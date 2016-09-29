@@ -1,0 +1,110 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/cartConfig/TaxClass">
+                                                <div align="right">
+                                                    <br>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Tax/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <h3>Tax Classes</h3>
+                                                                <table class="table table-responsive">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <td>Class</td>
+                                                                        <td>Action</td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody id="tax_classes">
+                                                                    {% for class in taxClasses %}
+                                                                        <tr>
+                                                                            <td>{{ class }}</td>
+                                                                            <td>
+                                                                                <i class="remove_tax_class glyphicon glyphicon-remove-circle"
+                                                                                   id="{{ class }}"></i>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <label>Tax Classes : </label><br>
+                                                                        <code><i class="glyphicon glyphicon-exclamation-sign"></i>
+                                                                            You Can't Create Multiple class with same
+                                                                            Name</code>
+                                                                        <input type="text" class="form-control"
+                                                                               id="taxClass" name="tax_class">
+                                                                        <input type="submit" class="btn btn-primary"
+                                                                               id="btn_add_class"
+                                                                               value="Add">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('.remove_tax_class').on('click', function () {
+                    var id = $(this).attr('id');
+                    var row = $(this).closest('tr');
+                    var res = confirm('Are You Sure to Remove Tax Class ?');
+                    if (res) {
+                        $.ajax({
+                            url: '{{ site_addr }}/cartConfig/RemoveTaxClass',
+                            type: 'POST',
+                            data: {class_id: id},
+                            success: function () {
+                                row.remove();
+                            }
+                        });
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}

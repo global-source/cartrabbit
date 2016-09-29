@@ -1,0 +1,138 @@
+{% extends '@CartRabbit/admin_product_template.html.twig' %}
+
+{% block body %}
+
+    <div class="flylshop fc-container">
+        <div class="fc-col-lg-12">
+            {% if orders | length == 0 %}
+                <h4>Sorry, No More Order Records !</h4>
+            {% else %}
+                <table class="table table-responsive table-bordered">
+                    <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Invoice No.</td>
+                        <td>Amount</td>
+                        <td>Status</td>
+                        <td>Action</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i, data in orders %}
+                        <tr>
+                            <td>{{ data.order.created_at }}</td>
+                            <td>{{ data.order.invoice_prefix ~ data.order.invoice_no }}</td>
+                            <td>{{ currency.format(data.order.meta.total, 1, data.order.meta.exchange_value, data.order.meta.currency_code) }}</td>
+                            <td>{{ data.order.order_status }}</td>
+                            <td>
+                                <button class="btn btn-primary view_order" id="{{ data.order.id }}"
+                                        data-target="#OrderViewModal"
+                                        data-toggle="modal"><span
+                                            class="dashicons dashicons-search"></span>
+                                </button>
+                                <button class="btn btn-danger print_order" id="print_{{ data.order.id }}"
+                                        data-target="#OrderViewModal"
+                                        data-toggle="modal"><span
+                                            class="dashicons dashicons-media-spreadsheet"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td>Date</td>
+                        <td>Invoice No.</td>
+                        <td>Amount</td>
+                        <td>Status</td>
+                        <td>Action</td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <!-- Popup Model -->
+                <div>
+                    <form method="post" action="{{ site_addr }}/order/getOrder">
+                        <!-- Modal -->
+                        <div class="modal fade" id="OrderViewModal" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document" style="width: 100% !important ; padding: 5%;">
+                                <div class="modal-content" id="model_content" style="width: 80%;">
+                                    <div class="modal-header" align="right">
+                                        <button type="button" class="btn btn-default btn_model_close"
+                                                data-dismiss="modal">Close
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="ajax_order">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                $(document).on('click', '.view_order', function () {
+                    var order_id = $(this).attr('id');
+                    $.ajax({
+                        url: '{{ site_addr }}/order/getMyOrder',
+                        type: 'POST',
+                        data: {order_id: order_id},
+                        success: function (res) {
+                            $('#ajax_order').html(res);
+                        }
+                    });
+                });
+
+                $(document).on('click', '.print_order', function () {
+                    var order_id = $(this).attr('id');
+                    order_id = order_id.replace('print_', '');
+                    $.ajax({
+                        url: '{{ site_addr }}/order/getMyOrder',
+                        type: 'POST',
+                        data: {order_id: order_id},
+                        success: function (res) {
+                            $('#ajax_order').html(res);
+                        },
+                        complete: function () {
+                            printDiv();
+                        }
+                    });
+                });
+                $(document).on('click', '.btn_model_close', function () {
+                    $('#OrderViewModal').hide();
+                });
+
+                $('#print_screen').on('click', function () {
+                    printDiv();
+                });
+
+            });
+            function printDiv() {
+                var printContents = document.getElementById('ajax_order').innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+
+                window.print();
+
+                document.body.innerHTML = originalContents;
+            }
+
+        })(jQuery);
+    </script>
+
+{% endblock %}

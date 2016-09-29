@@ -1,0 +1,328 @@
+{% extends '@CartRabbit/client_template.html.twig' %}
+
+{% block body %}
+    {% if (session.uaccount == 'guest' ) %}
+        <div id="checkoutAccountTab">
+            <div class="fc-title-tab">
+                    <span class="fc-text-medium">
+                        Welcome
+                        </span>
+                {% if (session.uaccount == 'guest') %}
+                    <span class="fc-text-right change-account-btn">
+                    Change Account
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    {#{% if session.uaccount == 'noRecord' %}#}
+    <div id="checkoutLoginContainer">
+        <div class="checkout-container">
+            {#{% if session['guestUser'] is null or session['guestUser'] == false %}#}
+            <div class="login-header heading">
+                <div class="fc-title-tab fc-text-medium">
+                    Login
+                </div>
+            </div>
+            {#{% endif %}#}
+            <div class="login-content">
+                <div id="txt_accountMsg" class="text text-danger"><code>Enter Valid E-mail Address to Create Account
+                        !</code></div>
+                <div id="body_haveAccount" class="input_haveAccount">
+                    <div class="fc-form-control">
+                        <input type="text" name="username" id="username"
+                               placeholder="Email"
+                               class="fc-input">
+                    </div>
+                    <br>
+                    <label><input id="rd_register" type="radio" value="yes" name="loginType">
+                        I am a new user.</label><br>
+                    <label>
+                        <input id="rd_login" type="radio" value="yes" name="loginType">
+                        I am a returning user
+                        and my password is:</label><br>
+                </div>
+            </div>
+
+            <!--USER LOGIN-->
+            <div id="footer_haveAccount">
+                <div id="accountPassword">
+                    <div class="fc-form-control">
+                        <input type="password" name="password" id="password" placeholder="Password"
+                               class="form-control">
+                    </div>
+                    <div class="fc-form-control">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--USER REGISTER-->
+            <div id="footer_newAccount">
+                <div id="accountPasswords">
+                    <input type="password" id="newPassword" placeholder="New Password"
+                           class="form-control">
+                    <input type="password" id="ConfirmPassword" placeholder="Confirm Password"
+                           class="form-control">
+
+                    <small><span class="text text-danger" id="passwordValidator"></span></small>
+                </div>
+            </div>
+            <div class="fc-form-control">
+                <input type="button" value="Continue" id="btn_continue_guest"
+                       class="fc-btn-md fc-btn-primary">
+            </div>
+            <br>
+            <label><input id="rd_guest" type="radio" value="yes" name="loginType">
+                Continue as Guest</label>
+        </div>
+    </div>
+    {#{% endif %}#}
+
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                {#$('#checkoutLoginContainer').hide();#}
+                {#if ('{{ session.user_id }}' == 0 && '{{ session.uaccount }}' == 'noRecord') {#}
+                {#$('#checkoutLoginContainer').show();#}
+                {#}#}
+
+                $('#txt_accountMsg').hide();
+                $('#footer_haveAccount').css('display', 'none');
+                $('#footer_newAccount').css('display', 'none');
+                $('#passwordValidator').css('display', 'none');
+//                $('#btn_continue_guest').css('display', 'none');
+
+                /** To Managing User Account Form **/
+                $('.checkoutLoginContainer').hide();
+                if ('{{ session.uaccount }}' == 'noRecord') {
+                    $('.checkoutLoginContainer').show();
+                }
+
+                $('.change-account-btn').on('click', function () {
+                    $('.checkoutLoginContainer').show();
+                });
+
+                $(".change-account-btn").click(function () {
+                    $(this).hide();
+                    $('#checkoutLoginContainer').show();
+                    $('#checkoutAccountTab').hide();
+                    $('.address-abstract').html('');
+                    $(".checkoutBillingAddressContainer").css('display', 'none');
+                    $(".checkoutDeliveryAddressContainer").css('display', 'none');
+                    $("#checkoutLoginContainer").css('display', 'block');
+//                    $(".paymentMethodContainer").css('display', 'none');
+                    $(".orderSummaryContainer").css('display', 'none');
+                    $('.btn_selectAddress').css('display', 'block');
+                    $('.btn_selectAddress').removeAttr('disabled');
+                    $('#paymentContinue').prop('disabled', true);
+                    $("[name='payment_type']").prop('checked', false);
+                    $("[name='shipping_type']").prop('checked', false);
+//                    $('.change-payment-btn').css('display', 'none');
+//                    $('.change-shipping-btn').css('display', 'none');
+                    $('.shippingMethodContainer').css('display', 'none');
+                    $('.btn_removeAddress').click();
+                });
+
+                /**
+                 * Simplified User Login/Register interface to manage
+                 * SignIn, signUp and guest Login with Ajax Call.
+                 */
+
+                /** To Init User Login */
+                $('#rd_login').change(
+                        function () {
+                            enableLogin();
+                        });
+
+                /** To Init User Registration */
+                $('#rd_register').change(
+                        function () {
+                            enableRegistration();
+                        });
+
+                /** To Init User Login as Guest */
+
+                $('#rd_guest').change(function () {
+                    $('#btn_continue_guest').show();
+                    $('#footer_haveAccount').hide();
+                    $('#footer_newAccount').hide();
+                });
+
+                $('#btn_continue_guest').on('click', function () {
+//                    $.each($("input[name='loginType[]']:checked"), function () {
+                    var username = $('#username').val();
+                    if (username == '') {
+                        $('#txt_accountMsg').html('Please Enter Your Email !');
+                        $('#txt_accountMsg').show();
+                    } else if ($('#rd_register').is(":checked")) {
+                        userRegistration();
+                    } else if ($('#rd_login').is(":checked")) {
+                        userLogIn();
+                    } else if ($('#rd_guest').is(":checked")) {
+                        $.ajax({
+                            url: '{{ site_addr }}/util/validateEmail',
+                            type: 'POST',
+                            data: {email: username},
+                            success: function (res) {
+                                if (res) {
+                                    updateUserAccount(username, true);
+                                } else {
+                                    $('#txt_accountMsg').show();
+                                    $('#txt_accountMsg').html('Please Enter Valid Email !');
+                                }
+                            }
+                        });
+                    } else {
+                        $('#txt_accountMsg').html('Please Select the Type of Access !');
+                        $('#txt_accountMsg').show();
+                    }
+
+//                    });
+                });
+
+                $('#chk_account').on('click', function () {
+                    var username = $('#username').val();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/checkAccount',
+                        type: 'POST',
+                        data: {account: username},
+                        success: function (res) {
+                            if (res == 'EXIST') {
+                                $('#chk_account').hide();
+                                $('#footer_haveAccount').show();
+                                $('#footer_newAccount').css('display', 'none');
+                                $('#chk_newAccount').removeAttr('checked');
+                            } else if (res == 'ALLOW') {
+                                $('#footer_newAccount').show();
+                                $('#txt_accountMsg').html('<code><i>New Account Registration</i></code>').delay(2000).slideUp();
+                                $('#txt_accountMsg').show();
+                                $('#footer_haveAccount').css('display', 'none');
+                                $('#chk_haveAccount').removeAttr('checked');
+                            } else if (res == 'DONT-ALLOW') {
+                                $('#txt_accountMsg').html('<div class="fc-text-danger"><b>Enter valid email address to create account !</b></div>').delay(2000).slideUp();
+                                $('#txt_accountMsg').show();
+                                $('#footer_newAccount').css('display', 'none');
+                                $('#footer_haveAccount').css('display', 'none');
+                            }
+                        }
+                    });
+                });
+
+
+                $('#btn_signOutAccount').on('click', function () {
+                    $.ajax({
+                        url: '/checkout/signout',
+                        type: 'GET',
+                        success: function () {
+                            location.reload();
+                        }
+                    });
+                });
+            });
+
+            function userRegistration() {
+                if ($('#newPassword').val() === $('#ConfirmPassword').val()) {
+                    var username = $('#username').val();
+                    var password = $('#newPassword').val();
+                    var re_password = $('#ConfirmPassword').val();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/signup',
+                        type: 'POST',
+                        data: {uname: username, pass: password, re_pass: re_password},
+                        success: function (res) {
+                            if (res.error) {
+                                $('#newPassword').val('');
+                                $('#ConfirmPassword').val('');
+                                $('#txt_accountMsg').html('User Creation Failed, Please check the details !');
+                                $('#txt_accountMsg').show();
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    $('#newPassword').val('');
+                    $('#ConfirmPassword').val('');
+                    $('#passwordValidator').html('Password Not Match');
+                    $('#passwordValidator').show().delay(2000).fadeOut();
+                }
+            }
+
+            function userLogIn() {
+                var username = $('#username').val();
+                var password = $('#password').val();
+                $.ajax({
+                    url: '/checkout/signin',
+                    type: 'POST',
+                    data: {uname: username, pass: password},
+                    success: function (res) {
+                        if (res.error) {
+                            $('#txt_accountMsg').show();
+                            $('#txt_accountMsg').html('Invalid Account, Please verify !');
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+
+            /** Here, User's Type will get Live with Store's Session to make reliable interface */
+            function updateUserAccount(username, status) {
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/signInGuest',
+                    type: 'POST',
+                    data: {status: status, user: username},
+                    success: function () {
+                        // Manage Address Display with Ajax Response
+                        if (status == true) {
+                            enableAddress(username);
+                            location.reload();
+                        } else {
+                            disableAddress();
+                        }
+                    }
+                });
+            }
+
+            function enableAddress(username) {
+                //
+            }
+
+            function disableAddress() {
+                $('#accountPasswords').show();
+                $('#hidden_username').remove();
+                $('.checkoutBillingAddressContainer').slideUp();
+                $('#newAddress').hide();
+            }
+
+            function showLoginTab() {
+
+            }
+
+            function hideLoginTab() {
+
+            }
+
+            function resetForms() {
+                $('#frm_multipleAddr')[0].reset();
+                $('#frm_multipleDeliveryAddr')[0].reset();
+            }
+
+            function enableLogin() {
+                $('#footer_haveAccount').show();
+                $('#footer_newAccount').hide();
+            }
+
+            function enableRegistration() {
+                $('#footer_haveAccount').hide();
+                $('#footer_newAccount').show();
+            }
+        })
+        (jQuery);
+    </script>
+
+{% endblock %}

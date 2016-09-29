@@ -1,0 +1,862 @@
+{% extends '@CartRabbit/admin_product_template.html.twig' %}
+
+{% block body %}
+    <div class="flylshop">
+        <div class="flylshop">
+            <div class="row product-properties-margin" style="padding-left: 10px; padding-right: 5px">
+                <input type="hidden" value="{{ site_addr }}" id="site_address">
+                <input type="hidden" value="{{ data['meta']['product_type'] }}" id="product_type">
+                <input type="hidden" value="{{ data['meta'] | json_encode }}" id="metaData">
+                <table>
+                    <tr>
+                        <td><label>Visible in StoreFront ?</label></td>
+                        <td><select class="select" name="visible_on_storefront">
+                                <option {% if data['meta']['visible_on_storefront'] == 'yes' %}  selected=selected {% endif %}
+                                        value="yes">Yes
+                                </option>
+                                <option {% if data['meta']['visible_on_storefront'] == 'no' %}  selected=selected {% endif %}
+                                        value="no">No
+                                </option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td><label>Product Type :</label></td>
+                        <td><select class="form-control" name="product_type" id="productType">
+                                <option {% if data['meta']['product_type'] == 'simpleProduct' %} selected=selected {% endif %}
+                                        value="simpleProduct">Simple Product
+                                </option>
+                                <option {% if data['meta']['product_type'] == 'variableProduct' %} selected=selected {% endif %}
+                                        value="variableProduct">Variable Product
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <div id="btn_edit" style="display: none">
+                    <input type="button" class="btn btn-primary button" id="btn_save_post" value="Next">
+                </div>
+                <br>
+                <div class="product_property" style="display: none">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 bhoechie-tab-menu">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item active text-left">
+                                    <h6 class="glyphicon glyphicon-home"></h6> General
+                                </a>
+                                {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                    <a href="#" class="list-group-item text-left simple_property">
+                                        <h6 class="glyphicon glyphicon-usd"></h6> Pricing
+                                    </a>
+                                {% endif %}
+                                {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                    <a href="#" class="list-group-item text-left inventoryTab">
+                                        <h4 class="glyphicon glyphicon-signal"></h4> Inventory
+                                    </a>
+                                {% endif %}
+                                {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                    <a href="#" class="list-group-item text-left">
+                                        <h4 class="glyphicon glyphicon-shopping-cart"></h4> Shipping
+                                    </a>
+                                {% endif %}
+                                <a href="#" class="list-group-item text-left">
+                                    <h4 class="glyphicon glyphicon-wrench"></h4> Attributes
+                                </a>
+                                {% if data['meta']['product_type'] == 'variableProduct' %}
+                                    <a href="#" class="list-group-item text-left variant_property"
+                                       style="display: none">
+                                        <h4 class="glyphicon glyphicon-plus"></h4> Variations
+                                    </a>
+                                {% endif %}
+                                <a href="#" class="list-group-item text-left">
+                                    <h4 class="glyphicon glyphicon-tree-deciduous"></h4> Relations
+                                </a>
+                                <a href="#" class="list-group-item text-left">
+                                    <h4 class="glyphicon glyphicon-baby-formula"></h4> Apps
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 bhoechie-tab">
+                            <!-- General -->
+                            <div class="bhoechie-tab-content active">
+                                <hr>
+                                {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                    <div class="form-group">
+                                        <label>SKU :</label>
+                                        <input type="text" name="sku"
+                                               value="{% if data['meta']['sku'] is not empty %}{{ data['meta']['sku'] }}{% endif %}"
+                                               class="form-control">
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label>Brand or Manufacturer :</label>
+                                    <select class="form-control" name="brand">
+                                        <option value="none"></option>
+                                        {% for i, value in brands %}
+                                            {% if value['name'] is not empty %}
+                                                <option {% if data['meta']['brand'] == value['term_id'] %}  selected=selected {% endif %}
+                                                        value="{{ value['term_id'] }}">{{ value['name'] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                    <div class="form-group">
+                                        <label>Enable Tax :</label>
+                                        <input type="checkbox" class="form_control" name="enable_tax"
+                                                {% if data['meta']['enable_tax'] == 'on' %} checked=checked {% endif %}>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label>Tax Classes :</label>
+                                    <select class="form-control" name="tax_profile">
+                                        {% for tax in data['meta']['taxClasses_list'] %}
+                                            <option {% if tax == data['meta']['tax_profile'] %} selected=selected {% endif %}
+                                                    value="{{ tax }}">{{ tax }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cart Button Text :</label>
+                                    <input type="text" class="form-control" name="add_cart_text"
+                                           value="{% if data['meta']['add_cart_text'] is not empty %}{{ data['meta']['add_cart_text'] }}{% endif %}">
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                <div class="bhoechie-tab-content">
+
+                                    <div class="form-group">
+                                        <label>Regular Price :</label>
+                                        <input type="text" class="form-control" name="regular_price"
+                                               value="{% if data['meta']['regular_price'] is not empty %}{{ data['meta']['regular_price'] }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Special Price :</label>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <td>Date From :</td>
+                                                <td>Date To :</td>
+                                                <td>Qty From :</td>
+                                                <td>Price :</td>
+                                                <td>Action</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="specialPrice">
+                                            {% for i,value in data['special_price'] %}
+                                                <tr>
+                                                    <td><input type="hidden" value="{{ value['id'] }}"
+                                                               name="cartRabbit[specialPrice][{{ i }}][price_id]">
+                                                        <input type="text" class="form-control datepicker"
+                                                               name="cartRabbit[specialPrice][{{ i }}][date_from]"
+                                                               value="{{ value['date_from'] }}"
+                                                               placeholder="DD-MM-YYYY"></td>
+                                                    <td><input type="text" class="form-control datepicker"
+                                                               name="cartRabbit[specialPrice][{{ i }}][date_to]"
+                                                               value="{{ value['date_to'] }}"
+                                                               placeholder="DD-MM-YYYY"></td>
+                                                    <td><input type="text" class="form-control"
+                                                               value="{{ value['qty_from'] }}"
+                                                               name="cartRabbit[specialPrice][{{ i }}][qty_from]">
+                                                    </td>
+                                                    <td><input type="text" class="form-control"
+                                                               value="{{ value['price'] }}"
+                                                               name="cartRabbit[specialPrice][{{ i }}][price]"></td>
+                                                    <td><input type="button" class="btn btn-danger btnRemovePrice"
+                                                               id="{{ value['id'] }}"
+                                                               value="Remove"></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><input type="button" class="btn btn-info btn_add_special_price"
+                                                           value="Add"></td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <!-- Inventory -->
+                            {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                <div class="bhoechie-tab-content">
+                                    <div class="form-group">
+                                        <label>Manage Stock : </label>
+                                        <select class="form-control" name="manage_stock">
+                                            <option {% if data['meta']['manage_stock'] == 'yes' %}  selected=selected {% endif %}
+                                                    value="yes">YES
+                                            </option>
+                                            <option {% if data['meta']['manage_stock'] == 'no' %}  selected=selected {% endif %}
+                                                    value="no">NO
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Stock Quantity : </label>
+                                        <input type="text" class="form-control" name="stock"
+                                               value="{% if data['meta']['stock'] is not empty %}{{ data['meta']['stock'] }}{% endif %}"
+                                               placeholder="ex. 600">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Allow Backorders : </label>
+                                        <select class="form-control" name="back_orders">
+                                            <option {% if data['meta']['back_orders'] == 'disallow' %}  selected=selected {% endif %}
+                                                    value="disallow">Disallow
+                                            </option>
+                                            <option {% if data['meta']['back_orders'] == 'allow' %}  selected=selected {% endif %}
+                                                    value="allow">Allow
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Notify If Stocks goes below : </label>
+                                        <input type="text" class="form-control" name="min_qty_to_notify"
+                                               value="{% if data['meta']['min_qty_to_notify'] is not empty %}{{ data['meta']['min_qty_to_notify'] }}{% endif %}"
+                                               placeholder="ex. 0000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Use Store Configuration : </label>
+                                        <input type="checkbox"
+                                               class="" {% if data['meta']['min_qty_notify_default'] == 'on' %}  checked {% endif %}
+                                               name="min_qty_notify_default">
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label>Quantity Restriction : </label>
+                                        <select class="form-control" name="qty_restriction">
+                                            <option {% if data['meta']['qty_restriction'] == 'yes' %}  selected=selected {% endif %}
+                                                    value="yes">Yes
+                                            </option>
+                                            <option {% if data['meta']['qty_restriction'] == 'no' %}  selected=selected {% endif %}
+                                                    value="no">No
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Sale Quantity : </label>
+                                        <input type="text" class="form-control" name="max_sale_qty"
+                                               placeholder="Leave Empty, consider as 'No Limit'"
+                                               value="{% if data['meta']['max_sale_qty'] is not empty %}{{ data['meta']['max_sale_qty'] }}{% endif %}"
+                                               placeholder="ex. 9999">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Use Store Configuration : </label>
+                                        <input type="checkbox" class="" name="max_sale_qty_default"
+                                                {% if data['meta']['max_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                        >
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label>Min Sale Quantity : </label>
+                                        <input type="text" class="form-control" name="min_sale_qty"
+                                               value="{% if data['meta']['min_sale_qty'] is not empty %}{{ data['meta']['min_sale_qty'] }}{% endif %}"
+                                               placeholder="ex. 0000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Use Store Configuration : </label>
+                                        <input type="checkbox" class=""
+                                                {% if data['meta']['min_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                               name="min_sale_qty_default">
+                                    </div>
+                                    <hr>
+                                </div>
+                            {% endif %}
+                            <!-- Shipping -->
+                            {% if data['meta']['product_type'] == 'simpleProduct' %}
+                                <div class="bhoechie-tab-content">
+                                    <div class="form-group">
+                                        <label>Enable Shipping : </label>
+                                        <select class="form-control" name="shipping_enable">
+                                            <option {% if data['meta']['shipping_enable'] == 'yes' %}  selected=selected {% endif %}
+                                                    value="yes">Yes
+                                            </option>
+                                            <option {% if data['meta']['shipping_enable'] == 'no' %}  selected=selected {% endif %}
+                                                    value="no">No
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <label>Dimension (L x W x H)</label>
+                                    <div class="form-group col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <input class="form-control col-md-3" placeholder="L"
+                                                       value="{% if data['meta']['length'] is not empty %}{{ data['meta']['length'] }}{% endif %}"
+                                                       name="length">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input class="form-control col-md-3" placeholder="W"
+                                                       value="{% if data['meta']['width'] is not empty %}{{ data['meta']['width'] }}{% endif %}"
+                                                       name="width">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input class="form-control col-md-3" placeholder="H"
+                                                       value="{% if data['meta']['height'] is not empty %}{{ data['meta']['height'] }}{% endif %}"
+                                                       name="height">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Length Class :</label>
+                                        <select class="form-control" name="length_class">
+                                            {% for i,value in metrics['length'] %}
+                                                <option {% if data['meta']['length_class'] == value['unit_length_id'] %} selected=selected {% endif %}
+                                                        value={{ value['unit_length_id'] }}>{{ value['name'] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label>Shipping Classes:</label>
+                                    <div class="form-group">
+                                        <select class="form-control"
+                                                name="shipping_class"
+                                                class="ShippingClasses">
+                                            {% for slug,name in data['meta']['shipping_class_list'] %}
+                                                <option {% if slug == data['meta']['shipping_class_list'] %} selected=selected {% endif %}
+                                                        value="{{ slug }}">{{ name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label>Weight :</label>
+                                    <div class="form-group">
+                                        <input class="form-control" name="weight"
+                                               value="{% if data['meta']['weight'] is not empty %}{{ data['meta']['weight'] }}{% endif %}"
+                                        >
+                                    </div>
+                                    <label>Weight Class :</label>
+                                    <div class="form-group">
+                                        <select class="form-control" name="weight_class">
+                                            {% for i,value in metrics['weight'] %}
+                                                <option {% if data['meta']['weight_class'] == value['unit_weight_id'] %} selected=selected {% endif %}
+                                                        value={{ value['unit_weight_id'] }}>{{ value['name'] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <!-- Attributes -->
+                            <div class="bhoechie-tab-content " id="form_product_attributes">
+
+                                <table class="table table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <td>Attribute</td>
+                                        <td>Options</td>
+                                    </tr>
+                                    </thead>
+                                    {% set productAttr = data['meta']['product_attributes'] %}
+                                    {% set attrib_list = data['meta']['attribute_list'] %}
+                                    <tbody id="tbl_body_fields">
+                                    <tr>
+                                        <td>
+                                            <div class="form-group"><label>Select Attributes :</label>
+                                                <select
+                                                        class="selectpicker attributes_list" name="attributes[]"
+                                                        id="attributes"
+                                                        tabindex="-1">
+                                                    {% for key,val in data['meta']['attributes'] %}
+                                                        <option value="{{ val['slug'] }}" id="{{ val['slug'] }}"
+                                                                {% if key in cartConfig['attributes'] %}
+                                                            selected=selected
+                                                                {% endif %}>
+                                                            {{ val['name'] }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="button" class="btn btn-success" id="btn_add_new_attr"
+                                                   value="Add">
+                                        </td>
+                                    </tr>
+
+
+                                    {% for name,option in productAttr %}
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <h3>{{ name }}</h3> <label> Options :</label>
+                                                <select class="selectpicker attr_options"
+                                                        name="{{ name }}_option" multiple="multiple"
+                                                        data-actions-box="true" data-live-search="true"
+                                                        tabindex="-1">
+                                                    {% for id,item in attrib_list[name] %}
+                                                        {% if item['term_id'] in productAttr[name]['list'] %}
+                                                            <option value="{{ item['term_id'] }}"
+                                                                    selected>{{ item['name'] }}</option>
+                                                        {% else %}
+                                                            <option value="{{ item['term_id'] }}">{{ item['name'] }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select></div>
+                                            <label><input type="checkbox" class="input_attribute"
+                                                        {% if productAttr[name]['isVisible'] == 'on' %}
+                                                            checked=true
+                                                        {% endif %}
+                                                          name="{{ name }}_visable_on_produt"> Visable
+                                                On Product Page</label><br>
+                                            {% if data['meta']['product_type'] != 'simpleProduct' %}
+                                                <label><input type="checkbox" class="input_attribute"
+                                                            {% if productAttr[name]['isVisible'] == 'on' %}
+                                                                checked=true
+                                                            {% endif %}
+                                                              name="{{ name }}_used_for_variant"> Used
+                                                    For Variants</label>
+                                            {% endif %}
+
+                                            <hr>
+                                        </td>
+                                        <td><br><a href=javascript:void(0) id="id_{{ name }}"
+                                                   class="btn_remove_options"><span
+                                                        class="text-danger">Delete</span></a></td>
+                                        {% endfor %}
+
+                                    </tbody>
+                                    <tbody id="tbl_attributes">
+
+                                    </tbody>
+                                </table>
+                                <div class="form_group">
+                                    <input type="button" class="btn btn-primary" id="btn_save_attribute"
+                                           value="Save Attributes">
+                                </div>
+                            </div>
+                            <!-- Variance -->
+                            {% if data['meta']['product_type'] == 'variableProduct' %}
+                                <div class="bhoechie-tab-content ">
+
+                                    <input type="button" class="btn btn-primary"
+                                           value="Generate Combinations"
+                                           id="btn_generate_combinations">
+                                    <hr>
+                                    <h3 class="panel-title">Variations </h3>
+                                    <div id="variation_combinations">
+
+                                    </div>
+
+                                </div>
+                            {% endif %}
+                            <!-- Relations -->
+                            <div class="bhoechie-tab-content">
+                                <h4>Up Sells (Related Items)</h4>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>Product Name</td>
+                                        <td>Remove</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="upSellsTable">
+                                    {% for i,value in data['meta']['up_sells'] %}
+                                        <tr>
+                                            <td><input type="hidden" name="up_sells[]" value="{{ value }}">{{ value }}
+                                            </td>
+                                            <td><a href="javascript:void(0)" val="btnRemoveUpsells"><i
+                                                            class="glyphicon glyphicon-remove-circle"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <td>Search and add Products</td>
+                                <td><input list="upSells" type="text" id="upSellsSearch"></td>
+
+                                <datalist id="upSells">
+                                </datalist>
+
+
+                                <h4>Cross Sells (Related Items)</h4>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>Product Name</td>
+                                        <td>Remove</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="crossSellsTable">
+                                    {% for i,value in data['meta']['cross_sells'] %}
+                                        <tr>
+                                            <td><input type="hidden" name="cross_sells[]"
+                                                       value="{{ value }}">{{ value }}
+                                            </td>
+                                            <td><a href="javascript:void(0)" val="btnRemoveCrosssells"><i
+                                                            class="glyphicon glyphicon-remove-circle"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <td>Search and add Products</td>
+                                <td><input list="crossSells" type="text" id="crossSellsSearch"></td>
+                                <datalist id="crossSells">
+                                </datalist>
+                            </div>
+                            <!-- App -->
+                            <div class="bhoechie-tab-content">
+                                <code>Third Party Applications</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                $('#btn_save_post').on('click', function () {
+                    $('#publish').click();
+                });
+
+                var site_addr = $('#site_address').val();
+                var meta = $("#metaData").val();
+
+                refreshCombination(false, false);
+
+                $('[id^=detail-]').hide();
+                $('.toggle').click(function () {
+                    $input = $(this);
+                    $target = $('#' + $input.attr('data-toggle'));
+                    $target.slideToggle();
+                });
+
+
+                /**
+                 * For UpSells
+                 * @type {*|jQuery|HTMLElement}
+                 */
+
+                $('.product_property').css('display', 'none');
+                $('.attr_options').selectpicker('refresh');
+
+                /** To check the product is in Edit State */
+                if ("{{ config['isEdit'] }}" == true) {
+                    $('.product_property').css('display', 'block');
+                    $('#btn_edit').css('display', 'none');
+                } else {
+                    $('#btn_edit').css('display', 'block');
+                }
+
+                /** To Check the product is a Variant or Not */
+                if ("{{ config['isVariant'] }}" == true) {
+                    $('.variant_property').css('display', 'block');
+                    $('.simple_property').css('display', 'none');
+                    $('.inventoryTab').css('display', 'none');
+                } else {
+                    $('.variant_property').css('display', 'none');
+                    $('.simple_property').css('display', 'block');
+
+                    $('.inventoryTab').css('display', 'block');
+                }
+
+                /** .live() function was deprecated, the following is an alternative for that */
+                $(document).on('click', '.btn_remove_options', function () {
+
+                    var confirmation = confirm('Warning : Removing Option also affects the Variant Combinations. Are You Sure to Remove ? ');
+                    var option = $(this).attr('id');
+                    var attribute = $('#attributes');
+                    var current = $(this);
+                    var action = true;
+                    option = option.replace('id_', '');
+                    if (confirmation) {
+                        $.ajax({
+                            url: '{{ site_addr }}/product/removeTermOption',
+                            type: 'POST',
+                            data: {class_id: option, action: action},
+                            success: function () {
+                                attribute.append('<option value="' + option + '">' + option + '</option>');
+                                current.closest('tr').delay(200).remove();
+                                attribute.selectpicker('refresh');
+                                refreshCombination(false, false);
+                            }
+                        });
+                    }
+                });
+
+                $(document).on('click', '#btn_generate_combinations', function () {
+                    /** If Refresh is True, then the combination gets Reset */
+                    refreshCombination(true, true);
+                });
+                $(document).on('click', '.toggle', function () {
+                    $(this).siblings('.list_options').slideToggle().removeClass('hide');
+                });
+
+                $('#btn_add_new_attr').on('click', function () {
+                    var id = $('#attributes').val();
+                    var menu = $('#tbl_attributes');
+                    var product_type = $('#product_type').val();
+                    $("#attributes option:selected").remove();
+                    $('#attributes').selectpicker('refresh');
+                    $.ajax({
+                        url: '{{ site_addr }}/product/termMeta',
+                        type: 'POST',
+                        data: {term_id: id},
+                        success: function (res) {
+                            var toAppend = '<tr><td><div class="form-group">' +
+                                    '<h3>' + id + '</h3><label> Options :</label>' +
+                                    '<select class="selectpicker attr_options se" name="' + id + '_option" multiple="multiple" data-actions-box="true" data-live-search="true" tabindex="-1">';
+                            var data = JSON.parse(res);
+                            $.each(data, function (i, term) {
+                                toAppend += '<option value="' + term['term_id'] + '">' + term['name'] + '</option>';
+                            });
+                            if (product_type == 'variableProduct') {
+                                toAppend += '</select></div>' +
+                                        '<label><input type="checkbox" class="input_attribute" name="' + id + '_visable_on_produt"> Visible On Product Page</label><br>' +
+                                        '<label><input type="checkbox" class="input_attribute" name="' + id + '_used_for_variant"> Used For Variants</label><hr>' +
+                                        '</td>' +
+                                        ' <td><br><a href=javascript:void(0) id="id_' + id + '"' +
+                                        'class="btn_remove_options"><span class="text-danger">Delete</span></a></td>' +
+                                        '</tr>';
+                            } else {
+                                toAppend += '</select></div>' +
+                                        '<label><input type="checkbox" class="input_attribute" name="' + id + '_visable_on_produt"> Visible On Product Page</label><br>' +
+                                        '</td>' +
+                                        ' <td><br><a href=javascript:void(0) id="id_' + id + '"' +
+                                        'class="btn_remove_options"><span class="text-danger">Delete</span></a></td>' +
+                                        '</tr>';
+                            }
+
+                            menu.append(toAppend);
+                            $('.attr_options').selectpicker('refresh');
+                        }
+                    });
+                    $('.attr_options').selectpicker('refresh');
+                });
+
+                $('#btn_save_attribute').on('click', function () {
+                    var options = $("#form_product_attributes :input").serializeArray();
+                    var button = $('#btn_save_attribute');
+                    var button_value = $('#btn_save_attribute').val();
+                    button.attr('disabled', 'disabled');
+                    button.val('Saving...');
+                    $.ajax({
+                        url: '{{ site_addr }}/product/savetermMeta',
+                        type: 'POST',
+                        data: {items: options},
+                        success: function () {
+                            button.attr('class', 'btn btn-success');
+                            button.val('Saved Successfully');
+                            setTimeout(function () {
+                                button.removeAttr('disabled');
+                                button.val(button_value);
+                                button.attr('class', 'btn btn-primary');
+                            }, 800);
+                            refreshCombination(false, false);
+                        }
+                    });
+                });
+
+
+                $('#upSellsSearch').on('keypress', function () {
+                    if ($(this).val().length >= 1) {
+                        var key = $(this).val();
+
+                        setTimeout(function () {
+                            $.ajax({
+                                url: '{{ site_addr }}/productsList',
+                                type: 'POST',
+                                data: {search: key},
+                                success: function (result) {
+                                    var toAppend = '';
+                                    var data = JSON.parse(result);
+                                    $.each(data, function (i, product) {
+                                        toAppend += '<option value="' + i + '">' + product + '</option>';
+                                    });
+                                    $('#upSells').html(toAppend);
+                                }
+                            });
+                        }, 800);
+
+                    }
+                });
+                var table = $('#upSellsTable');
+                $('#upSellsSearch').on('input', function (event) {
+                    var current = $(this);
+                    var val = this.value;
+                    console.log('upselss');
+                    if ($('#upSells option').filter(function () {
+                                return this.value === val;
+                            }).length) {
+                        if (event.originalEvent) {
+                            table.append('<tr><td>' + $(this).val() +
+                                    '<input type="hidden" name="up_sells[]" value="' + $(this).val() + '"></td><td><a href="javascript:void(0)" val="btnRemoveUpsells">' +
+                                    '<i class="glyphicon glyphicon-remove-circle"></i></a></td></tr>');
+                            current.val('');
+                        }
+                    }
+                });
+
+                /**
+                 * For CrossSells
+                 * @type {*|jQuery|HTMLElement}
+                 */
+
+                $('#crossSellsSearch').on('keypress', function () {
+                    if ($(this).val().length >= 2) {
+                        var key = $(this).val();
+                        setTimeout(function () {
+                            $.ajax({
+                                url: '{{ site_addr }}/productsList',
+                                type: 'POST',
+                                data: {search: key},
+                                success: function (result) {
+                                    var toAppend = '';
+                                    var data = JSON.parse(result);
+                                    $.each(data, function (i, product) {
+                                        toAppend += '<option value="' + product + '">' + i + '</option>';
+                                    });
+                                    $('#crossSells').html(toAppend);
+                                }
+                            });
+                        }, 800);
+                    }
+                    var table = $('#crossSellsTable');
+                    $("#crossSellsSearch").on('input', function (event) {
+                        var current = $(this);
+                        var val = this.value;
+                        console.log('crosssells');
+                        if ($('#crossSells option').filter(function () {
+                                    return this.value === val;
+                                }).length) {
+                            if (event.originalEvent) {
+                                table.append('<tr><td>' + $(this).val() +
+                                        '<input type="hidden" name="cross_sells[]" value="' + $(this).val() + '"></td><td><a href="javascript:void(0)" val="btnRemoveUpsells">' +
+                                        '<i class="glyphicon glyphicon-remove-circle"></i></a></td></tr>');
+                                current.val('');
+                            }
+                        }
+                        return;
+                    });
+                });
+
+                /**
+                 * For Remove UpSell itmes
+                 */
+                $(document).on('click', '[val="btnRemoveUpsells"]', function () {
+                    $(this).closest('tr').remove();
+                });
+
+                /**
+                 * For Remove CrossSell itmes
+                 */
+                $(document).on('click', '[val="btnRemoveCrosssells"]', function () {
+                    $(this).closest('tr').remove();
+                });
+
+                /**
+                 * For Add More Images
+                 */
+
+                /**
+                 * For Add Special Prices
+                 */
+                $('.btn_add_special_price').on('click', function () {
+                    $priceTable = $('#specialPrice');
+                    var counter = $('#specialPrice tr').length;
+                    $priceTable.append('<tr><td><input type="text" class="form-control datepicker" name="cartRabbit[specialPrice][' + counter + '][date_from]" placeholder="DD-MM-YYYY"></td>' +
+                            '<td><input type="text" class="form-control datepicker" name="cartRabbit[specialPrice][' + counter + '][date_to]" placeholder="DD-MM-YYYY"></td>' +
+                            '<td><input type="text" class="form-control" name="cartRabbit[specialPrice][' + counter + '][qty_from]"></td>' +
+                            '<td><input type="text" class="form-control" name="cartRabbit[specialPrice][' + counter + '][price]"></td>' +
+                            '<td><input type="button" class="btn btn-danger btnRemovePrice" value="Remove"></td></tr>'
+                    );
+
+                    $('.datepicker').datepicker({
+                        dateFormat: 'yy-mm-dd'
+                    });
+                });
+
+                /**
+                 * For Remove Special Prices
+                 */
+                $(document).on('click', '.btnRemovePrice', function () {
+                    var id = $(this).attr('id');
+                    var table = $(this);
+                    $.ajax({
+                        url: '{{ site_addr }}/product/removeSpecialPrice',
+                        type: 'POST',
+                        data: {price_id: id},
+                        success: function () {
+                            table.closest('tr').remove();
+                        }
+                    });
+                });
+
+                /**
+                 * For Product Properties Tabs
+                 */
+                $("div.bhoechie-tab-menu>div.list-group>a").click(function (e) {
+                    e.preventDefault();
+                    $(this).siblings('a.active').removeClass("active");
+                    $(this).addClass("active");
+                    var index = $(this).index();
+
+                    $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                    $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+                });
+                $('.datepicker').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+
+                /**
+                 * Get the initial product type
+                 */
+
+                var initialProductType = '';
+
+                $("#productType").on('focus', function (e) {
+                    initialProductType = $(this).val();
+                });
+
+
+                /**
+                 * Reset Product
+                 */
+                $("#productType").on('change', function (e) {
+
+                    var isEdit = "{{ config['isEdit'] }}";
+                    if (isEdit) {
+                        var choice = confirm("Entire Product data's will be delete!\n Would you like to continue?");
+                        var product_type = $(this).val();
+
+                        if (choice) {
+                            $.ajax(
+                                    {
+                                        url: site_addr + "/product/changeType",
+                                        type: 'POST',
+                                        data: {
+                                            product_type: product_type
+                                        },
+                                        success: function (result) {
+                                            location.reload();
+                                            console.log(result);
+                                        }
+                                    });
+                        } else {
+                            $('#productType option:selected').removeAttr('selected');
+                            $('#productType option:' + initialProductType).attr('selected', 'selected');
+                        }
+                    }
+                });
+
+
+            });
+            function refreshCombination(action, refresh) {
+                $.ajax({
+                    url: '{{ site_addr }}/product/generateVariationList',
+                    type: 'POST',
+                    data: {action: action, refresh: refresh},
+                    success: function (res) {
+                        $('#variation_combinations').html(res);
+                    }
+                });
+            }
+        })(jQuery);
+    </script>
+{% endblock %}

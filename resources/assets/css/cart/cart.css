@@ -1,0 +1,89 @@
+table.cart-table *, table.cart-table-sub-total * {
+    text-align: center !important;
+    white-space: nowrap;
+}
+
+.cart-table {
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 5%;
+    z-index: 5000;
+    border: 0;
+    background-color: white;
+}
+
+.cart-table tbody tr:last-child td {
+    background-color: #eeeeee;
+}
+
+.cart-table thead {
+    background-color: rgba(172, 172, 172, 0.16);
+
+}
+
+.cart-table thead tr :first-child {
+    width: 40% !important;
+}
+
+.cart-table thead tr * {
+    border-radius: 5px;
+}
+
+.cart-table img {
+    position: relative;
+    padding: 5px;
+    float: left;
+    max-height: 75px;
+    max-width: 75px;
+    min-height: 75px;
+    min-width: 75px;
+}
+
+.cart-table .product-name {
+    position: relative;
+    padding: 5%;
+    float: left;
+}
+
+.apply-coupon {
+    float: left;
+}
+
+.cart-coupon-input {
+    width: 35% !important;
+}
+
+.update-cart-btn {
+    float: right;
+}
+
+.cart-subtotals {
+    width: 50%;
+    float: right;
+}
+
+.pincode {
+    width: 50%;
+}
+
+.cart-table-sub-total {
+    border-radius: 5px;
+}
+
+.cart-table-sub-total tr:last-child {
+    background-color: rgba(172, 172, 172, 0.16);
+}
+
+.total-price-title {
+    font-weight: bolder;
+    text-shadow: -1px 0 rgba(0, 0, 0, 0.17), 0 1px rgba(0, 0, 0, 0.17), 1px 0 rgba(0, 0, 0, 0.17), 0 -1px rgba(0, 0, 0, 0.17);
+    z-index: 5000;
+    letter-spacing: 1px;
+}
+
+.total-price {
+    font-weight: bolder;
+    text-shadow: -1px 0 rgba(0, 0, 0, 0.17), 0 1px rgba(0, 0, 0, 0.17), 1px 0 rgba(0, 0, 0, 0.17), 0 -1px rgba(0, 0, 0, 0.17);
+    z-index: 5000;
+    letter-spacing: 1px;
+}

@@ -1,0 +1,545 @@
+{% extends '@CartRabbit/admin_dashboard_template.html.twig' %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container-fluid">
+            <div id="spin_bar"
+                 style="position: absolute; left: 0; top: 0; height: 100%; width:100%; z-index: 9999; background-color: #FFFFFF; opacity: .8;">
+                <img src="{{ default.ajax_spin }}" style="left: 50%; top: 50%; position:relative;">
+            </div>
+            <!--Overall Status-->
+            <div class="row flylshop">
+                <div class=" col-lg-3 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class=" row">
+                                <div class="col-md-6">
+                                    {#<div id="weekly_visitor"></div>#}
+                                    <i class="glyphicon glyphicon-shopping-cart text-primary"
+                                       style="font-size: 80px;"></i>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="text-primary">{{ content.total_buyers }}</h3>
+                                    <p class="text-muted">Total Buyers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-lg-3 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class=" row">
+                                <div class="col-md-6">
+                                    {#<div id="total_sale"></div>#}
+                                    <i class="glyphicon glyphicon-stats text-primary" style="font-size: 80px;"></i>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="text-primary">{{ currency.format(content.sales.today) }}</h3>
+                                    <p class="text-muted">Today Sale</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {#<div id="pending_order"></div>#}
+                                    <i class="glyphicon glyphicon-stats text-warning"
+                                       style="font-size: 80px;"></i>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="text-primary">{{ currency.format(content.sales.monthly) }}</h3>
+                                    <p class="text-muted text-nowrap">Monthly Sale</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-lg-3 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {#<div id="today_visitor"></div>#}
+                                    <i class="glyphicon glyphicon-stats text-success"
+                                       style="font-size: 80px;"></i>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="text-primary">{{ currency.format(content.sales.total) }}</h3>
+                                    <p class="text-muted text-nowrap">Total Sale</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Of Overall Status-->
+
+
+            <!-- card box 2-->
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-dark  text-left ">Total Revenue</h4>
+                            <div class="text-center" id="chart_div">
+                                {#<div id="total_revenue">#}
+                                {#<canvas height="165" width="348"#}
+                                {#style="display: inline-block; width: 348px; height: 165px; vertical-align: top;"></canvas>#}
+                                {#</div>#}
+                                {#<ul class="list-inline">#}
+                                {#<li>#}
+                                {#<h5 class="text-muted ">Target</h5>#}
+                                {#<h4>$1000</h4>#}
+                                {#</li>#}
+                                {#<li>#}
+                                {#<h5 class="text-muted">Last Week#}
+                                {#</h5>#}
+                                {#<h4>$523</h4>#}
+                                {#</li>#}
+                                {#<li>#}
+                                {#<h5 class="text-muted">Last Month</h5>#}
+                                {#<h4>$965</h4>#}
+                                {#</li>#}
+                                {#</ul>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 flylshop">
+                    <div class="">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Checklist</h3>
+                                <div align="right">
+                                    {% set status = 'ok' %}
+                                    {% set color = 'success' %}
+                                    {% for key, value in pages %}
+                                        {% if value == 'NoPage' %}
+                                            {% set status = 'remove' %}
+                                            {% set color = 'danger' %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    Status : <span class="text-{{ color }}"><i
+                                                class="glyphicon glyphicon-{{ status }}"></i></span>
+                                </div>
+                            </div>
+                            <ul class="list-group">
+                                {#<li class="list-group-item">#}
+                                {#<div class="row toggle" id="dropdown-detail-2" data-toggle="detail-currency">#}
+                                {#<div class="col-xs-10">#}
+                                {#<h5><a href=javascript:void(0)> Admin | Multiple Currency </a></h5>#}
+                                {#</div>#}
+                                {#<div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>#}
+                                {#</div>#}
+                                {#<div id="detail-currency">#}
+                                {#<hr>#}
+                                {#// Not Yet#}
+                                {#</div>#}
+                                {#</li>#}
+                                <li class="list-group-item">
+                                    <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-1">
+                                        <div class="col-xs-10">
+                                            <h5><a href=javascript:void(0)> Site | Store Pages </a></h5>
+                                        </div>
+                                        <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+                                    </div>
+                                    <div id="detail-1">
+                                        <hr>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item"><a
+                                                                    href="?page=dashboard">
+                                                                Set Page for List Product</a>
+                                                            {% set status = 'ok' %}
+                                                            {% set color = 'success' %}
+                                                            {% if pages['page_to_list_product'] == 'NoPage' %}
+                                                                {% set status = 'remove' %}
+                                                                {% set color = 'danger' %}
+                                                            {% endif %}
+                                                            <span class="text-{{ color }}"><i
+                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                        </li>
+                                                        <li class="list-group-item"><a
+                                                                    href="?page=dashboard">
+                                                                Set Page for Cart Product</a>
+                                                            {% set status = 'ok' %}
+                                                            {% set color = 'success' %}
+                                                            {% if pages['page_to_cart_product'] == 'NoPage' %}
+                                                                {% set status = 'remove' %}
+                                                                {% set color = 'danger' %}
+                                                            {% endif %}
+                                                            <span class="text-{{ color }}"><i
+                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                        </li>
+                                                        <li class="list-group-item"><a
+                                                                    href="?page=dashboard">
+                                                                Set Page for My Account</a>
+                                                            {% set status = 'ok' %}
+                                                            {% set color = 'success' %}
+                                                            {% if pages['page_to_account'] == 'NoPage' %}
+                                                                {% set status = 'remove' %}
+                                                                {% set color = 'danger' %}
+                                                            {% endif %}
+                                                            <span class="text-{{ color }}"><i
+                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                        </li>
+                                                        <li class="list-group-item"><a
+                                                                    href="?page=dashboard">
+                                                                Set Page for Checkout</a>
+                                                            {% set status = 'ok' %}
+                                                            {% set color = 'success' %}
+                                                            {% if pages['page_to_checkout'] == 'NoPage' %}
+                                                                {% set status = 'remove' %}
+                                                                {% set color = 'danger' %}
+                                                            {% endif %}
+                                                            <span class="text-{{ color }}"><i
+                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-dark text-left "><i class="glyphicon glyphicon-pencil text-warning"></i>
+                                Notes !</h4>
+                            <div class="">
+                                <form method="post" id="my_notes" action="{{ site_addr }}/dashboard/saveNotes">
+                                    <ul class="list-inline" id="notes_panel">
+                                        {% for i,note in content['notes'] %}
+                                            <li>
+                                                <label>My Note :</label>
+                                                <input type="text" name="note[]" value="{{ note }}"
+                                                       class="form-control col-md-12">
+                                                <i class="text-danger glyphicon glyphicon-remove-circle remove_note"></i>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <input type="button" class="btn btn-success" id="create_note" value="Create New">
+                                    <input type="submit" value="Save" class="btn btn-primary">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end of card box2 -->
+            <div class="row">
+                <!--Table Data for Latest Projects-->
+                <div class="col-lg-6 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-dark  ">Latest Orders</h4>
+                            <p class="text-muted">
+                                The order details for this week.
+                            </p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>S.no</td>
+                                        <th>Invoice No.</th>
+                                        <th>User</th>
+                                        <th>Ordered On</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i,order in content.index.orders %}
+                                        {% set billing_address = util.jsonDecode(order.info.meta.billing_address) %}
+                                        <tr>
+                                            <td>{{ i + 1 }}</td>
+                                            <td># {{ order.info.invoice_prefix ~  order.info.invoice_no }}</td>
+                                            <td>{{ billing_address.fname ~ ' ' ~ billing_address.lname }}</td>
+                                            <td>{{ order.info.created_at }}</td>
+                                            <td>{{ currency.format(order.info.meta.total, 1, order.info.meta.exchange_value, order.info.meta.currency_code) }}</td>
+                                            {% set flag_color = 'success' %}
+                                            {% set order_status = order.info.order_status %}
+                                            {% if order_status == 'failed' %}
+                                                {% set flag_color = 'danger' %}
+                                            {% elseif order_status == 'new' %}
+                                                {% set flag_color = 'primary' %}
+                                            {% elseif order_status == 'completed' %}
+                                                {% set flag_color = 'success' %}
+                                            {% else %}
+                                                {% set flag_color = 'danger' %}
+                                                {% set order_status = 'Pending' %}
+                                            {% endif %}
+                                            <td>
+                                                <span class="col-md-8 label label-{{ flag_color }}">{{ order.info.order_status }}</span>
+                                                <a href="/wp-admin/admin.php?page=cartrabbit_order&order_id={{ order.info.id }}">
+                                                    <button class="col-md-offset-1 col-md-3 btn btn-primary"><i
+                                                                class="glyphicon glyphicon-search"></i></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Table Data for Latest Projects-->
+
+
+                <!--Progress Bar for Top Selling Products-->
+                <div class="col-lg-6 ">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="referrals">
+                                <h4 class="text-dark ">Top Selling Products</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Progress Bar for Top Selling Products-->
+            </div>
+        </div>
+    </div>
+    <input type="hidden" value="{{ content.sales.graph }}" id="graph">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{% endblock %}
+
+    {% block footer %}
+        <script>
+            (function ($) {
+                $(document).ready(function () {
+                    $('#spin_bar').hide();
+                    /** CURL based GeoIP Download */
+                    $(document).on('click', '.geo_ip_download_curl', function () {
+                        $('#spin_bar').show();
+                        var current = $(this);
+                        $.ajax({
+                            url: '{{ site_addr }}/dashboard/downloadGeoIP',
+                            type: 'POST',
+                            success: function () {
+
+                            },
+                            complete: function () {
+                                $('#spin_bar').hide();
+                                current.closest('div').remove();
+                            }
+
+                        });
+                    });
+
+                    /** Notes Submission */
+                    $('#create_note').on('click', function () {
+                        $('#notes_panel').append(' <li><label> MyNote :</label><input type="text" name="note[]" class="form-control col-md-12"><i class="text-danger glyphicon glyphicon-remove-circle remove_note"></i></li>');
+                    });
+
+                    $(document).on('click', '.remove_note', function () {
+                        var value = $(this).prev('input').val();
+
+                        if (value == '') {
+                            $(this).closest('li').remove();
+                        } else {
+                            var confirmation = confirm('Are You Sure to Remove this Note ?');
+                            if (confirmation) {
+                                $(this).closest('li').remove();
+                            }
+                        }
+                    });
+
+                    $('[id^=detail-]').hide();
+                    $('.toggle').click(function () {
+                        $input = $(this);
+                        $target = $('#' + $input.attr('data-toggle'));
+                        $target.slideToggle();
+                    });
+                    var DrawSparkline = function () {
+                        $('#total_revenue').sparkline([0, 23, 43, 35, 44, 45, 56, 37, 40], {
+                            type: 'line',
+                            width: $('#total_revenue').width(),
+                            height: '165',
+                            chartRangeMax: 50,
+                            lineColor: '#3bafda',
+                            fillColor: 'rgba(59,175,218,0.3)',
+                            highlightLineColor: 'rgba(0,0,0,.1)',
+                            highlightSpotColor: 'rgba(0,0,0,.2)',
+                        });
+
+                        $('#total_revenue').sparkline([25, 23, 26, 24, 25, 32, 30, 24, 19], {
+                            type: 'line',
+                            width: $('#total_revenue').width(),
+                            height: '165',
+                            chartRangeMax: 40,
+                            lineColor: '#00b19d',
+                            fillColor: 'rgba(0, 177, 157, 0.3)',
+                            composite: true,
+                            highlightLineColor: 'rgba(0,0,0,.1)',
+                            highlightSpotColor: 'rgba(0,0,0,.2)',
+                        });
+
+                        $('#yearly_sales').sparkline([3, 6, 7, 8, 6, 4, 7, 10, 12, 7, 4, 9, 12, 13, 11, 12], {
+                            type: 'bar',
+                            height: '165',
+                            barWidth: '10',
+                            barSpacing: '3',
+                            barColor: '#3bafda'
+                        });
+
+                        $('#weekly_sales').sparkline([20, 40, 30, 10], {
+                            type: 'pie',
+                            width: '165',
+                            height: '165',
+                            sliceColors: ['#dcdcdc', '#3bafda', '#333333', '#00b19d']
+                        });
+                    };
+                    DrawSparkline();
+
+                    var resizeChart;
+
+                    $(window).resize(function (e) {
+                        clearTimeout(resizeChart);
+                        resizeChart = setTimeout(function () {
+                            DrawSparkline();
+                        }, 300);
+                    });
+
+
+                    $("#weekly_visitor").circliful
+                    ({
+                        foregroundColor: "#3498DB",
+                        backgroundColor: "#eee",
+                        fontColor: '#aaa',
+                        percent: '{{ content.total_buyers }}',
+
+                    });
+                    $("#total_sale").circliful
+                    ({
+                        foregroundColor: "#3498DB",
+                        backgroundColor: "#eee",
+                        fontColor: '#aaa',
+                        percent: 50
+                    });
+                    $("#pending_order").circliful
+                    ({
+                        foregroundColor: "#3498DB",
+                        backgroundColor: "#eee",
+                        fontColor: '#aaa',
+                        percent: 75
+                    });
+                    $("#today_visitor").circliful
+                    ({
+                        foregroundColor: "#3498DB",
+                        backgroundColor: "#eee",
+                        fontColor: '#aaa',
+                        percent: 40
+                    });
+
+                    /** Graph Contents */
+                    var graph = $('#graph').val();
+                    graph = JSON.parse(graph);
+                    console.log(graph);
+
+                    google.charts.load('current', {'packages': ['line', 'corechart']});
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+
+                        var button = document.getElementById('change-chart');
+                        var chartDiv = document.getElementById('chart_div');
+
+                        var data = new google.visualization.DataTable();
+                        data.addColumn('date', 'Month');
+                        data.addColumn('number', "Monthly Revenue");
+                        var rows = [];
+                        $.each(graph, function (i, data) {
+                            $.each(data, function (n, amount) {
+                                $.each(amount, function (m, total) {
+                                    rows.push([new Date(i, m), total]);
+                                });
+                            });
+                        });
+                        data.addRows(
+                                rows
+                        );
+
+                        var materialOptions = {
+                            chart: {
+                                title: ''
+                            },
+                            width: 500,
+                            height: 240,
+                            series: {
+                                // Gives each series an axis name that matches the Y-axis below.
+                                0: {axis: 'Temps'},
+                                1: {axis: 'Daylight'}
+                            },
+                            axes: {
+                                // Adds labels to each axis; they don't have to match the axis names.
+                                y: {
+                                    Temps: {label: 'Temps (Celsius)'},
+                                    Daylight: {label: 'Daylight'}
+                                }
+                            }
+                        };
+
+                        var classicOptions = {
+                            width: 900,
+                            height: 500,
+                            // Gives each series an axis that matches the vAxes number below.
+                            series: {
+                                0: {targetAxisIndex: 0},
+                                1: {targetAxisIndex: 1}
+                            },
+                            vAxes: {
+                                // Adds titles to each axis.
+                                0: {title: 'Temps (Celsius)'},
+                                1: {title: 'Daylight'}
+                            },
+                            hAxis: {
+                                ticks: [new Date(2014, 0), new Date(2014, 1), new Date(2014, 2), new Date(2014, 3),
+                                    new Date(2014, 4), new Date(2014, 5), new Date(2014, 6), new Date(2014, 7),
+                                    new Date(2014, 8), new Date(2014, 9), new Date(2014, 10), new Date(2014, 11)
+                                ]
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: 30
+                                }
+                            }
+                        };
+
+                        function drawMaterialChart() {
+                            var materialChart = new google.charts.Line(chartDiv);
+                            materialChart.draw(data, materialOptions);
+                            button.innerText = 'Change to Classic';
+                            button.onclick = drawClassicChart;
+                        }
+
+                        function drawClassicChart() {
+                            var classicChart = new google.visualization.LineChart(chartDiv);
+                            classicChart.draw(data, classicOptions);
+                            button.innerText = 'Change to Material';
+                            button.onclick = drawMaterialChart;
+                        }
+
+                        drawMaterialChart();
+
+                    }
+                });
+            })(jQuery.noConflict())
+
+        </script>
+    {% endblock %}

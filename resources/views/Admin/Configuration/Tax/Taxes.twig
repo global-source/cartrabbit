@@ -1,0 +1,114 @@
+{% extends '@CartRabbit/admin_tax_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Tax/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="row">
+                                                                    <h3>Taxes</h3>
+                                                                    <div class="row">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-12">
+                                                                                <table id="example" class="display"
+                                                                                       width="100%" cellspacing="0">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>#</th>
+                                                                                        <th>Tax ID</th>
+                                                                                        <th>Name</th>
+                                                                                        <th>Generic Label</th>
+                                                                                        <th>Rounding Mode</th>
+                                                                                        <th>Zone</th>
+                                                                                        <th>Tag</th>
+                                                                                        <th>Action</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tfoot>
+                                                                                    <tr>
+                                                                                        <th>#</th>
+                                                                                        <th>Tax ID</th>
+                                                                                        <th>Name</th>
+                                                                                        <th>Generic Label</th>
+                                                                                        <th>Rounding Mode</th>
+                                                                                        <th>Zone</th>
+                                                                                        <th>Tag</th>
+                                                                                        <th>Action</th>
+                                                                                    </tr>
+                                                                                    </tfoot>
+                                                                                    <tbody>
+                                                                                    {% set n = 0 %}
+                                                                                    {% for key, val in taxes %}
+                                                                                        <tr>
+                                                                                            <td>{% set n = n +1 %}{{ n }}</td>
+                                                                                            <td>{{ val['id'] }}</td>
+                                                                                            <td>{{ val['name'] }}</td>
+                                                                                            <td>{{ val['genericLabel'] }}</td>
+                                                                                            <td>{{ val['roundingMode'] }}</td>
+                                                                                            <td>{{ val['zone'] }}</td>
+                                                                                            <td>{{ val['tag'] }}</td>
+                                                                                            <td>
+                                                                                                <a href="{{ site_addr }}/wp-admin/admin.php?page=cartrabbit-config&tab=tax&opt=taxes&tax_id={{ val['id'] }}">
+                                                                                                    <i class="glyphicon glyphicon-edit"></i></a>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    {% endfor %}
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    "order": [[3, "desc"]]
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

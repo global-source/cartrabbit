@@ -1,0 +1,96 @@
+{% block body %}
+    <div class="panel">
+        <div class="panel-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <h3>Setup Page To Handle,</h3>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Page to List Products :</label>
+                                    <select class="form-control"
+                                            name="page_to_list_product">
+                                        <option value="NoPage">[Use
+                                            Shortcodes]
+                                        </option>
+                                        {% if config['pages'] is not empty %}
+                                            {% for key,val in config.pages.page %}
+                                                <option value="{{ key }}" {% if key == config.pages.list_product %} selected {% endif %}> {{ val }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Page to Cart Product :</label>
+                                    <select class="form-control"
+                                            name="page_to_cart_product">
+                                        <option value="NoPage">[Use
+                                            Shortcodes]
+                                        </option>
+                                        {% if config['pages'] is not empty %}
+                                            {% for key,val in config.pages.page %}
+                                                <option value="{{ key }}" {% if key == config.pages.cart_product %} selected {% endif %}> {{ val }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Page to My Account :</label>
+                                    <select class="form-control"
+                                            name="page_to_account">
+                                        <option value="NoPage">[Use
+                                            Shortcodes]
+                                        </option>
+                                        {% if config['pages'] is not empty %}
+                                            {% for key,val in config.pages.page %}
+                                                <option value="{{ key }}" {% if key == config.pages.account %} selected {% endif %}> {{ val }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Page to Checkout :</label>
+                                    <select class="form-control"
+                                            name="page_to_checkout">
+                                        <option value="NoPage">[Use
+                                            Shortcodes]
+                                        </option>
+                                        {% if config['pages'] is not empty %}
+                                            {% for key,val in config.pages.page %}
+                                                <option value="{{ key }}" {% if key == config.pages.checkout %} selected {% endif %}> {{ val }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Page to Thank :</label>
+                                    <select class="form-control"
+                                            name="page_to_thank">
+                                        <option value="NoPage">[Use
+                                            Shortcodes]
+                                        </option>
+                                        {% if config['pages'] is not empty %}
+                                            {% for key,val in config.pages.page %}
+                                                <option value="{{ key }}" {% if key == config.pages.thank %} selected {% endif %}> {{ val }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#</form>#}
+    </div>
+{% endblock %}

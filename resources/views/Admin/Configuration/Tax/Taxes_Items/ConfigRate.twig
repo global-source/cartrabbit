@@ -1,0 +1,200 @@
+{% block body %}
+    <br>
+    <div class="flylshop">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 flylshop">
+                    <div class="row">
+                        <div class="col-md-12 flylshop">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <h3>{{ rate_id }}'s Rates
+                                        </h3>
+                                        <div id="resTable">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>Amount ID</th>
+                                                    <th>Amount</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="dyRow">
+                                                {% for amount in content['rates'] %}
+                                                    {% if amount['id'] == rate_id %}
+                                                        {% for amount in amount['amounts'] %}
+                                                            <tr>
+                                                                <td class="lbl_rate_id">{{ amount['id'] }}</td>
+                                                                <td class="lbl_rate_amount">{{ amount['amount'] }}</td>
+                                                                <td class="lbl_rate_start_date">{{ amount['start_date'] }}</td>
+                                                                {% if amount['end_date'] is empty %}
+                                                                    <td> -</td>
+                                                                {% else %}
+                                                                    <td class="lbl_rate_end_date">{{ amount['end_date'] }}</td>
+                                                                {% endif %}
+                                                                <td>
+
+                                                                    <i class="glyphicon glyphicon-edit text-primary btn_rate_edit"
+                                                                       data-target="#myModal"
+                                                                       data-toggle="modal"></i>
+                                                                    <i class="glyphicon glyphicon-remove text-danger btn_rate_remove"
+                                                                       id="{{ amount['id'] }}"
+                                                                       value="delete"
+                                                                       data-target="#myModal"
+                                                                       data-toggle="modal"></i>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td>
+                                                        <input type="button"
+                                                               class="btn btn-info"
+                                                               value="Add"
+                                                                {% if(status == false) %} disabled=disabled title="Cant Create Many Profiles in Same Year" {% endif %}
+                                                               data-target="#myModal"
+                                                               data-toggle="modal">
+                                                    </td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" action="{{ site_addr }}/taxConfig/editTaxAmount">
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title lbl_amount_id" id="myModalLabel">New Tax Amount's
+                                [{{ rate_id ~ '_' ~ now | date('Y') }}]</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" value="{{ tax_id }}"
+                                   name="tax_id"
+                                   id="hidden_tax_id">
+                            <input type="hidden" value="{{ rate_id }}"
+                                   name="rate_id"
+                                   id="hidden_rate_id">
+                            <input type="hidden" value="{{ rate_id ~ '_' ~ now | date('Y') }}"
+                                   name="amount_id"
+                                   id="hidden_amount_id">
+                            <div class="form-group">
+                                <label>Amount : </label>
+                                <input type="text" name="amount" class="form-control txt_amount" placeholder="Amount">
+                            </div>
+                            <div class="form-group">
+                                <label>Start Date : </label>
+                                <input type="text" name="start_date" class="form-control txt_start_date"
+                                       placeholder="Start Date">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date : </label>
+                                <input type="text" name="end_date" class="form-control txt_end_date"
+                                       placeholder="End Date">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                /** To Place Content to Popup Model, while Display ! */
+                $('.btn_rate_edit').on('click', function () {
+                    var id = $(this).closest('tr').find('.lbl_rate_id').html();
+                    var amount = $(this).closest('tr').find('.lbl_rate_amount').html();
+                    var start_date = $(this).closest('tr').find('.lbl_rate_start_date').html();
+                    var end_date = $(this).closest('tr').find('.lbl_rate_end_date').html();
+
+                    //To Set Amount ID to Heading
+                    $('.lbl_amount_id').html(id);
+                    //To Set Amount ID to Hidden Field
+                    $('#hidden_amount_id').val(id);
+                    //To Set Amount for Edit
+                    $('.txt_amount').val(amount);
+                    //To Define the date to Start process
+                    $('.txt_start_date').val(start_date);
+                    //To Define the date to Stop process
+                    $('.txt_end_date').val(end_date);
+                });
+
+                /** To Save Amount Details to JSON File */
+                $('#btn_save').on('click', function () {
+
+                    var id = $('.lbl_amount_id').html();
+                    var amount = $('.txt_amount').val();
+                    var start_date = $('.txt_start_date').val();
+                    var end_date = $('.txt_end_date').val();
+                    var tax_id = $('#hidden_tax_id').val();
+                    var rate_id = $('#hidden_rate_id').val();
+                    var amount_id = $('#hidden_amount_id').val();
+                    $.ajax({
+                        url: '{{ site_addr }}/taxConfig/editTaxAmount',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            amount: amount,
+                            start: start_date,
+                            end: end_date,
+                            tax_id: tax_id,
+                            rate_id: rate_id,
+                            amount_id: amount_id
+                        },
+                        success: function () {
+
+                        }
+                    });
+                });
+
+                /** To Remove Tax Amount's */
+                $('.btn_rate_remove').on('click', function () {
+                    var table = $(this);
+                    var isOK = confirm('Are You Sure to Delete ?');
+                    var tax_id = $('#hidden_tax_id').val();
+                    var rate_id = $('#hidden_rate_id').val();
+                    var amount_id = $(this).attr('id');
+                    if (isOK) {
+                        $.ajax({
+                            url: '/taxConfig/removeTaxAmount',
+                            type: 'POST',
+                            data: {tax_id: tax_id, rate_id: rate_id, amount_id: amount_id},
+                            success: function () {
+                                table.closest('tr').remove();
+                            }
+                        });
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

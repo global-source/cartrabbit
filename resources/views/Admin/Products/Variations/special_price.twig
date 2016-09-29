@@ -1,0 +1,115 @@
+{% block body %}
+    <div class="container">
+        <div class="col-md-6">
+            <table>
+                <thead>
+                <tr>
+                    <td>Date From</td>
+                    <td>Date To</td>
+                    <td>Qty From</td>
+                    <td>Price</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody id="variant_specialPrice">
+                <input type="hidden" value="{{ product_id }}" name="cartRabbit[product_id]">
+                {% for i,data in specialPrice %}
+                    <tr>
+                        <input type="hidden" value="{{ data['id'] }}"
+                               name="cartRabbit[special_price][{{ i }}][price_id]">
+                        <td>
+                            <div class="form-group">
+                                <input type="text" value="{{ data['date_from'] }}" class="form-control datepicker"
+                                       name="cartRabbit[special_price][{{ i }}][date_from]" placeholder="DD-MM-YYYY">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" value="{{ data['date_to'] }}" class="form-control datepicker"
+                                       name="cartRabbit[special_price][{{ i }}][date_to]" placeholder="DD-MM-YYYY">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" value="{{ data['qty_from'] }}" class="form-control"
+                                       name="cartRabbit[special_price][{{ i }}][qty_from]">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" value="{{ data['price'] }}" class="form-control"
+                                       name="cartRabbit[special_price][{{ i }}][price]">
+                            </div>
+                        </td>
+                        <td>
+                            <input type="button" class="btn btn-danger btn_variant_RemovePrice"
+                                   id="id_remove_price_{{ data['id'] }}" value="remove">
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% if specialPrice is empty %}
+                    <tr>
+                        <td><input type="text" class="form-control datepicker"
+                                   name="cartRabbit[special_price][0][date_from]" placeholder="DD-MM-YYYY"></td>
+                        <td><input type="text" class="form-control datepicker"
+                                   name="cartRabbit[special_price][0][date_to]" placeholder="DD-MM-YYYY"></td>
+                        <td><input type="text" class="form-control" name="cartRabbit[special_price][0][qty_from]"></td>
+                        <td><input type="text" class="form-control" name="cartRabbit[special_price][0][price]"></td>
+                        <td><input type="button" class="btn btn-danger btnRemovePrice" value="Remove"></td>
+                    </tr>
+                {% endif %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><input type="button" class="btn btn-success btn_addSpecialPrice" value="Add New"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $('.btn_addSpecialPrice').on('click', function () {
+                $priceTable = $('#variant_specialPrice');
+                var counter = $('#variant_specialPrice tr').length;
+                $priceTable.append('<tr><td><input type="text" class="form-control datepicker" name="cartRabbit[special_price][' + counter + '][date_from]" placeholder="DD-MM-YYYY"></td>' +
+                        '<td><input type="text" class="form-control datepicker" name="cartRabbit[special_price][' + counter + '][date_to]" placeholder="DD-MM-YYYY"></td>' +
+                        '<td><input type="text" class="form-control" name="cartRabbit[special_price][' + counter + '][qty_from]"></td>' +
+                        '<td><input type="text" class="form-control" name="cartRabbit[special_price][' + counter + '][price]"></td>' +
+                        '<td><input type="button" class="btn btn-danger btnRemovePrice" value="Remove"></td></tr>');
+                $('.datepicker').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+            });
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+
+            /**
+             * For Remove Special Prices
+             */
+            $(document).on('click', '.btn_variant_RemovePrice', function () {
+                var id = $(this).attr('id');
+                id = id.replace('id_remove_price_', '');
+                var table = $(this);
+                var confirmation = confirm('Are You Sure to Remove this Special Price ?');
+                if (confirmation) {
+                    $.ajax({
+                        url: '{{ site_addr }}/product/removeSpecialPrice',
+                        type: 'POST',
+                        data: {price_id: id},
+                        success: function () {
+                            table.closest('tr').remove();
+                        }
+                    });
+                }
+            });
+
+        })(jQuery);
+
+    </script>
+{% endblock %}

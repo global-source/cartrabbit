@@ -1,0 +1,122 @@
+{% extends '@CartRabbit/client_singleproduct_template.html.twig' %}
+
+{% block body %}
+
+    <div id="checkout_content" style="position: relative;">
+        <div id="spin_bar"
+             style="position: absolute; left: 0; top: 0; height: 100%; width:100%; z-index: 9999; background-color: #FFFFFF; opacity: .8;">
+            <img src="{{ default.ajax_spin }}" style="left: 50%; top: 50%; position:relative;">
+        </div>
+        {% if general.orderSummery.cart_contents | length > 0 %}
+            <input type="hidden" id="site_addr" value="{{ site_addr }}">
+
+            <div class="flylshop">
+                <div class="fc-container">
+                    <div class="fc-row">
+                        <div class="fc-col-lg-12">
+                            <div class="loginOrRegister fc-row">
+                                {% if (session.user_id < 1 ) %}
+                                    {% include '@CartRabbit/Site/Checkout/Panels/loginOrRegister.twig' %}
+                                {% endif %}
+                            </div>
+                            <div class="billingAddress fc-row">
+                                {% include '@CartRabbit/Site/Checkout/Panels/BillingAddress.twig' %}
+                            </div>
+                        </div>
+                        <div class="fc-col-lg-6">
+                            <div class="shippingMethod fc-row">
+                                {% include '@CartRabbit/Site/Checkout/Panels/shippingMethod.twig' %}
+                            </div>
+                        </div>
+                        <div class="fc-col-lg-6">
+                            <div class="orderSummery fc-row">
+                                {% include '@CartRabbit/Site/Checkout/Panels/OrderSummery.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <h4>Sorry, You Having No More Items for Checkout !</h4>
+        {% endif %}
+        <div style="clear: both;"></div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('#spin_bar').hide();
+
+                var uaccount_status = '{{ session.uaccount }}';
+                var address_state = '{{ session.address_status }}';
+
+                /** Address Management */
+                $('.checkoutBillingAddressContainer').css('display', 'none');
+                if (uaccount_status != 'noRecord') {
+                    $('#checkoutLoginContainer').css('display', 'none');
+                    if (address_state == 'false') {
+                        if ('{{ billing_address | length }}' == 1) {
+                            //Create Form Should Open
+                            $('.checkoutBillingAddressContainer').css('display', 'block');
+                        } else {
+                            $('#checkoutDeliveryAddressTab').css('display', 'none');
+                            $('.checkoutBillingAddressContainer').css('display', 'block');
+                        }
+                    }
+                }
+
+                if ('{{ general.orderSummery.shipping_info.isEnable ? 'true' : 'false' }}' == 'true' && '{{ general.orderSummery.shipping_info.needShipping ? 'true' : 'false' }}' == 'true') {
+                    //
+                } else {
+//                    loadPayment();
+                }
+            });
+
+            function loadPayment() {
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/loadPayment',
+                    type: 'POST',
+                    success: function (res) {
+                        console.log(res.summery);
+                        /** If error is hit, then redirect */
+                        if (res.error_url) {
+                            location.reload(res.error_url);
+                        }
+                        $('#payment_content').html(res.payment);
+                        $('#summery_content').html(res.summery);
+                        $('.orderSummaryContainer').css('display', 'block');
+                        $(".order-content").show(100);
+                        $(".delivery-content").delay(200).css('display', 'none');
+
+                        /** This Action only happened, when shipping is disabled */
+//                        $(".checkoutBillingAddressContainer").css('display', 'none');
+//
+//                        $('.shippingMethodContainer').css('display', 'none');
+//                        loadOrderSummery();
+                    }
+                });
+            }
+
+            function loadOrderSummery() {
+                var site_addr = $('#site_addr').val();
+                $.ajax({
+                    url: site_addr + '/checkout/loadOrderSummery',
+                    type: 'POST',
+                    success: function (res) {
+                        /** If error is hit, then redirect */
+                        if (res.error_url) {
+                            location.reload(res.error_url);
+                        }
+                        $('#summery_content').html(res);
+                        $('.orderSummaryContainer').css('display', 'block');
+                    }
+                });
+            }
+        })(jQuery);
+    </script>
+
+{% endblock %}

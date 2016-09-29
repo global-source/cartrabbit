@@ -1,0 +1,633 @@
+{% block body %}
+    <div>
+        <div class="fc-title-tab checkoutBillingAddressTab">
+            <span class="fc-text-medium">
+                Address
+            </span>
+            {% if session.uaccount != 'noRecord' %}
+                <span class="fc-text-right change-address-btn">
+                    Change Address
+                </span>
+            {% endif %}
+        </div>
+        <div class="address-abstract">
+
+        </div>
+        <div class="checkoutBillingAddressContainer">
+            <div class="fc-row address_create_form">
+
+                <input type="hidden" value="{{ billing_address | length }}"
+                       id="hidden_billing_addr_count">
+                <div class="row" id="newAddress">
+                    <div class="col-md-12">
+                        <div id="div_existing" align="right">
+                            <input type="button" id="btn_Existing" class="fc-btn fc-btn-primary"
+                                   value="Use Existing">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fc-container">
+                            <div class="fc-row">
+                                {#{{ dd(session) }}#}
+                                {% set data = [] %}
+                                <div class="fc-col-lg-6">
+                                    <div align="right" class="diff_guest_billing_address">
+                                    </div>
+                                    {% set form = 'frm_multipleAddr' %}
+                                    {% set prf = '' %}
+                                    {% set submit = 'btn_save' %}
+                                    {% if session.uaccount == 'guest' %}
+                                        <h4>Billing Address</h4>
+
+                                        {% set data = session['billing_address'] %}
+                                    {% endif %}
+                                    {% include '@CartRabbit/Site/Checkout/Form/address_creation_form.twig' %}
+                                </div>
+                                {% if session.uaccount == 'guest' %}
+                                    <!-- Only For Guest User's -->
+                                    <div class="fc-col-lg-6 guest_shipping_address">
+                                        <br>
+                                        <h4>Shipping Address</h4>
+                                        {% set form = 'frm_guest_delivery_multipleAddr' %}
+                                        {% set prf = 'gu_' %}
+                                        {% set submit = 'btn_guest_save' %}
+
+                                        {% if session.guest_shipping_address.force_set  == 'false' %}
+                                            {% set data = session['shipping_address'] %}
+                                        {% endif %}
+                                        {% include '@CartRabbit/Site/Checkout/Form/address_creation_form.twig' %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="checkoutBillingAddressContainer">
+            <form id="address_form">
+                <div class="fc-container" id="container">
+                    <div id="existingAddress" class="fc-row">
+                        <div align="right" class="chk_use_different_shipping">
+                            <label>Use Different Shipping Address :
+                                <input type="checkbox" class="form-control" value="yes" name="diff_shipping_address"
+                                       id="chk_use_different_shipping">
+                            </label>
+                        </div>
+                        <div id="div_createNew" align="right">
+                            <input type="button" id="btn_createNew" class="fc-btn fc-btn-success"
+                                   value="Create New">
+                        </div>
+                        <div class="fc-col-lg-6 fc-col-md-6">
+                            <h3>Billing Address</h3>
+                            <div class="col-md-6">
+
+                                {% if session.uaccount != "guest" %}
+                                    {% for key, address in billing_address %}
+                                        {#{{ dd(billing_address) }}#}
+                                        {% if key != 'active' %}
+                                            {% if key == billing_address['active']['id'] %}
+                                                <input type="hidden" id="default_billing_address" value="{{ key }}">
+                                                <input type="hidden" id="default_billing_address_value"
+                                                       value="{{ jsonAddress }}">
+                                            {% endif %}
+                                            <div class="col-lg-6">
+                                                <div class="well">
+                                                    <div align="right">
+                                                        <a href=javascript:void(0)><i
+                                                                    class="glyphicon glyphicon-edit"></i></a>
+                                                    </div>
+                                                    <div style="font-size: 100%">
+                                                        <p><label><input type="radio" class="address_panel"
+                                                                         value="{{ key }}"
+                                                                         name="billing_address">
+                                                                <b>{{ address['fname'] ~ ' ' ~ address['lname'] }}</b><br>
+                                                                {{ address['address1'] ~ ' ,' ~ address['address2'] }}
+                                                                {{ address['city'] }},
+                                                                {{ address['zone'] }},
+                                                                {{ address['country'] }},
+                                                                {{ address['mobile'] }} </label></p>
+                                                    </div>
+                                                    {#<input type="button" id="{{ key }}"#}
+                                                    {#class="fc-btn fc-btn-success btn_selectAddress"#}
+                                                    {#value="Use This">#}
+                                                    {#<input type="button" id="rem_{{ key }}"#}
+                                                    {#class="fc-btn fc-btn-danger btn_removeAddress"#}
+                                                    {#value="Remove">#}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="fc-col-lg-6 fc-col-md-6">
+                            <h3 id="delivery_address_info">Delivery Address</h3>
+                            <div id="existingAddress" class="col-md-6 checkoutDeliveryAddressContainer">
+                                <div>
+                                    <div id="div_createNew" align="right">
+                                    </div>
+                                </div>
+                                {% if session.uaccount != "guest" %}
+                                    {% for key, address in billing_address %}
+                                        {% if key != 'active' %}
+                                            {% if key == billing_address['active']['id'] %}
+                                                <input type="hidden" id="default_billing_address" value="{{ key }}">
+                                                <input type="hidden" id="default_billing_address_value"
+                                                       value="{{ jsonAddress }}">
+                                            {% endif %}
+                                            <div class="col-lg-6">
+                                                <div class="well">
+                                                    <div align="right">
+                                                        <a href=javascript:void(0)><i
+                                                                    class="glyphicon glyphicon-edit"></i></a>
+                                                    </div>
+                                                    <div style="font-size: 100%">
+                                                        <p><label><input type="radio" class="address_panel"
+                                                                         value="{{ key }}"
+                                                                         name="shipping_address">
+                                                                <b>{{ address['fname'] ~ ' ' ~ address['lname'] }}</b><br>
+                                                                {{ address['address1'] ~ ' ,' ~ address['address2'] }}
+                                                                {{ address['city'] }},
+                                                                {{ address['zone'] }},
+                                                                {{ address['country'] }},
+                                                                {{ address['mobile'] }} </label></p>
+                                                    </div>
+                                                    {#<input type="button" id="{{ key }}"#}
+                                                    {#class="fc-btn fc-btn-success btn_shipping_selectAddress"#}
+                                                    {#value="Use This">#}
+                                                    {#<input type="button" id="rem_sh_{{ key }}"#}
+                                                    {#class="fc-btn fc-btn-danger btn_shipping_removeAddress"#}
+                                                    {#value="Remove">#}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if session.uaccount != 'guest' %}
+                    <div style="clear: both;"></div>
+                    <div align="right">
+                        <input type="button" value="Continue" id="btn_set_address" class="fc-btn fc-btn-primary">
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div class="fc-row" id="selected_address">
+
+    </div>
+    <input type="hidden" value="{{ site_addr }}" id="site_addr">
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                ajax_stop();
+
+                $(".checkoutDeliveryAddressContainer").css('display', 'none');
+                $("#delivery_address_info").hide();
+
+                var uaccount = '{{ session.uaccount }}';
+                var isAddressSet = '{{ session.address_status }}';
+
+                if (isAddressSet == 'true') {
+                    loadAddress();
+                }
+
+                $('.guest_shipping_address').hide();
+                if (uaccount == 'guest') {
+                    /** Check, if guest's delivery address is setted. */
+                    var status = '';
+
+                    if ('{{ session.shipping_address_verified }}' == 1 && '{{ session.shipping_address.force_set }}' == 'false') {
+                        status = 'checked="checked"';
+                        $('.guest_shipping_address').show();
+                    }
+                    var guest_diff_addr = ' <label>Use Different Shipping Address : <input type="checkbox" ' + status + ' class="form-control" id="chk_use_different_guest_shipping"> ' +
+                            '              </label>';
+                    $('.diff_guest_billing_address').html(guest_diff_addr);
+                    $('.chk_use_different_shipping').hide();
+                }
+
+                $('#chk_use_different_guest_shipping').on('click', function () {
+                    if ($(this).prop("checked") == true) {
+                        $('.guest_shipping_address').show();
+                    } else {
+                        $('#gu_btn_reset').click();
+                        $('.guest_shipping_address').hide();
+                    }
+                });
+
+                $('.btn_removeAddress').hide();
+                $('.btn_shipping_removeAddress').hide();
+                $('#newAddress').hide();
+                $('#existingAddress').hide();
+
+                var default_billing_address = $('#default_billing_address').val();
+
+                if (default_billing_address !== undefined || null) {
+                    var button = "#" + default_billing_address;
+                    $('.btn_selectAddress').attr('disabled', 'true');
+                    $('.btn_shipping_selectAddress').attr('disabled', 'true');
+                    $(button).hide();
+                    id = "#rem_" + default_billing_address;
+                    $(id).show();
+                }
+
+                var address_count = $('#hidden_billing_addr_count').val();
+                if (address_count > 0) {
+                    $('#existingAddress').show();
+                    $('#newAddress').hide();
+                } else if (address_count == 0) {
+                    $('#div_useExisting').hide();
+                    $('#newAddress').show();
+                    $('#createNew').attr('checked', 'checked');
+                }
+
+                /** If Current User is loggin as "Guest" then directly display the forms */
+                if (uaccount == 'guest') {
+                    $('#btn_createNew').css('display', 'none');
+                    $('#btn_Existing').css('display', 'none');
+
+                    $('#newAddress').css('display', 'block');
+                }
+
+                /** If Billing Address is Set */
+                if (isAddressSet == 'true') {
+                    loadDelivery();
+                }
+
+                /** Ajax Call Triggering on Selecting Country. */
+                $('.sel_country').on('change', function () {
+                    var country = $(this).val();
+                    var id = $(this).attr('id');
+                    ajax_start();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/getSubdivisions',
+                        type: 'POST',
+                        data: {country: country},
+                        success: function (data) {
+                            var toAppend = '';
+                            $.each(data['Country'], function (i, state) {
+                                toAppend += '<option value="' + i + '">' + state + '</option>';
+                            });
+                            /** Work with two different form with its unique prefix. */
+                            if (id == 'gu_') {
+                                $('#gu_sel_zone').html(toAppend);
+                            } else {
+                                $('#sel_zone').html(toAppend);
+                            }
+                        },
+                        complete: function () {
+                            ajax_stop();
+                        }
+                    });
+                });
+
+                /** For Save Guest Address */
+                $('#btn_save').on('click', function () {
+                    ajax_start();
+                    saveAddress();
+                });
+
+                /** For Save Multiple Address */
+                $('#btn_guest_save').on('click', function () {
+                    ajax_start();
+                    saveAddress('guest_shipping');
+                });
+
+                $('#btn_set_address').attr('disabled', 'true');
+
+                /** Enabling / Disabling the Address Process */
+                $('.address_panel').on('click', function () {
+                    var address_status = getAddressButtonStatus();
+
+                    if (address_status) {
+                        $('#btn_set_address').removeAttr('disabled');
+                    } else {
+                        $('#btn_set_address').attr('disabled', 'true');
+                    }
+                });
+
+                /** To Create New Address */
+                $('#btn_createNew').on('click', function () {
+                    $('#existingAddress').hide();
+                    $('#newAddress').show();
+
+                    $('#btn_Existing').show();
+                    $('#btn_createNew').hide();
+                    $('#btn_set_address').hide();
+                });
+
+                $('#btn_Existing').on('click', function () {
+
+                    $('#existingAddress').show();
+                    $('#newAddress').hide();
+
+                    $('#btn_set_address').show();
+                    $('#btn_Existing').hide();
+                    $('#btn_createNew').show();
+                });
+
+
+                /** Form for Managing Addresses */
+
+                /** For Billing Address */
+                $('#btn_set_address').on('click', function () {
+
+                    var form = $(this).closest('form').serializeArray();
+
+                    var id = $(this).attr('id');
+                    $(".checkoutBillingAddressContainer").css('display', 'none');
+                    ajax_start();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/setCheckoutAddress',
+                        type: 'POST',
+                        data: form,
+                        success: function () {
+                            loadAddress();
+                            loadPayment();
+                            $('.change-address-btn').css('display', 'block');
+                        }
+                    });
+                });
+
+                /** For Shipping Address */
+                {#$('.btn_shipping_selectAddress').on('click', function () {#}
+                {#var form = $(this).closest('form').serializeArray();#}
+                {#var id = $(this).attr('id');#}
+                {#var button = $(this);#}
+                {#ajax_start();#}
+                {#$.ajax({#}
+                {#url: '{{ site_addr }}/checkout/setCheckoutAddress',#}
+                {#type: 'POST',#}
+                {#data: form,#}
+                {#success: function () {#}
+                {#loadPayment();#}
+                {#loadShippingDelivery();#}
+                {#$('.btn_shipping_selectAddress').attr('disabled', 'true');#}
+                {#button.css('display', 'none');#}
+                {#id = "#rem_sh_" + id;#}
+                {#$(id).show();#}
+                {#$('.change-address-btn').css('display', 'block');#}
+                {#loadPayment();#}
+                {#loadAddress();#}
+                {#},#}
+                {#complete: function () {#}
+                {#ajax_stop();#}
+                {#}#}
+                {#});#}
+                {#});#}
+
+                $('#chk_use_different_shipping').on('click', function () {
+                    var address_status = getAddressButtonStatus();
+
+                    if ($(this).is(':checked')) {
+                        $('#btn_set_address').attr('disabled', 'true');
+                        loadDelivery();
+                    } else {
+                        if (address_status) {
+                            $('#btn_set_address').removeAttr('disabled');
+                        }
+                        disableDelivery();
+                    }
+                });
+
+                /** For Removing Billing Address */
+                $('.btn_removeAddress').one('click', function () {
+                    var id = $(this).attr('id');
+//                    removeBillingAddress();
+                });
+
+                /** For Shipping Address */
+                $('.btn_shipping_removeAddress').one('click', function () {
+                    var id = $(this).attr('id');
+//                    removeShippingAddress();
+                });
+
+                $(".change-address-btn").click(function () {
+                    $(this).hide();
+                    $('.address-abstract').html('');
+                    $('#selected_address').hide();
+                    // Processing Panels
+                    $(".checkoutBillingAddressContainer").css('display', 'block');
+                    $(".checkoutDeliveryAddressContainer").css('display', 'none');
+
+                    $(".orderSummaryContainer").css('display', 'none');
+                    $('.shippingMethodContainer').css('display', 'none');
+
+                    $('.btn_selectAddress').css('display', 'block');
+                    $('.btn_selectAddress').removeAttr('disabled');
+
+                    $('.btn_shipping_removeAddress').css('display', 'block');
+                    $('.btn_shipping_removeAddress').removeAttr('disabled');
+                    $('#paymentContinue').prop('disabled', true);
+                    $("[name='payment_type']").prop('checked', false);
+                    $("[name='shipping_type']").prop('checked', false);
+                    $('.change-payment-btn').css('display', 'none');
+//                    $('.change-shipping-btn').css('display', 'none');
+                    $('#chk_use_different_shipping').attr('checked', false);
+
+                    //TODO: Separate this.
+                    removeBillingAddress();
+                    removeShippingAddress();
+
+                    $('#place-order').attr('disabled', 'disabled');
+                });
+
+                {#/** To Verify the session address. */#}
+                {#if (('{{ session.billing_address }}' != '' && '{{ session.shipping_address }}' != '') && '{{ session.uaccount }}' != 'noRecord') {#}
+//                $(".checkoutBillingAddressContainer").css('display', 'none');
+                {#}#}
+
+                {#/** If Guest user get logged in, then show address form directly. */#}
+                {#if (('{{ session.uaccount }}' == 'guest' && '{{ session.user_id }}' == 0) || ('{{ session.address_statue }}' == 'false')) {#}
+                {#$(".checkoutBillingAddressContainer").css('display', 'block');#}
+                {#}#}
+            });
+
+            function removeBillingAddress() {
+                if ('{{ session.uaccount }}' != 'guest') {
+                    ajax_start();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/removeBillingAddress',
+                        type: 'POST',
+                        success: function () {
+                            $('#payment_content').html();
+                            $('.btn_removeAddress').hide();
+                            $('.btn_selectAddress').show();
+
+                            disableDelivery();
+                            $('.btn_selectAddress').removeAttr('disabled');
+                            $('.shippingMethodContainer').css('display', 'none');
+                            $('#chk_use_different_shipping').attr('checked', false);
+                        },
+                        complete: function () {
+                            ajax_stop();
+                        }
+                    });
+                }
+            }
+
+            function removeShippingAddress() {
+                if ('{{ session.uaccount }}' != 'guest') {
+                    ajax_start();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/removeDeliveryAddress',
+                        type: 'POST',
+                        success: function () {
+
+                            $('.btn_shipping_removeAddress').hide();
+                            $('.btn_shipping_selectAddress').show();
+
+                            $('#payment_content').html();
+                            $('.btn_shipping_selectAddress').removeAttr('disabled');
+                            $('.shippingMethodContainer').css('display', 'none');
+                        },
+                        complete: function () {
+                            ajax_stop();
+                        }
+                    });
+                }
+            }
+
+            function getAddressButtonStatus() {
+                var address_set_status = false;
+                if ($('[name=billing_address]').is(':checked')) {
+                    if ($('#chk_use_different_shipping').is(':checked')) {
+                        if ($('[name=shipping_address]').is(':checked')) {
+                            address_set_status = true;
+                        }
+                    } else {
+                        address_set_status = true;
+                    }
+                } else {
+                    address_set_status = false;
+                }
+                return address_set_status;
+            }
+
+            function loadDelivery() {
+//                $(".checkoutBillingAddressContainer").css('display', 'none');
+                $(".checkoutDeliveryAddressContainer").css('display', 'block');
+                $("#delivery_address_info").show();
+            }
+
+            function loadShippingDelivery() {
+//                $(".checkoutBillingAddressContainer").css('display', 'none');
+                $(".checkoutDeliveryAddressContainer").css('display', 'block');
+            }
+
+            function disableDelivery() {
+                $(".checkoutBillingAddressContainer").css('display', 'block');
+                $(".checkoutDeliveryAddressContainer").css('display', 'none');
+                $("#delivery_address_info").hide();
+            }
+
+            function loadPayment() {
+                ajax_start();
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/loadPayment',
+                    type: 'POST',
+                    success: function (res) {
+
+                        /** If error is hit, then redirect */
+                        if (res.error_url) {
+                            location.reload(res.error_url);
+                        }
+                        $(".order-content").show(100);
+                        $(".delivery-content").delay(200).css('display', 'none');
+//
+                        /** This Action only happened, when shipping is disabled */
+                        $(".checkoutBillingAddressContainer").css('display', 'none');
+
+                        $('.shippingMethodContainer').css('display', 'none');
+
+//                        $('#payment_content').html(res.payment);
+                        $('#summery_content').html(res.summery);
+                        $('#shipping_content').html(res.shipping);
+                    },
+                    complete: function () {
+                        ajax_stop();
+                    }
+                });
+            }
+
+            function loadAddress() {
+                ajax_start();
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/loadAddressInfo',
+                    type: 'POST',
+                    success: function (res) {
+                        $('#selected_address').html(res);
+                        $('#selected_address').show();
+                    },
+                    complete: function () {
+                        ajax_stop();
+                    }
+
+                });
+            }
+
+            function saveAddress(type) {
+                var prf;
+                var form;
+                var data;
+                var force_set = !$('#chk_use_different_guest_shipping').prop("checked");
+
+                $('.validation').remove();
+
+                if (type == 'guest_shipping') {
+                    form = $('#frm_guest_delivery_multipleAddr');
+                    prf = 'gu_';
+                    data = form.serializeArray();
+                } else {
+                    prf = '';
+                    form = $('#frm_multipleAddr');
+                    data = form.serializeArray();
+                    data.push({name: 'addr_type', value: 'billing_address'});
+                }
+                data.push({name: 'force_set', value: force_set});
+                console.log(form + ' : ');
+                console.log(data);
+
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/saveAddress',
+                    type: 'POST',
+                    data: data,
+                    success: function (res) {
+                        $.each(res, function (i, data) {
+                            if (i == 'success' && data == 1) {
+                                location.reload();
+                            } else if (i == 'error') {
+                                $.each(data, function (i, data) {
+                                    console.log(prf + i);
+                                    $('[for= ' + prf + i + ' ]').append('<span class="validation fc-text-danger">*' + data + '</span>');
+                                });
+                            }
+                        });
+                    },
+                    complete: function () {
+                        ajax_stop();
+                    }
+                });
+            }
+
+            function ajax_start() {
+                $('#spin_bar').show();
+            }
+
+            function ajax_stop() {
+                $('#spin_bar').hide();
+            }
+
+        })(jQuery);
+    </script>
+
+{% endblock %}

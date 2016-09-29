@@ -1,0 +1,56 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/config/config">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <h3>Order Configurations</h3>
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-8">
+                                                                            <label>Invoice Prefix :</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   placeholder="ex. INV-"
+                                                                                   value="{{ config['invoice_prefix'] }}"
+                                                                                   name="invoice_prefix">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

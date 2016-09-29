@@ -1,0 +1,7 @@
+{% block body %}
+    {% if setting.get('tax_display_tax_info', 'no') == 'yes' %}
+        {% if product.price.taxInfo is not empty %}
+            <small>[ {{ product.price.taxInfo }} ]</small>
+        {% endif %}
+    {% endif %}
+{% endblock %}

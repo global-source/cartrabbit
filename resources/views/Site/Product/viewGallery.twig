@@ -1,0 +1,20 @@
+{% block body %}
+    {% if (setting.d_config_show_product_gallery == 'yes') %}
+        {# In Single Product Display, i Value is Empty #}
+        {% if i is empty %}
+            {% set i = 0 %}
+        {% endif %}
+        <br>
+        <div class="" align="">
+            {% if product.meta.gallery | length != 0 %}
+                {% for id, url in product.meta.gallery %}
+                    <a href="#" class="">
+                        <img src="{{ url }}" alt="Image" height="50" width="50">
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p class="margin btm">...</p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

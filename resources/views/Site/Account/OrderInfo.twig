@@ -1,0 +1,74 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+{% block body %}
+    <div style="width: 95%; max-height: 500px; overflow-y: auto;">
+        <div class="flylshop">
+            <div class="panel">
+                <div class="panel-body flylshop">
+                    <h4>Order #{{ orderInfo.order.invoice_prefix ~ orderInfo.order.invoice_no }}</h4>
+                    <hr>
+                    <h5 class="text text-success">Payment Type :
+                        <b>{{ orderInfo.order.meta.payment_method_raw }}</b>
+                    </h5>
+                    <h6 class="text text-danger">Orderd On : <b>{{ orderInfo.order.created_at.format('Y-m-d') }}</b>
+                    </h6>
+                    <div class="col-md-4">
+                        <b>Billing Details</b>
+                        {% set billing_address = util.jsonDecode(orderInfo.order.meta.billing_address) %}
+                        <br>
+                        <p class="text-primary"><b>Address : </b></p>
+                        <p>{{ billing_address.fname ~ ' ' ~ billing_address.lname }}
+                            ,</p>
+                        <p>{{ billing_address.address1 ~ ' ' ~ billing_address.address2 }}
+                            ,</p>
+                        <p>{{ billing_address.city }}
+                            - {{ billing_address.postalCode }},</p>
+                        <p>{{ util.convertStateCodeToName(billing_address.country, billing_address.zone)~ ',' }}
+                        </p>
+                        <p>{{ util.getCountryNameByCode(billing_address.country)~ ',' }}</p>
+                        {% if billing_address.mobile is not empty %}
+                            <p class="text-primary"><b>Phone : </b></p>
+                            <p>{{ billing_address.mobile }},</p>
+                        {% endif %}
+
+                        {% if orderInfo.user.email is not empty %}
+                            <p class="text-primary"><b>E-Mail : </b></p>
+                            <p>{{ orderInfo.user.email }}.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-4">
+                        <b>Shipping Details</b>
+                        {% set delivery_address = util.jsonDecode(orderInfo.order.meta.shipping_address) %}
+                        <p class="text-primary"><b>Address : </b></p>
+                        <p>{{ delivery_address.fname ~ ' ' ~ delivery_address.lname }}
+                            ,</p>
+                        <p>{{ delivery_address.address1 ~ ' ' ~ delivery_address.address2 }}
+                            ,</p>
+                        <p>{{ delivery_address.city }}
+                            - {{ delivery_address.postalCode }},</p>
+
+                        {% if delivery_address.country != null %}
+                            <p>{{ util.convertStateCodeToName(delivery_address.country, delivery_address.zone ) ~ ',' }}
+                            </p>
+                        {% endif %}
+                        <p>{{ util.getCountryNameByCode(delivery_address.country) ~ ',' }}</p>
+                        {% if delivery_address.mobile is not empty %}
+                            <p class="text-primary"><b>Phone : </b></p>
+                            <p>{{ delivery_address.mobile }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include '@CartRabbit/Site/Account/OrderItems.twig' %}
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+    </script>
+{% endblock %}

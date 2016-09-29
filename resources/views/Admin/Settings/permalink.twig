@@ -1,0 +1,92 @@
+{% extends '@CartRabbit/admin_js_template.html.twig' %}
+{% block content %}
+
+{% endblock %}
+{% block body %}
+    <table class="form-table">
+        <tbody>
+        <tr>
+            <th><label>
+                    Product category base</label></th>
+            <td><input type="text" class="regular-text code"
+                       value="{{ config['product_category_base'] }}"
+                       name="product_category_base"></td>
+        </tr>
+        <tr>
+            <th><label>
+                    Product tag base</label></th>
+            <td><input type="text" class="regular-text code"
+                       value="{{ config['product_tag_base'] }}"
+                       name="product_tag_base"></td>
+        </tr>
+        <tr>
+            <th><label>
+                    <input type="radio" name="permalink"
+                           class="cartRabbit_PermalinkStructure"
+                            {% if config['permalink'] == 'default_permalink' %}
+                                checked=checked
+                            {% endif %}
+                           value="default_permalink">
+                    Default </label></th>
+            <td><code>{{ permalink['default'] }}</code></td>
+        </tr>
+        <tr>
+            <th><label>
+                    <input type="radio" name="permalink"
+                           class="cartRabbit_PermalinkStructure"
+                            {% if config['permalink'] == 'product/' %}
+                                checked=checked
+                            {% endif %}
+                           value="product/">
+                    Shop Base</label></th>
+            <td><code>{{ permalink['shop'] }}</code></td>
+        </tr>
+        <tr>
+            <th><label><input type="radio" name="permalink"
+                              class="cartRabbit_PermalinkStructure"
+                            {% if config['permalink'] == 'product/%product-category%' %}
+                                checked=checked
+                            {% endif %}
+                              value="product/%product-category%">
+                    Shop Base with Category</label></th>
+            <td><code>{{ permalink['shopWithCat'] }}</code></td>
+        </tr>
+        <tr>
+            <th><label><input type="radio" name="permalink"
+                              class="cartRabbit_PermalinkStructure"
+                            {% if config['permalink'] == 'shopWithCat_permalink' or config['type'] == 'custom' %}
+                                checked=checked
+                            {% endif %}
+                              value="custom">
+                    Custom Structure</label></th>
+            <td><input type="text" class="regular-text code"
+                       value="{{ config['permalink'] }}"
+                       name="permalink_custom"></td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                $('.permalink-structure input').change(function () {
+                    if (!jQuery(this).val()) {
+                        jQuery('.cartRabbit_PermalinkStructure').attr('disabled', 'disabled');
+                        $('[name="permalink_custom"]').val('');
+                    } else {
+                        jQuery('.cartRabbit_PermalinkStructure').removeAttr('disabled');
+                    }
+                });
+
+                $('.cartRabbit_PermalinkStructure').change(function () {
+                    if (jQuery(this).val() != 'custom') {
+                        $('[name="permalink_custom"]').val(jQuery(this).val());
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% block content %}
+    <link href="{{ site_url }}/resources/assets/css/notifIt.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/style.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/cart/cart.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ site_url }}/resources/assets/css/product/viewProduct.css">
+    <link rel="stylesheet" type="text/css" href="{{ site_url }}/resources/assets/css/product/viewProducts.css">
+    <link rel="stylesheet" type="text/css" href="{{ site_url }}/resources/assets/css/flycart.css">
+
+{% endblock %}
+<div id="content">{% block body %}{% endblock %}</div>
+
+<div id="footer">
+    <script src="{{ site_url }}/resources/assets/js/CartRabbit.min.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/bootstrap.min.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/product/addToCart.js"></script>
+    {#<script src="{{ site_url }}/resources/assets/js/notifIt.min.js"></script>#}
+    {#<script src="{{ site_url }}/resources/assets/js/jquery.validator.min.js"></script>#}
+    {#<script src="{{ site_url }}/resources/assets/js/jquery.validator.addtional.methods.js"></script>#}
+    <script src="{{ site_url }}/resources/assets/js/script.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/spin.min.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/jquery.spin.js"></script>
+    {% block footer %}
+    {% endblock %}
+</div>

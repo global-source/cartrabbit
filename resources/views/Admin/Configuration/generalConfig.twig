@@ -1,0 +1,415 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            {% if tabType != 'product' and tabType != 'tax' %}
+                                <div class="">
+                                    <div class="row">
+                                        <div class="col-md-12 flylshop">
+                                            <h3 class="text text-primary">General Options</h3>
+                                            <div class="panel panel-info">
+                                                <form method="post" enctype="multipart/form-data"
+                                                      action="{{ site_addr }}/storeConfig/general">
+                                                    <div align="right">
+                                                        <button class="btn btn-primary">Save</button>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Store Name : </label>
+                                                                        <input type="text" name="store_name"
+                                                                               value="{% if config.store_name is not empty %}{{ config.store_name }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+
+                                                                        <label>Store Logo :</label><br>
+                                                                        {#{% if config['logo'] is not empty %}#}
+                                                                        {#<img class="image"#}
+                                                                        {#src="../wp-content/uploads/{{ config['logo'] }}"#}
+                                                                        {#height="80" width="auto" alt="No Logo">#}
+                                                                        {#{% endif %}#}
+                                                                        {#<input type="file" name="logo" class="logo-btn btn"#}
+                                                                        {#accept="image/x-png">#}
+                                                                        <img
+                                                                                {% if config.logo is not empty %}
+                                                                                    src="{{ config.logo }}"
+                                                                                    height='80' width='80'
+                                                                                {% endif %}
+                                                                                class="upload_btn_logo" alt="Set Image">
+                                                                        <input type="hidden"
+                                                                               name="logo"
+                                                                               value=""
+                                                                               class="upload_data">
+                                                                        <span class="text text-danger"><code><b>Must be
+                                                                                    in '.png' format</b></code></span>
+                                                                    </div>
+                                                                    <div class="">
+                                                                        <label class="">Store Location :</label>
+                                                                        <select class="selectpicker form-control"
+                                                                                name="store_country"
+                                                                                id="storeCountry"
+                                                                                data-live-search="true"
+                                                                                tabindex="-1">
+                                                                            {% for key,val in countries %}
+                                                                                <option {% if config.store_country == key %}  selected=selected {% endif %}
+                                                                                        value="{{ key }}">{{ val }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div id="storeStateDiv">
+                                                                        <label class="">State :</label>
+                                                                        <select class="form-control selectpicker"
+                                                                                data-live-search="true"
+                                                                                name="store_state"
+                                                                                id="storeState">
+                                                                            {% for i, state in config.store_states %}
+                                                                                <option {% if i == config.store_state %} selected=selected {% endif %}
+                                                                                        value="{{ i }}">{{ state }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="">Address line 1 :</label>
+                                                                        <input type="text" name="address1"
+                                                                               value="{% if config.address1 is not empty %}{{ config.address1 }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="">Address line 2 :</label>
+                                                                        <input type="text" name="address2"
+                                                                               value="{% if config.address2 is not empty %}{{ config.address2 }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label class="">City :</label>
+                                                                        <input type="text" name="city"
+                                                                               value="{% if config.city is not empty %}{{ config.city }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label class="">Postal Code :</label>
+                                                                        <input type="text" name="postal"
+                                                                               value="{% if config.postal is not empty %}{{ config.postal }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="">Terms & Conditions :</label>
+                                                                        <textarea class="form-control" name="terms"
+                                                                                  style="height: 75px">{% if config.terms is not empty %}{{ config.terms }}{% endif %}
+                                                                        </textarea>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="form-group">
+                                                                        <label class="">Selling locations :</label>
+                                                                        <select class="form-control"
+                                                                                name="sell_location"
+                                                                                id="sellLocation">
+                                                                            <option value="sell_to_all">Sell to All
+                                                                                Country
+                                                                            </option>
+                                                                            <option value="sell_to_specific"
+                                                                                    {% if config.sell_to_specific == 'sell_to_specific' %}
+                                                                                        selected=selected {% endif %} >
+                                                                                Sell to
+                                                                                Specific
+                                                                                Countries Only
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div {% if config.sell_location == 'sell_to_specific' %}
+                                                                        style="display:block" {% else %} style="display:none"
+                                                                    {% endif %} id="countries_mul">
+                                                                        <label class="">Select Countries :</label>
+                                                                        <select class="selectpicker"
+                                                                                name="countries[]"
+                                                                                id="countries" multiple="multiple"
+                                                                                data-actions-box="true"
+                                                                                data-live-search="true"
+                                                                                tabindex="-1">
+                                                                            {% for key,val in countries %}
+                                                                                <option value="{{ key }}"
+                                                                                        {% if key in config.countries %}
+                                                                                            selected=selected
+                                                                                        {% endif %}
+                                                                                >
+                                                                                    {{ val }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                        <hr>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Currency : </label>
+                                                                        <select class="form-control selectpicker"
+                                                                                data-live-search="true" name="currency">
+                                                                            {% for key,val in currency %}
+                                                                                <option {% if config.currency == key %}  selected=selected {% endif %}
+                                                                                        value="{{ key }}">{{ key }}
+                                                                                    - {{ val }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Position : </label>
+                                                                        <select class="form-control" name="position">
+                                                                            <option {% if config.position == 'before' %}  selected=selected {% endif %}
+                                                                                    value='before'>Before ($10)
+                                                                            </option>
+                                                                            <option {% if config.position == 'after' %}  selected=selected {% endif %}
+                                                                                    value='after'>After (10$)
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Separator : </label>
+                                                                        <input type="text" name="separator"
+                                                                               value="{% if config.separator is not empty %}{{ config.separator }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Dec.Separator : </label>
+                                                                        <input type="text" name="dec_separator"
+                                                                               value="{% if config.dec_separator is not empty %}{{ config.dec_separator }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>No.Of Decimals : </label>
+                                                                        <input type="text" name="no_dec_value"
+                                                                               value="{% if config.no_dec_value is not empty %}{{ config.no_dec_value }}{% endif %}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% include '@CartRabbit/Admin/Configuration/Products/Display.twig' %}
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">
+                                                    <h3>Additional Currencies
+                                                    </h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div id="resTable">
+                                                        <form method="post"
+                                                              action="{{ site_addr }}/config/secCurrency">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Currency</th>
+                                                                    <th>Position</th>
+                                                                    <th>Separator</th>
+                                                                    <th>Dec.Separator</th>
+                                                                    <th>No. of Decimals</th>
+                                                                    <th>Exchange</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="dyRow">
+                                                                {% if secondaryCurrency is not empty %}
+                                                                    {% for i in 0..secondaryCurrency | length -1 %}
+                                                                        <tr>
+                                                                            <td>
+                                                                                <select class="form-control"
+                                                                                        data-live-search="true"
+                                                                                        id="secCurrency"
+                                                                                        name="cartRabbit[secCorrency][{{ i }}][currency]">
+                                                                                    {% for key,val in currency %}
+                                                                                        <option {% if secondaryCurrency[i]['currency'] == key %}  selected=selected {% endif %}
+                                                                                                value="{{ key }}">{{ key }}</option>
+                                                                                    {% endfor %}
+                                                                                </select>
+                                                                            </td>
+                                                                            <td>
+                                                                                <select class="form-control"
+                                                                                        name="cartRabbit[secCorrency][{{ i }}][position]">
+                                                                                    <option {% if secondaryCurrency[i]['position'] == 'before' %}  selected=selected {% endif %}
+                                                                                            value='before'>Before ($10)
+                                                                                    </option>
+                                                                                    <option {% if secondaryCurrency[i]['position'] == 'after' %}  selected=selected {% endif %}
+                                                                                            value='after'>After (10$)
+                                                                                    </option>
+                                                                                </select>
+
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text"
+                                                                                       name="cartRabbit[secCorrency][{{ i }}][separator]"
+                                                                                       value="{% if secondaryCurrency[i]['separator'] is not empty %}{{ secondaryCurrency[i]['separator'] }}{% endif %}"
+                                                                                       class="col-md-4">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text"
+                                                                                       name="cartRabbit[secCorrency][{{ i }}][dec_separator]"
+                                                                                       value="{% if secondaryCurrency[i]['dec_separator'] is not empty %}{{ secondaryCurrency[i]['dec_separator'] }}{% endif %}"
+                                                                                       class="col-md-4">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text"
+                                                                                       name="cartRabbit[secCorrency][{{ i }}][no_dec_value]"
+                                                                                       value="{% if secondaryCurrency[i]['no_dec_value'] is not empty %}{{ secondaryCurrency[i]['no_dec_value'] }}{% endif %}"
+                                                                                       class="col-md-4">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="text"
+                                                                                       name="cartRabbit[secCorrency][{{ i }}][exchange]"
+                                                                                       value="{% if secondaryCurrency[i]['exchange'] is not empty %}{{ secondaryCurrency[i]['exchange'] }}{% endif %}"
+                                                                                       class="col-md-8">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="button"
+                                                                                       class="btn btn-danger btnRemove"
+                                                                                       value="Remove">
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                                </tbody>
+                                                                <tfoot>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <button class="btn btn-primary"
+                                                                                        id="btnAdd">
+                                                                                    Add
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <input type="submit"
+                                                                                       class="btn btn-success"
+                                                                                       value="Update">
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $(document).on('click', '.btnRemove', function () {
+                    var row = $(this).closest('tr');
+                    var currencyType = $(this).closest('tr').find('#secCurrency').val();
+                    if (confirm("Are you sure to Remove " + currencyType + " Currency Type ?")) {
+                        $.ajax({
+                            url: '{{ site_addr }}/config/removeSecondaryCurrency',
+                            type: 'POST',
+                            data: {currency: currencyType},
+                            success: function () {
+                                row.remove();
+                            }
+                        });
+                    }
+                    return false;
+
+                });
+                var table = $('#dyRow');
+                var counter = $('#dyRow tr').length;
+                $('#btnAdd').on('click', function (event) {
+                    counter++;
+                    var newRow = jQuery('<tr><td><select class="form-control" id="secCurrency" name="cartRabbit[secCorrency][' + counter + '][currency]">{% for key,val in currency %}<option value="{{ key }}">{{ key }}</option>{% endfor %}</select></td>' +
+                            '<td> <select class="form-control" name="cartRabbit[secCorrency][' + counter + '][position]"><option value="before">Before ($10)</option><option value="after">After (10$)</option></select></td>' +
+                            '<td><input type="text" name="cartRabbit[secCorrency][' + counter + '][separator]"class="col-md-4"></td>' +
+                            '<td><input type="text" name="cartRabbit[secCorrency][' + counter + '][dec_separator]"class="col-md-4"></td>' +
+                            '<td><input type="text" name="cartRabbit[secCorrency][' + counter + '][no_dec_value]"class="col-md-4"></td>' +
+                            '<td><input type="text" name="cartRabbit[secCorrency][' + counter + '][exchange]"class="col-md-8"></td>' +
+                            '<td><input type="button" value="Remove" class="btn btn-danger btnRemove"></td></tr>');
+                    event.preventDefault();
+                    table.append(newRow);
+                });
+                $('#sellLocation').on('change', function () {
+                    if ($(this).val() == 'sell_to_specific') {
+                        $('#countries_mul').show();
+                        $('#countries').multiselect({
+                            includeSelectAllOption: true
+                        });
+                    } else {
+                        $('#countries_mul').hide();
+                    }
+                });
+                $('#storeCountry').on('change', function () {
+                    var country = $(this).val();
+                    $.ajax({
+                        url: '{{ site_addr }}/countrycode',
+                        type: 'POST',
+                        data: {country: country},
+                        success: function (res) {
+                            var toAppend = '';
+                            var ress = JSON.parse(res);
+                            $.each(ress, function (i, state) {
+                                toAppend += '<option value="' + i + '">' + state + '</option>';
+                            });
+                            $('#storeState').html(toAppend);
+                            $('#storeState').selectpicker('refresh');
+                        }
+                    });
+                });
+
+                $('.upload_btn_logo').click(function (e) {
+                    console.log('clickewd upload');
+                    var current = $(this);
+                    e.preventDefault();
+                    var image = wp.media({
+                        title: 'Upload Image',
+                        // mutiple: true if you want to upload multiple files at once
+                        multiple: false
+                    }).open()
+                            .on('select', function (e) {
+                                // This will return the selected image from the Media Uploader, the result is an object
+                                var uploaded_image = image.state().get('selection').first();
+                                // We convert uploaded_image to a JSON object to make accessing it easier
+                                // Output to the console uploaded_image
+                                var image_url = uploaded_image.toJSON().url;
+                                // Let's assign the url value to the input field
+
+                                current.attr('height', 150);
+                                current.attr('width', 150);
+                                current.attr('src', image_url);
+                                current.siblings('.upload_data').val(image_url);
+                                console.log('data' + current.siblings('.upload_data').val());
+                            });
+                });
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}

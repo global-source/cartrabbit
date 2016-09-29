@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs">
+    {% for name, menu in admin_menu %}
+        <li role="presentation" class="{% if tabType == name | lower %}active{% endif %}">
+            <a href="{{ menu }}">{{ name }}</a>
+        </li>
+    {% endfor %}
+</ul>

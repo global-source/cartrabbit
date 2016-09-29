@@ -1,0 +1,163 @@
+/*Namespace : CartRabbit */
+
+.CartRabbit {
+    margin: 0;
+    padding: 0
+}
+
+.CartRabbit .add_product_images {
+    padding: 0 12px 12px
+}
+
+.CartRabbit #product_images_container {
+    padding: 0 0 0 9px
+}
+
+.CartRabbit #product_images_container ul {
+    margin: 0;
+    padding: 0
+}
+
+.CartRabbit  #product_images_container ul:after,
+.CartRabbit #product_images_container ul:before {
+    content: " ";
+    display: table
+}
+
+.CartRabbit #product_images_container ul:after {
+    clear: both
+}
+
+.CartRabbit #product_images_container ul li.add,
+.CartRabbit #product_images_container ul li.image,
+.CartRabbit #product_images_container ul li.wc-metabox-sortable-placeholder {
+    width: 80px;
+    float: left;
+    cursor: move;
+    border: 1px solid #d5d5d5;
+    margin: 9px 9px 0 0;
+    background: #f7f7f7;
+    border-radius: 2px;
+    position: relative;
+    box-sizing: border-box
+}
+
+.CartRabbit #product_images_container ul li.add img,
+.CartRabbit #product_images_container ul li.image img,
+.CartRabbit #product_images_container ul li.wc-metabox-sortable-placeholder img {
+    width: 100%;
+    height: auto;
+    display: block
+}
+
+.CartRabbit #product_images_container ul li.wc-metabox-sortable-placeholder {
+    border: 3px dashed #ddd;
+    position: relative
+}
+
+.CartRabbit #product_images_container ul li.wc-metabox-sortable-placeholder:after {
+    font-family: WooCommerce;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    content: "";
+    font-size: 2.618em;
+    line-height: 72px;
+    color: #ddd
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.delete:before,
+.CartRabbit #product_images_container ul ul.actions li a.view:before {
+    line-height: 1;
+    color: #fff;
+    background-color: #000;
+    font-family: Ubuntu;
+    font-weight: 400;
+    font-variant: normal;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    left: 0;
+    text-transform: none
+}
+
+.CartRabbit #product_images_container ul ul.actions {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    padding: 2px;
+    display: none
+}
+
+.CartRabbit #product_images_container ul ul.actions li {
+    float: right;
+    margin: 0 0 0 2px
+}
+
+.CartRabbit #product_images_container ul ul.actions li a {
+    width: 1em;
+    margin: 0;
+    height: 0;
+    display: block;
+    overflow: hidden
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.tips {
+    cursor: pointer
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.view {
+    display: block;
+    text-indent: -9999px;
+    position: relative;
+    height: 1em;
+    width: 1em;
+    font-size: 1.4em
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.view:before {
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    content: ""
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.delete {
+    display: block;
+    text-indent: -9999px;
+    position: relative;
+    height: 1em;
+    width: 1em;
+    font-size: 1.4em
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.delete:before {
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    top: 1;
+    width: 100%;
+    height: 100%;
+    content: "x";
+    border-radius: 100%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2)
+}
+
+.CartRabbit #product_images_container ul ul.actions li a.delete:hover before {
+    background-color: #a00;
+}
+
+.CartRabbit #product_images_container ul li:hover ul.actions {
+    display: block;
+}

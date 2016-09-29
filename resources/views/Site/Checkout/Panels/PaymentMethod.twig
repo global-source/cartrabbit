@@ -1,0 +1,141 @@
+{% block body %}
+
+    <div id="payment_content">
+        <div class="paymentMethodContainer">
+
+            <form action="{{ site_addr }}/order/createOrder" method="post">
+                <div class="">
+                    <div class="checkout-container payment-checkout-container">
+
+                    </div>
+                    <div class="payment-content contents">
+                        <div class="">
+                            {% set status = 'false' %}
+                            {% if general.payment.paymentMethods is not empty %}
+                                {% for i, item in general.payment.paymentMethods %}
+                                    {% if general.payment.available[i] == 'on' %}
+                                        {% set status = 'true' %}
+                                        <label>
+                                            <input type="radio" name="payment_type[]" class="payment_type"
+                                                    {% if i == session.paymentMethod %} checked="checked" {% endif %}
+                                                   value="{{ i }}">
+                                            {{ item }}
+                                        </label><br>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <code>Sorry, No More Payment Methods are Available !</code>
+                            {% endif %}
+                            {% if status == 'false' %}
+                                <code>Sorry, No More Payment Methods are Available !</code>
+                            {% endif %}
+                        </div>
+                        <div class="" align="right">
+                        </div>
+                        {#<input type="button" class="fc-btn fc-btn-primary" value="Continue" disabled="disabled"#}
+                        {#id="paymentContinue">#}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                $('.change-payment-btn').css('display', 'none');
+
+                $('.payment_type').on('click', function () {
+                    if (this.checked) {
+                        $('.change-payment-btn').css('display', 'block');
+                        var payment = $('input[name="payment_type[]"]:checked').val();
+                        var shipping = $('input[name="shipping_type[]"]:checked').val();
+                        console.log('Payment Type : ' + payment);
+                        ajax_start();
+                        $.ajax({
+                            url: '{{ site_addr }}/config/setPaymentMethod',
+                            type: 'POST',
+                            data: {'payment_method': payment, shipping_method:shipping},
+                            success: function () {
+                                loadPayment();
+                            },
+                            complete:function(){
+
+                            }
+                        });
+                    }
+                });
+
+                $('.change-payment-btn').click(function () {
+                    $('.paymentMethodContainer').slideToggle();
+                    $(this).css('display', 'none');
+                    $('.shippingMethodContainer').css('display', 'none');
+                    $('.orderSummaryContainer').css('display', 'none');
+//                    $('.change-shipping-btn').css('display', 'none');
+                });
+
+
+                var paymentMethodRadio = "{{ session['paymentMethod'] }}";
+
+                if (paymentMethodRadio !== (null || undefined || '')) {
+                    var checkboxElement = $("[value='" + paymentMethodRadio + "']");
+                    checkboxElement.prop('checked', true);
+                    if (checkboxElement.is(':checked')) {
+//                        $('.paymentMethodContainer').css('display', 'none');
+                        var paymentContinueButton = $('#paymentContinue');
+                        paymentContinueButton.prop('disabled', false);
+                        paymentContinueButton.click();
+                    }
+                }
+
+            });
+
+            function loadPayment() {
+                $.ajax({
+                    url: '{{ site_addr }}/checkout/loadPayment',
+                    type: 'POST',
+                    success: function (res) {
+
+                        /** If error is hit, then redirect */
+                        if (res.error_url) {
+                            location.reload(res.error_url);
+                        }
+                        $('#payment_content').html(res.payment);
+                        $('#summery_content').html(res.summery);
+                        $('#shipping_content').html(res.shipping);
+                        ajax_stop();
+                    }
+                });
+            }
+
+            function loadOrderSummery() {
+                var site_addr = $('#site_addr').val();
+                $.ajax({
+                    url: site_addr + '/checkout/loadOrderSummery',
+                    type: 'POST',
+                    success: function (res) {
+                        /** If error is hit, then redirect */
+                        if (res.error_url) {
+                            location.reload(res.error_url);
+                        }
+                        $('#summery_content').html(res);
+                        $('.orderSummaryContainer').css('display', 'block');
+                    }
+                });
+            }
+
+            function ajax_start() {
+                $('#spin_bar').show();
+            }
+
+            function ajax_stop() {
+                $('#spin_bar').hide();
+            }
+
+        })(jQuery);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends '@CartRabbit/client_singleproduct_template.html.twig' %}
+{% block body %}
+
+    {# In Single Product Display, i Value is Empty #}
+    {% if i is empty %}
+        {% set i = 0 %}
+    {% endif %}
+    <input type="hidden" value="{{ links.cart }}" id="btn_my_cart">
+    <div class="flylshop fc-container" style="padding: 20px;">
+        <div class="fc-row">
+            <div class="fc-col-lg-6">
+                <div>
+                    <!-- PRODUCT SKU -->
+                    {% include '@CartRabbit/Site/Product/viewImage.twig' %}
+                    {% if (setting.d_config_show_sku == 'yes') %}
+                        <h5>SKU:&nbsp;<span class="sku-display" id="product_sku">{{ product.meta.sku }}</span></h5>
+                    {% endif %}
+
+                    <!-- PRODUCT BRAND -->
+                    {% if (setting.d_config_show_brand == 'yes') %}
+                        {% if product.meta.brand != 'none' %}
+                            <h5>Brand:&nbsp;<span class="brand-display">{{ product.meta.brand }}</span></h5>
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- PRODUCT DESC -->
+                    {% if (setting.d_config_show_desc == 'yes') %}
+                        <h5><span class="desc-display">{{ product.descr }}</span></h5>
+                    {% endif %}
+                </div>
+                <!-- PRODUCT GALLERY -->
+                {% if (setting.d_config_show_product_gallery == 'yes') %}
+                    <div>
+                        {% include '@CartRabbit/Site/Product/viewGallery.twig' %}<br>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="fc-col-lg-6">
+            <div>
+                <h1 class="product_title">{{ product.post_title }}</h1>
+            </div>
+            <!-- PRODUCT ATTRIBUTES -->
+            {% if product.meta.list.html is defined %}
+                {% for id,item in product.meta.list.html.items %}
+                    <div>
+                        <select name="attr_{{ id }}" class="fc-form-control select_attribute_option" title="{{ id }}">
+                            <option value="none" selected>Please Choose Your {{ id }}</option>
+                            {% for key, value in item['list'] %}
+                                <option value="{{ value }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {#<input type="hidden" value="{{ product.meta.price.f_price }}" class="product_price">#}
+            <!-- PRODUCT PRICE RANGE -->
+            {% include '@CartRabbit/Site/Product/viewPriceRange.twig' %}
+            ​
+            <!-- PRODUCT PRICE -->
+            {% include '@CartRabbit/Site/Product/viewPrice.twig' %}
+
+            <!-- TAX INFO -->
+            {% include '@CartRabbit/Site/Product/viewTaxInfo.twig' %}
+
+            <!-- PRODUCT STOCK -->
+            {% include '@CartRabbit/Site/Product/viewStock.twig' %}
+
+            <!-- CART ACTION -->
+            {% include '@CartRabbit/Site/Product/viewCart.twig' %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}

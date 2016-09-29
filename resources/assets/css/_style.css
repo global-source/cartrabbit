@@ -1,0 +1,16 @@
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+
+
+/* Manikandan
+product properties margin none
+
+ */
+.product-properties-margin{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.list-group-item
+{
+    outline: none !important;
+}
+

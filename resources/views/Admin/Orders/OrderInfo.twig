@@ -1,0 +1,63 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+{% block body %}
+    <div class="flylshop">
+        <div class="panel " style="width: 95%">
+            <form method="post" action="{{ site_addr }}/order/updateOrderStatus">
+                <div class="panel-body flylshop">
+                    <h4>Order #{{ orderInfo.order.invoice_prefix ~ orderInfo.order.invoice_no }}</h4>
+                    <hr>
+                    <h5 class="text text-success">Payment Type :
+                        <b>{{ orderInfo.order.meta.payment_method_raw }}</b>
+                    </h5>
+                    <h6 class="text text-danger">Orderd On : <b>{{ orderInfo.order.created_at.format('Y-m-d') }}</b>
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <b>General Details</b>
+                            <div class="form-group">
+                                <p class="text-primary"><b>Order Status : </b></p>
+                                <select class="form-control" name="order_status">
+                                    {% for key,val in order_status %}
+                                        <option {% if key == orderInfo.order.order_status %} selected=selected {% endif %}
+                                                value="{{ key }}">{{ val }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div align="left">
+                                    <input type="submit" class="btn btn-primary" value="Update">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <b>Billing Details</b>
+                            {% set billing_address = address.format(orderInfo.order.meta.billing_address, true) %}
+                            {{ billing_address.formatted | raw }}
+                            {% if billing_address.raw.mobile is not empty %}
+                                <p class="text-primary"><b>Phone : </b></p>
+                                <p>{{ billing_address.raw.mobile }},</p>
+                            {% endif %}
+
+                            {% if orderInfo.user.email is not empty %}
+                                <p class="text-primary"><b>E-Mail : </b></p>
+                                <p>{{ orderInfo.user.email }}.</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <b>Shipping Details</b>
+                            {% set shipping_address = address.format(orderInfo.order.meta.shipping_address, true) %}
+                            {{ shipping_address.formatted | raw }}
+
+                            {% if delivery_address.raw.mobile is not empty %}
+                                <p class="text-primary"><b>Phone : </b></p>
+                                <p>{{ delivery_address.raw.mobile }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include '@CartRabbit/Admin/Orders/OrderItems.twig' %}
+    </div>
+
+{% endblock %}

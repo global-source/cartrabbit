@@ -1,0 +1,9 @@
+{% block body %}
+    <div>
+    <span class="stock-availability">
+                    {% if product.meta.stock.show == true %}
+                        Available : {{ product.meta.stock.qty }}
+                    {% endif %}
+                </span>
+    </div>
+{% endblock %}

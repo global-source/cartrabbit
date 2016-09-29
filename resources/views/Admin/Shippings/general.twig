@@ -1,0 +1,64 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <form method="post" action="{{ site_addr }}/config/shippingConfig">
+                                            <div class="panel panel-info">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Shipping/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="col-md-12 form-group">
+                                                        <h3>Shipping Config</h3>
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <label> Enable/Disable :
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="checkbox" {% if config['shipping_enable'] == 'yes' %} checked=checked {% endif %}
+                                                                       class="" name="shipping_enable">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <label> Don't Allow, if Shipping Plugins not Available :
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="checkbox" {% if config['shipping_dont_allow_if_no_shipping'] == 'yes' %} checked=checked {% endif %}
+                                                                       class=""
+                                                                       name="shipping_dont_allow_if_no_shipping">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}

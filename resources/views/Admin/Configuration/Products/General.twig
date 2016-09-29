@@ -1,0 +1,118 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/productConfig/general">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Products/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <h3>General | Measurements</h3>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Weight Unit :</label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                          <input type="text" name="pro_gen_wightUnit"
+                                                                                 value="{% if generalConfig['pro_gen_wightUnit'] is not empty %}{{ generalConfig['pro_gen_wightUnit'] }}{% endif %}"
+                                                                                 class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Dimensions Unit :</label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                          <input type="text" name="pro_gen_dimUnit"
+                                                                                 value="{% if generalConfig['pro_gen_dimUnit'] is not empty %}{{ generalConfig['pro_gen_dimUnit'] }}{% endif %}"
+                                                                                 class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <h4>Reviews</h4>
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <label>Enable ratings on reviews :</label>
+                                                                            </div>
+                                                                            <div class="col-md-1">
+                                                                                <input type="checkbox" name="pro_gen_enableRating"
+                                                                                        {% if (generalConfig['pro_gen_enableRating'] == 'on') %} checked {% endif %}
+                                                                                       class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <label>Ratings are required to leave a review :</label>
+                                                                            </div>
+                                                                            <div class="col-md-1">
+                                                                                <input type="checkbox" name="pro_gen_requiredRating"
+                                                                                        {% if (generalConfig['pro_gen_requiredRating'] == 'on') %} checked {% endif %}
+                                                                                       class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <label>Show "verified owner" label for customer reviews :</label>
+                                                                            </div>
+                                                                            <div class="col-md-1">
+                                                                                <input type="checkbox" name="pro_gen_verifyOwner"
+                                                                                        {% if (generalConfig['pro_gen_verifyOwner'] == 'on') %} checked {% endif %}
+                                                                                       class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <label>Only allow reviews from "verified owners" :</label>
+                                                                            </div>
+                                                                            <div class="col-md-1">
+                                                                                <input type="checkbox" name="pro_gen_onlyVerifyOwner"
+                                                                                        {% if (generalConfig['pro_gen_onlyVerifyOwner'] == 'on') %} checked {% endif %}
+                                                                                       class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

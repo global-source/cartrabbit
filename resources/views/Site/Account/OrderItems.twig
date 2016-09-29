@@ -1,0 +1,58 @@
+{% block body %}
+    <div class="panel">
+        <div class="panel-body flylshop">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set n = 0 %}
+                {% for item in orderInfo['items']['meta'] %}
+                    <tr>
+                        <td>{% set n = n + 1 %}{{ n }}</td>
+                        <td>
+                            {{ item.product.post_title ~ ' [' ~ item.product.ID ~ ']' }}
+                        </td>
+                        <td>{{ item['quantity'] }}</td>
+
+                        <td>{{ currency.format(item.line_price, 1, order.exchange_value, order.currency_code ) }}</td>
+                        <td>{{ currency.format(item.line_final_total, 1, order.exchange_value, order.currency_code ) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3"></td>
+                    <th colspan="1">Subtotal :</th>
+                    <td>{{ currency.format(orderInfo.order.meta.subtotal, 1, order.exchange_value, order.currency_code ) }}</td>
+                </tr>
+                {% if orderInfo.order.meta.tax_total > 0 %}
+                    <tr>
+                        <td colspan="3"></td>
+                        <th colspan="1">Tax :</th>
+                        <td>{{ currency.format(orderInfo.order.meta.tax_total, 1, order.exchange_value, order.currency_code ) }}</td>
+                    </tr>
+                {% endif %}
+                {% if orderInfo.order.meta.shipping_total > 0 %}
+                    <tr>
+                        <td colspan="3"></td>
+                        <th colspan="1">Shipping :</th>
+                        <td>{{ currency.format(orderInfo.order.meta.shipping_total, 1, order.exchange_value, order.currency_code ) }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="3"></td>
+                    <th colspan="1">Total :</th>
+                    <td>{{ currency.format(orderInfo.order.meta.total, 1, order.exchange_value, order.currency_code ) }}</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}

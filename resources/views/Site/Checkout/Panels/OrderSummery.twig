@@ -1,0 +1,195 @@
+{% block body %}
+
+    <div id="summery_content" style="padding-left: 5px">
+        <div class="fc-title-tab fc-text-medium orderSummaryTab">
+            Order Summary
+        </div>
+        <div class="orderSummaryContainer2">
+            <div class="flylshop">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <td><b>Items</b></td>
+                                    <td><b>Qty</b></td>
+                                    <td><b>Total</b></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i, item in general.orderSummery.cart_contents %}
+                                    <tr>
+                                        <td><i>{{ item.product.post_title }}</i></td>
+                                        <td><i>{{ item.quantity }}</i></td>
+                                        <td><i>{{ currency.format(item.line_total) }}</i></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2"><b>Subtotal</b></td>
+                                    <td><i>{{ currency.format(general.orderSummery.subtotal) }}</i></td>
+                                </tr>
+                                <!-- LOADING TAXES -->
+                                {% for id, tax in general.orderSummery.getItemisedTaxTotals() %}
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td>
+                                            <small>{{ tax.label }} :</small>
+                                        </td>
+                                        <td>
+                                            {{ currency.format(tax.amount) }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% if general.orderSummery.shipping_total != '' %}
+                                    <tr>
+                                        <td colspan="2"><b>Shipping</b><br>
+                                            {
+                                            <small>{{ general.shipping.shippingMethods[session.shippingMethod] }} </small>
+                                            }
+                                        </td>
+                                        <td><i>{{ currency.format(general.orderSummery.shipping_total) }}</i>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% if session.shippingMethod != '' and general.orderSummery.shipping_info.needShipping == true %}
+                                        <tr>
+                                            <td colspan="2"><b>Shipping</b><br>
+                                            </td>
+                                            <td><i>Free</i>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+                                <tr>
+                                    <td colspan="2"><b>Total</b></td>
+                                    <td><i>{{ currency.format(general.orderSummery.total) }}</i></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <div class="fc-text-danger" id="error_log">
+
+                            </div>
+                            <form method="post" id="order_summery" action="{{ site_addr }}/checkout/">
+                                <input type="hidden" name="paction" value="process">
+                                <div class="place-order-button">
+                                    <input type="button" class="fc-btn fc-btn-success" value="Place Order"
+                                           id="place-order">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                var shipping_status = $('#shipping_status').val();
+                var shipping_restriction = $('#restrict_shipping').val();
+                var address_status = false;
+                var payment = false;
+                var shipping = false;
+                $('#error_log').html('');
+                $('#error_log').hide();
+                // For Normal User Access.
+                if ('{{ session.address_status }}' == 'true') {
+                    address_status = true;
+                    // For Guest User Access.
+                } else if ('{{ session.uaccount }}' == 'guest') {
+                    if ('{{ session.billing_address_verified }}' == 1 && '{{ session.shipping_address_verified }}' == 1) {
+                        address_status = true;
+                    }
+                }
+
+                $('#place-order').attr('disabled', 'disabled');
+
+                // To Verify, is any one payment type is selected or not.
+                $.each($("input[name='payment_type[]']:checked"), function () {
+                    payment = true;
+                });
+
+                // To Verify, is any one shipping type is selected or not.
+                $.each($("input[name='shipping_type[]']:checked"), function () {
+                    shipping = true;
+                });
+
+                if (shipping_status == 'false') {
+                    shipping = true;
+                }
+
+                /** FOR TESTING PURPOSE. */
+                console.log('{{ session.billing_address }}');
+                console.log('shipping_address : {{ session.shipping_address }}');
+                console.log('shipping_restriction : ' + shipping_restriction);
+                console.log('address_status : ' + address_status);
+                console.log('payment : ' + payment);
+                console.log('shipping : ' + shipping);
+                console.log('shipping Status : ' + shipping_status);
+                console.log('need Shipping : ' + '{{ general.order_summery.order_info.needShipping }}');
+
+                if (shipping_restriction == 'false' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {
+                    if (address_status) {
+                        if (payment) {
+                            $('#place-order').removeAttr('disabled');
+                        }
+                    }
+                } else if (shipping_restriction == 'true' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {
+                    if (address_status) {
+                        if (shipping) {
+                            if (payment) {
+                                $('#place-order').removeAttr('disabled');
+                            }
+                        }
+
+                    }
+                }
+
+                $('#place-order').on('click', function () {
+                    ajax_start();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkout/initPrePayment',
+                        type: 'POST',
+                        success: function (res) {
+                            if (res.error_url) {
+                                window.location.replace(res.error_url);
+                            } else if (res.error_log) {
+                                $('#error_log').show();
+                                $('#error_log').html(res.error_log);
+                                ajax_stop();
+                            } else {
+                                $.ajax({
+                                    url: '{{ site_addr }}//checkout/place_order',
+                                    type: 'POST',
+                                    data: $('#order_summery').serializeArray(),
+                                    success: function (res) {
+                                        $('#checkout_content').html(res);
+                                    },
+                                    complete: function () {
+                                        ajax_stop();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+
+            function ajax_start() {
+                $('#spin_bar').show();
+            }
+
+            function ajax_stop() {
+                $('#spin_bar').hide();
+            }
+        })(jQuery);
+    </script>
+{% endblock %}

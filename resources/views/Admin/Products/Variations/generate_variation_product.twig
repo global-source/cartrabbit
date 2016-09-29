@@ -1,0 +1,496 @@
+<div class="row " style="border: 2px #d3d3d3; padding: 5px;">
+    {% if variations['activeSets'] is not null %}
+        <div class="option_list">
+            {% for i, value in variations['activeSets'] %}
+                <div class="col-md-3">
+                    <select class="form-control option_item" id="option_{{ i }}">
+                        <option value="{{ i }}_any">any {{ i }}..</option>
+                        {% for key, item in value %}
+                            <option value="{{ i }}_{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-success" id="btn_add_new_combination" value="Add New"><br><br>
+        </div>
+    {% else %}
+        <h4 class="text-danger">Sorry, You have No Attributes for this Product !</h4>
+    {% endif %}
+</div>
+{% if html['html'] is not empty %}
+    <input type="button" class="btn btn-danger" id="btn_remove_all" value="Remove All Attributes"><br><br>
+    <code class="text-danger">Warning: You wont get back the Removed Attributes !</code>
+{% endif %}
+<hr>
+<ul class="list-group">
+    <input type="hidden" id="site_addr" value="{{ site_addr }}">
+    <input type="hidden" id="variant_id" value="{{ html['id'] }}">
+    <input type="hidden" id="variant_combinations" value="{{ html['combinations'] }}">
+    {% if html['html'] is empty %}
+        {% if variations['activeSets'] is not null %}
+            <h4 class="text-danger">Sorry, No more combination are available !</h4>
+        {% endif %}
+    {% else %}
+        <span class="text text-danger" id="lbl_warning_log"></span>
+        <div align="right">
+            <input type="button" class="btn btn-primary btn_attribute_save_changes" value="Save Changes">
+        </div>
+    {% endif %}
+
+    <div id="data_variant_combinations">
+        {% for i, value in html['html'] %}
+            <li class="list-group-item">
+                <div class="col-xs-10">
+                    <div class="form-group terms_collection">
+                        <div class="col-md-2">
+                            <b>#{{ html['product_id'][i] }}</b>
+                            <input type="hidden" id="cartrabbit_product_id_{{ i }}"
+                                   name="cartrabbit[{{ i }}][variant_product][product_id]"
+                                   value="{{ html['product_id'][i] }}">
+                        </div>
+                        {% for id,item in value %}
+                            <div class="col-md-4">
+                                {{ item | raw }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-xs-2">
+                            <a class="remove_option" id="remove_option_{{ html['product_id'][i] }}"
+                               href=javascript:void(0)><i
+                                        class=" text-danger">Remove</i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row toggle" id="dropdown-detail-{{ i }}" data-toggle="detail-{{ i }}">
+                    <div class="col-xs-2 ">
+                        <i class=" glyphicon glyphicon-chevron-down pull-right"></i>
+                    </div>
+                </div>
+                <div id="detail-{{ i }}" class="hide list_options">
+                    <hr>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="image_url">Image:
+                                        <img src="{{ html['meta'][html['product_id'][i]]['_thumbnail_id'] }}"
+                                             alt="Set Image"
+                                             class="upload_btn">
+                                        <input type="hidden"
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][_thumbnail_id]"
+                                               value="{{ html['meta'][html['product_id'][i]]['_img'] }}"
+                                               class="_thumbnail_id">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Manage Stock :
+                                        <select class="form-control"
+                                                name="cartrabbit[variant_product][{{ html['product_id'][i] }}]manageStock">
+                                            <option {% if html['meta'][html['product_id'][i]]['manage_stock'] == 'yes' %}  selected=selected {% endif %}
+                                                    value="yes">YES
+                                            </option>
+                                            <option {% if html['meta'][html['product_id'][i]]['manage_stock'] == 'no' %}  selected=selected {% endif %}
+                                                    value="no">NO
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Enabled :
+                                        <input type="checkbox"
+                                                {% if html['meta'][html['product_id'][i]]['enabled'] == 'on' %} checked {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][enabled]">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>SKU :
+                                        <input type="text" class="form-control"
+                                               {% if html['meta'][html['product_id'][i]]['sku'] is not null %}value="{{ html['meta'][html['product_id'][i]]['sku'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][sku]">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Regular Price :
+                                        <input type="text" class="form-control"
+                                               {% if html['meta'][html['product_id'][i]]['regular_price'] is not null %}value="{{ html['meta'][html['product_id'][i]]['regular_price'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][regular_price]">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Special Price :
+                                        <input type="button" id="id_{{ i }}"
+                                               class="btn btn-warning btn_get_special_price"
+                                               value="Manage"
+                                               data-target="#specialPriceAddModal"
+                                               data-toggle="modal">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>weight :
+                                        <input type="text" class="form-control"
+                                               {% if html['meta'][html['product_id'][i]]['weight'] is not null %}value="{{ html['meta'][html['product_id'][i]]['weight'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][weight]">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Dimension :</label>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" placeholder="L"
+                                               {% if html['meta'][html['product_id'][i]]['length'] is not null %}value="{{ html['meta'][html['product_id'][i]]['length'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][length]">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" placeholder="W"
+                                               {% if html['meta'][html['product_id'][i]]['width'] is not null %}value="{{ html['meta'][html['product_id'][i]]['width'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][width]">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" placeholder="H"
+                                               {% if html['meta'][html['product_id'][i]]['height'] is not null %}value="{{ html['meta'][html['product_id'][i]]['height'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][height]">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Stock :
+                                        <input type="text" class="form-control" placeholder="ex. 50"
+                                               {% if html['meta'][html['product_id'][i]]['stock'] is not null %}value="{{ html['meta'][html['product_id'][i]]['stock'] }}" {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][stock]">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Allow Backorders : </label>
+                                    <select class="form-control"
+                                            name="cartrabbit[variant_product][{{ html['product_id'][i] }}][backOrders]">
+                                        <option {% if html['meta'][html['product_id'][i]]['back_orders'] == 'disallow' %}  selected=selected {% endif %}
+                                                value="disallow">Disallow
+                                        </option>
+                                        <option {% if html['meta'][html['product_id'][i]]['back_orders'] == 'allow' %}  selected=selected {% endif %}
+                                                value="allow">Allow
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Max Sale Quantity : </label>
+                                    <input type="text" class="form-control"
+                                           placeholder="Leave Empty, consider as 'No Limit'"
+                                           name="cartrabbit[variant_product][{{ html['product_id'][i] }}][max_sale_qty]"
+                                           value="{% if html['meta'][html['product_id'][i]]['max_sale_qty'] is not empty %}{{ html['meta'][html['product_id'][i]]['max_sale_qty'] }}{% endif %}"
+                                           placeholder="ex. 9999">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Use Store Configuration : </label>
+                                    <input type="checkbox" class=""
+                                           name="cartrabbit[variant_product][{{ html['product_id'][i] }}][max_sale_qty_default]"
+                                            {% if html['meta'][html['product_id'][i]]['max_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Min Sale Quantity : </label>
+                                    <input type="text" class="form-control"
+                                           name="cartrabbit[variant_product][{{ html['product_id'][i] }}][min_sale_qty]"
+                                           value="{% if html['meta'][html['product_id'][i]]['min_sale_qty'] is not empty %}{{ html['meta'][html['product_id'][i]]['min_sale_qty'] }}{% endif %}"
+                                           placeholder="ex. 0000">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Use Store Configuration : </label>
+                                    <input type="checkbox" class=""
+                                            {% if html['meta'][html['product_id'][i]]['min_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                           name="cartrabbit[variant_product][{{ html['product_id'][i] }}][min_sale_qty_default]">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Enable Tax :
+                                        <input type="checkbox"
+                                                {% if html['meta'][html['product_id'][i]]['enable_tax'] == 'on' %} checked {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][enable_tax]">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Enable Shipping :
+                                        <input type="checkbox"
+                                                {% if html['meta'][html['product_id'][i]]['shipping_enable'] == "yes" %} checked {% endif %}
+                                               name="cartrabbit[variant_product][{{ html['product_id'][i] }}][shipping_enable]">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Shipping Classes:
+                                        <select class="form-control"
+                                                name="cartrabbit[variant_product][{{ html['product_id'][i] }}][shipping_class]"
+                                                class="ShippingClasses">
+                                            {% for slug,name in html['meta']['shipping_class'] %}
+                                                <option {% if slug == html['meta'][html['product_id'][i]]['shipping_class'] %} selected=selected {% endif %}
+                                                        value="{{ slug }}">{{ name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Variant Description :
+                                    <textarea rows="4" class="form-control"
+                                              name="cartrabbit[variant_product][{{ html['product_id'][i] }}][variantDesc]">{{ html['meta'][html['product_id'][i]]['variantDesc'] }}</textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </div>
+</ul>
+
+
+<!-- Modal -->
+<form method="post" id="specialPriceForm" action="{{ site_addr }}/product/addSpecialPrice">
+    <div class="modal fade" id="specialPriceAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title lbl_amount_id" id="myModalLabel">Special Price</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="ajax_special_price_curd">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="button" id="saveSpecialPrice" value="Save" class="btn btn-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    jQuery.noConflict();
+    (function ($) {
+
+        /** For Saving the Variants via Ajax. */
+        $(document).on('click', '.btn_attribute_save_changes', function () {
+
+            var data = $('#data_variant_combinations :input').serializeArray();
+            var button = $(this);
+            var button_value = button.val();
+
+            button.val('Saving...');
+            button.attr('disabled', 'disabled');
+
+            $.ajax({
+                url: '{{ site_addr }}/product/saveVariationProducts',
+                type: 'POST',
+                data: {data: data},
+                success: function () {
+                    button.removeClass('btn-primary');
+                    button.addClass('btn-success');
+                    button.val('Saved Successfully');
+                    //Here, Timeout Duration make sense of reliability
+                    setTimeout(function () {
+                        button.removeAttr('disabled');
+                        button.removeClass('btn-success');
+                        button.addClass('btn-primary');
+                        button.val(button_value);
+                    }, 800);
+
+                }
+            });
+        });
+
+        /** For Saving Special price of variants via Ajax. */
+        $('#saveSpecialPrice').on('click', function () {
+            var data = $('#specialPriceForm').serializeArray();
+            var button = $('#saveSpecialPrice');
+            var button_value = button.val();
+            button.val('Saving..');
+            button.attr('disabled', 'disabled');
+
+            $.ajax({
+                url: '{{ site_addr }}/product/addSpecialPrice',
+                type: 'POST',
+                data: data,
+                success: function () {
+                    button.removeClass('btn-primary');
+                    button.addClass('btn-success');
+                    button.val('Saved Successfully');
+                    //Here, Timeout Duration make sense of reliability
+                    setTimeout(function () {
+                        button.removeAttr('disabled');
+                        button.removeClass('btn-success');
+                        button.addClass('btn-primary');
+                        button.val(button_value);
+                    }, 800);
+                }
+            });
+        });
+
+        $('.btn_get_special_price').on('click', function () {
+            var id = $(this).attr('id');
+            id = id.replace('id_', '');
+            var product_id = $('#cartrabbit_product_id_' + id).val();
+            $.ajax({
+                url: '{{ site_addr }}/product/getSpecialPriceList',
+                type: 'POST',
+                data: {product_id: product_id},
+                success: function (data) {
+                    $('#ajax_special_price_curd').html(data);
+                }
+            });
+        });
+
+        $('.remove_option').on('click', function () {
+            var id = $(this).attr('id');
+            var current = $(this);
+            id = id.replace('remove_option_', '');
+            var conformation = confirm('Are You Sure to Remove this option ?');
+            if (conformation) {
+                $.ajax({
+                    url: '{{ site_addr }}/product/removeVariation',
+                    type: 'POST',
+                    data: {id: id},
+                    success: function () {
+                        current.closest('li').remove();
+                    }
+                });
+            }
+        });
+
+        $('#btn_remove_all').on('click', function () {
+            var conformation = confirm('Are You Sure to Remove All Combinations ?');
+            if (conformation) {
+                $.ajax({
+                    url: '{{ site_addr }}/product/removeVariation',
+                    type: 'POST',
+                    data: {reset: true},
+                    success: function () {
+                        refreshCombination(false, false);
+                    }
+                });
+            }
+        });
+
+        $('#btn_add_new_combination').on('click', function () {
+            var options = [];
+            $('.option_list .option_item').each(function () {
+                options.push([$(this).val()]);
+            });
+            $.ajax({
+                url: '{{ site_addr }}/product/newVariation',
+                type: 'post',
+                data: {options: options},
+                success: function (res) {
+//                    alert(res['stop']);
+                    console.log(res);
+                    if (!$.isEmptyObject(res['stop'])) {
+                        $('#lbl_warning_log').html('Warning : This Variant will affect other combinations !').delay(1000).fadeOut();
+                    } else if (!$.isEmptyObject(res['alert'])) {
+                        $('#lbl_warning_log').removeAttr('text-danger').attr('text-info');
+                        $('#lbl_warning_log').html('Warning : This Variant may overwrite !').delay(1000).fadeOut();
+                    } else {
+                        refreshCombination(false, false);
+                    }
+                }
+            });
+
+        });
+
+        function refreshCombination(action, refresh) {
+            $.ajax({
+                url: '{{ site_addr }}/product/generateVariationList',
+                type: 'POST',
+                data: {action: action, refresh: refresh},
+                success: function (res) {
+                    $('#variation_combinations').html(res);
+                }
+            });
+        }
+
+        $('.ShippingClasses').on('change', function () {
+
+        });
+
+        $('.upload_btn').click(function (e) {
+            var current = $(this);
+            e.preventDefault();
+            var image = wp.media({
+                title: 'Upload Image',
+                // mutiple: true if you want to upload multiple files at once
+                multiple: false
+            }).open()
+                    .on('select', function (e) {
+                        // This will return the selected image from the Media Uploader, the result is an object
+                        var uploaded_image = image.state().get('selection').first();
+                        // We convert uploaded_image to a JSON object to make accessing it easier
+                        // Output to the console uploaded_image
+                        var image_url = uploaded_image.toJSON().url;
+                        // Let's assign the url value to the input field
+
+                        current.attr('height', 150);
+                        current.attr('width', 150);
+                        current.attr('src', image_url);
+                        current.siblings('._thumbnail_id').val(image_url);
+                        console.log('data' + current.siblings('._thumbnail_id').val());
+                    });
+        });
+    })(jQuery);
+</script>

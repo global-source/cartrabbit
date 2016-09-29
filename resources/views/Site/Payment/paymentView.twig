@@ -1,0 +1,19 @@
+{% extends '@CartRabbit/client_singleproduct_template.html.twig' %}
+
+{% block body %}
+
+    {{ form | raw }}
+
+{% endblock %}
+{% block footer %}
+
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('#btn_place_order').click();
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,254 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/cartConfig/Tax">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Tax/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <h3>Tax Options</h3>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Enable Taxes : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <input type="checkbox"
+                                                                                    {% if (taxOptions['tax_enable'] == 'on') %} checked {% endif %}
+                                                                                   name="tax_enable">
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Default Start with : <i
+                                                                                        class="glyphicon glyphicon-info-sign"
+                                                                                        title="If Customer have no address, then start with !"></i></label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_start_up_address">
+                                                                                <option {% if taxOptions['tax_start_up_address'] == 'no_address' %}  selected=selected {% endif %}
+                                                                                        value="no_address">No Address
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_start_up_address'] == 'store_address' %}  selected=selected {% endif %}
+                                                                                        value="store_address">Store
+                                                                                    Address
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Prices Entered with Tax : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_price_includes_tax">
+                                                                                <option {% if taxOptions['tax_price_includes_tax'] == 'yes' %}  selected=selected {% endif %}
+                                                                                        value="yes">Yes
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_price_includes_tax'] == 'no' %}  selected=selected {% endif %}
+                                                                                        value="no">No
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>calculate tax based on : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_calculate_with">
+                                                                                <option {% if taxOptions['tax_calculate_with'] == 'customerShipping' %}  selected=selected {% endif %}
+                                                                                        value="customerShipping">
+                                                                                    Customer Shipping Address
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_calculate_with'] == 'customerBilling' %}  selected=selected {% endif %}
+                                                                                        value="customerBilling">Customer
+                                                                                    Billing Address
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_calculate_with'] == 'shopBased' %}  selected=selected {% endif %}
+                                                                                        value="shopBased">Shop Based
+                                                                                    Address
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Shipping Tax Class : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_shipping">
+                                                                                <option {% if taxOptions['tax_shippingTax'] == 'customerShipping' %}  selected=selected {% endif %}
+                                                                                        value="customerShipping">Based
+                                                                                    On Cart Item
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_shipping'] == 'standard' %}  selected=selected {% endif %}
+                                                                                        value="standard">
+                                                                                    Standard
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_shipping'] == 'reducedRate' %}  selected=selected {% endif %}
+                                                                                        value="reducedRate">Reduced Rate
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_shipping'] == 'zeroRate' %}  selected=selected {% endif %}
+                                                                                        value="zeroRate">Zero Rate
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Rounding : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group">
+                                                                                   <input type="checkbox"
+                                                                                           {% if (taxOptions['tax_rounding'] == 'on') %} checked {% endif %}
+                                                                                          name="tax_rounding">
+                                                                               Round tax at subtotal level,
+                                                                                    instead of rounding per line
+                                                                                    </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Display Prices in the <br>Shop :
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_display_price">
+                                                                                <option {% if taxOptions['tax_display_price'] == 'excludeTax' %}  selected=selected {% endif %}
+                                                                                        value="excludeTax">
+                                                                                    Excluding Tax
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_display_price'] == 'includeTax' %}  selected=selected {% endif %}
+                                                                                        value="includeTax">Including Tax
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Display Prices During Cart & Checkout
+                                                                                : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_display_price_during_cart">
+                                                                                <option {% if taxOptions['tax_display_price_during_cart'] == 'excludeTax' %}  selected=selected {% endif %}
+                                                                                        value="excludeTax">
+                                                                                    Excluding Tax
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_display_price_during_cart'] == 'includeTax' %}  selected=selected {% endif %}
+                                                                                        value="includeTax">Including Tax
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Price Display Suffix : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <input type="text" class="form-control"
+                                                                                   name="tax_price_suffix"
+                                                                                   value="{% if taxOptions['tax_price_suffix'] is not empty %}{{ taxOptions['tax_price_suffix'] }}{% endif %}"
+                                                                                   placeholder="N/A">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Display Tax Total : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_display_tax_total">
+                                                                                <option {% if taxOptions['tax_display_tax_total'] == 'single_total' %}  selected=selected {% endif %}
+                                                                                        value="single_total">As a
+                                                                                    Single Total
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_display_tax_total'] == 'itemized' %}  selected=selected {% endif %}
+                                                                                        value="itemized">Itemized
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Display Tax Information below the
+                                                                                prices (in product pages) : </label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="tax_display_tax_info">
+                                                                                <option {% if taxOptions['tax_display_tax_info'] == 'yes' %}  selected=selected {% endif %}
+                                                                                        value="yes">Yes
+                                                                                </option>
+                                                                                <option {% if taxOptions['tax_display_tax_info'] == 'no' %}  selected=selected {% endif %}
+                                                                                        value="no">No
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

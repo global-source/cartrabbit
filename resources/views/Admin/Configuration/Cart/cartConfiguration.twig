@@ -1,0 +1,87 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/cartConfig/cart">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <h3>Cart Configurations</h3>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-4">
+                                                                            <label>Clear Cart : <i
+                                                                                        class="glyphicon glyphicon-info-sign"
+                                                                                        title="To Define, when the cart items will remove !"></i></label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <select class="form-control"
+                                                                                    name="cartconfig_clear_cart">
+                                                                                <option {% if cartConfig['cartconfig_clear_cart'] == 'onPlaceOrder' %}  selected=selected {% endif %}
+                                                                                        value="onPlaceOrder">On Place
+                                                                                    Order
+                                                                                </option>
+                                                                                <option {% if cartConfig['cartconfig_clear_cart'] == 'afterOrderConfirmation' %}  selected=selected {% endif %}
+                                                                                        value="afterOrderConfirmation">
+                                                                                    After Order Confirmation
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <label>Only Calculate Shpping, <br>if
+                                                                                    Customer
+                                                                                    Address Exist:</label>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <select class="form-control"
+                                                                                        name="cartconfig_is_shipping_address_required">
+                                                                                    <option {% if cartConfig['cartconfig_is_shipping_address_required'] == 'yes' %}  selected=selected {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if cartConfig['cartconfig_is_shipping_address_required'] == 'no' %}  selected=selected {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

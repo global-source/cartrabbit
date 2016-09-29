@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="{{ site_url }}/resources/assets/css/flylshop.bootstrap.min.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/metaboxProductImages.css" rel="stylesheet">
+    <link href="{{ site_url }}/resources/assets/css/TabbablePanel.css" rel="stylesheet">
+    <script src="{{ site_url }}/resources/assets/js/bootstrap.min.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/CartRabbit.min.js"></script>
+    <link href="{{ site_url }}/resources/assets/css/jquery.ui.css" rel="stylesheet">
+    <script src="{{ site_url }}/resources/assets/js/jquery.ui.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/metaboxProductsImage.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/bootstrap.select.min.js"></script>
+    <link href="{{ site_url }}/resources/assets/css/bootstrap.select.min.css"
+          rel="stylesheet">
+    <div class="container flylshop">
+        <div class="col-md-11">
+            {% for status in configStatus %}
+                <div class="alert alert-danger">
+                    <code class="alert-danger"><i class="glyphicon glyphicon-exclamation-sign"></i> <a
+                                href="{{ status['url'] }}">{{ status['msg'] }}</a></code>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+</head>
+<body>
+<div id="content">{% block body %}{% endblock %}</div>
+<div id="footer">
+    <script src="{{ site_url }}/resources/assets/js/variant.js"></script>
+    {% block footer %}
+
+    {% endblock %}
+</div>
+
+
+</body>
+</html>

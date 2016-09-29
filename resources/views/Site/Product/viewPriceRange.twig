@@ -1,0 +1,5 @@
+{% block body %}
+    {% if (setting.d_config_show_price_range == 'yes' and product.meta.is_variant == true) %}
+        <span class="text_highlight_small">Range : {{ currency.format(product.meta.min_price) ~ ' - ' ~ currency.format(product.meta.max_price) }}</span>
+    {% endif %}
+{% endblock %}

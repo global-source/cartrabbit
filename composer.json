@@ -1,0 +1,29 @@
+{
+  "name": "getherbert/herbert-plugin",
+  "description": "Herbert plugin",
+  "license": "MIT",
+  "require": {
+    "getherbert/framework": "dev-dev",
+    "jgrossi/corcel": "1.0.3",
+    "commerceguys/addressing": "~0.5",
+    "commerceguys/pricing": "master",
+    "commerceguys/intl": ">=0.7.1",
+    "commerceguys/zone": "^0.7.1",
+    "commerceguys/tax": "^0.7.1",
+    "illuminate/encryption": "^5.2",
+    "illuminate/pagination": "^5.2",
+    "geoip2/geoip2": "~2.0",
+    "flycartinc/inventory": "dev-master",
+    "flycartinc/order": "master",
+    "flycartinc/cart": "dev-master"
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "CartRabbit\\": "app/"
+    }
+  }
+}

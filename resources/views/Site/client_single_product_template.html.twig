@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block content %}
+
+    {% endblock %}
+</head>
+<body>
+<div id="content">{% block body %}{% endblock %}</div>
+
+<div id="footer">
+    <script src="{{ site_url }}/resources/assets/js/CartRabbit.min.js"></script>
+    <script src="{{ site_url }}/resources/assets/js/notifIt.min.js"></script>
+    {% block footer %}
+
+    {% endblock %}
+</div>
+</body>
+</html>

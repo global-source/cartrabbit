@@ -1,0 +1,227 @@
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+
+.CartRabbit body {
+    background-color: #f0f0f0;
+    font-family: "Droid Sans",  "Helvetica Neue",   Helvetica,   Arial,   sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+.verticalLine {
+    border-left: thick solid #444444;
+}
+
+.CartRabbit * {
+    box-sizing: border-box;
+}
+.CartRabbit .container {
+    background: #fdfdfd;
+    padding: 1rem;
+    margin: 3rem auto;
+    border-radius: 0.2rem;
+    counter-reset: pagination;
+    text-align: center;
+}
+.CartRabbit .container:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+.CartRabbit
+.container ul {
+    width: 100%;
+}
+.CartRabbit
+
+.xlarge {
+    width: 65rem;
+}
+.CartRabbit
+
+.large {
+    width: 45rem;
+}
+.CartRabbit
+
+.middle {
+    width: 32rem;
+}
+.CartRabbit
+
+.small {
+    width: 22rem;
+}
+.CartRabbit
+
+.xsmall {
+    width: 14rem;
+}
+.CartRabbit
+
+ul, .CartRabbit  li {
+    list-style: none;
+    display: inline;
+    padding-left: 0px;
+}
+.CartRabbit
+
+li {
+    counter-increment: pagination;
+}
+.CartRabbit
+li:hover a {
+    color: #fdfdfd;
+    background-color: #1d1f20;
+    border: solid 1px #1d1f20;
+}
+.CartRabbit
+li.active a {
+    color: #fdfdfd;
+    background-color: #1d1f20;
+    border: solid 1px #1d1f20;
+}
+.CartRabbit
+li:first-child {
+    float: left;
+}
+.CartRabbit
+li:nth-child(2) {
+    counter-reset: pagination;
+}
+.CartRabbit
+li:last-child {
+    display: none;
+    float: right;
+}
+.CartRabbit
+li a {
+    border: solid 1px #d7d7d7;
+    border-radius: 0.2rem;
+    color: #7d7d7d;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    padding: 0.5rem 0.9rem;
+}
+.CartRabbit
+li a:after {
+    content: " " counter(pagination) " ";
+}
+.CartRabbit
+
+.large li a {
+    display: none;
+}
+.CartRabbit
+.large li:nth-child(2) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(3) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(4) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(5) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(6) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(7) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-child(8) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-last-child(2) a {
+    display: inline-block;
+}
+.CartRabbit
+.large li:nth-last-child(3) {
+    display: inline-block;
+}
+/* 101 Manuall */
+/*.CartRabbit*/
+/*.large li:nth-last-child(3):after {*/
+    /*padding: 0 1rem;*/
+    /*content: "...";*/
+/*}*/
+.CartRabbit
+
+.middle li a {
+    display: none;
+}
+.CartRabbit
+.middle li:nth-child(2) a {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-child(3) a {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-child(4) a {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-child(5) a {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-last-child(2) a {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-last-child(3) {
+    display: inline-block;
+}
+.CartRabbit
+.middle li:nth-last-child(3):after {
+    padding: 0 1rem;
+    content: "...";
+}
+.CartRabbit
+
+.small li {
+    display: none;
+}
+.CartRabbit
+
+.xsmall li {
+    display: none;
+}
+.CartRabbit
+.xsmall li.active {
+    display: inline;
+}
+
+.flylshop .cart-table-list-size
+{
+    width: 3.631em;
+}
+
+.flylshop .cart-table-td-padding
+{
+    padding: 6px 12px;
+}
+
+.flylshop .cart-table-th-padding
+{
+    padding: 6px 12px;
+    font-weight: 400 !important;
+}
+.flylshop .cart-table-a-text-decoration:hover
+{
+    text-decoration: none !important;
+}
+.flylshop .cart-table-a-text-decoration
+{
+    box-shadow:none !important;
+}

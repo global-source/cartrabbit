@@ -1,0 +1,91 @@
+{% block content %}
+    <form method="post" id="{{ form }}">
+        {% if session.isGuest == "false" %}
+            <label>Type :
+                <select name="addr_type">
+                    <option value="billing_address">Billing Address</option>
+                    <option value="shipping_address" {% if prf == 'gu_' %} selected="selected" {% endif %} >Delivery
+                        Address
+                    </option>
+                </select>
+            </label>
+        {% endif %}
+        <div class="form-group">
+            <small><label for="{{ prf }}fname">First Name :</label></small>
+            <input type="text" name="fname" value="{{ data['fname'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}lname">Last Name :</label></small>
+            <input type="text" name="lname" value="{{ data['lname'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}phone">Phone :</label></small>
+            <input type="text" name="phone" value="{{ data['phone'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}mobile">Mobile :</label></small>
+            <input type="text" name="mobile"
+                   value="{{ data['mobile'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}company">Company :</label></small>
+            <input type="text" name="company"
+                   value="{{ data['company'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}taxNumber">Tax Number :</label></small>
+            <input type="text" name="tax_number"
+                   value="{{ data['tax_number'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}address1">Address 1 :</label></small>
+            <input type="text" name="address1"
+                   value="{{ data['address1'] }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}address2">Address 2 :</label></small>
+            <input type="text" name="address2"
+                   value="{{ data['address2'] }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}city">City :</label></small>
+            <input type="text" name="city" value="{{ data['city'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}postalCode">Zip / Postal Code :</label></small>
+            <input type="text" name="postalCode"
+                   value="{{ data['postalCode'] }}"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}country">Country :</label></small>
+            <select name="country" id="{{ prf }}" class="fc-form-control sel_country">
+                {% for code, country in general.countries %}
+                    <option {% if data['country'] == code %} selected=selected {% endif %}
+                            value="{{ code }}">{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <small><label for="{{ prf }}zone">Zone / Region :</label></small>
+            <select name="zone" id="{{ prf }}sel_zone" class="fc-form-control">
+                {% for i, state in data['states'] %}
+                    <option {% if data['zone'] == i %} selected=selected {% endif %}
+                            value="{{ i }}">{{ state }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div align="right">
+            <input type="button" class="fc-btn fc-btn-primary" id="{{ submit }}" value="Save">
+            {#<input type="reset" class="fc-btn fc-btn-danger" id="{{ prf }}btn_reset" value="Cancel">#}
+        </div>
+    </form>
+{% endblock %}

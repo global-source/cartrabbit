@@ -1,0 +1,106 @@
+{% extends '@CartRabbit/admin_tax_template.html.twig' %}
+
+{% block body %}
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 flylshop">
+                    <br>
+                    <div class="panel" style="width: 95%">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <table id="example" class="display table table-bordered table-responsive"
+                                               width="100%" cellspacing="0">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>User</th>
+                                                <th>order ID</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Amount</th>
+                                                <th>Payment Method</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>User</th>
+                                                <th>order ID</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Amount</th>
+                                                <th>Payment Method</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            {% set n = 0 %}
+
+                                            {% for record in orders %}
+                                                {% set shipping = util.jsonDecode(record.order.meta.shipping_address, true) %}
+
+                                                <tr>
+                                                    <td>{% set n = n+1 %} {{ n }}</td>
+                                                    <td>{{ record.user.displayName }}</td>
+                                                    <td>#{{ record.order_id }}</td>
+                                                    <td>{{ record.order.created_at.format('Y-m-d') }}</td>
+                                                    <td>{{ shipping.fname ~ ' ' ~ shipping.lname }}</td>
+                                                    <td>{{ currency.format(record.order.meta.total) }}</td>
+                                                    <td>{{ record.order.meta.payment_method_raw }}</td>
+
+                                                    <!-- Set Flag based on order status -->
+                                                    {% set flag_color = 'success' %}
+                                                    {% set order_status = order.info.order_status %}
+                                                    {% if order_status == 'failed' %}
+                                                        {% set flag_color = 'danger' %}
+                                                    {% elseif order_status == 'new' %}
+                                                        {% set flag_color = 'primary' %}
+                                                    {% endif %}
+                                                    <td>
+                                                        <button class="col-md-8 btn btn-{{ flag_color }}">{{ record.order.order_status }}</button>
+                                                    </td>
+                                                    <td>
+                                                        <a href="?page=cartrabbit_order&order_id={{ record.order_id }}">
+                                                            <button class="btn btn-primary"><i
+                                                                        class="glyphicon glyphicon-search"> </i>
+                                                            </button>
+                                                        </a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                        <div align="right" style="font-weight: bolder;">
+                                            {{ pagination | raw }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+//                $('#example').DataTable({
+//                    "order": [[3, "desc"]]
+//                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

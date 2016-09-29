@@ -1,0 +1,22 @@
+{% block body %}
+    <div class="fc-col-lg-6" style="color: #5e5e5e;">
+        {% set billing = session.billing_address %}
+        {% if billing is not empty %}
+            <span><b><i>Billing Address</i></b></span>
+            <p>
+                <b>{{ billing.fname ~ ' ' ~ billing.lname }}</b>
+                {{ billing.mobile ~', '~ billing.company ~', '~ billing.address1 ~', ' ~ billing.address2 ~', ' ~ billing.zone ~', ' ~ billing.country ~', ' ~ billing.postalCode }}
+            </p>
+        {% endif %}
+    </div>
+    <div class="fc-col-lg-6" style="color: #5e5e5e;">
+        {% set shipping = session.shipping_address %}
+        {% if shipping is not empty %}
+            <span><b><i>Delivery Address</i></b></span>
+            <p>
+                <b>{{ shipping.fname ~ ' ' ~ shipping.lname }}</b>
+                {{ shipping.mobile ~', '~ shipping.company ~', '~ shipping.address1 ~', ' ~ shipping.address2 ~', ' ~ shipping.zone ~', ' ~ shipping.country ~', ' ~ shipping.postalCode }}
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

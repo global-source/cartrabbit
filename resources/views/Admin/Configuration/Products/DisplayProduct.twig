@@ -1,0 +1,192 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/cartConfig/productDisplay">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Products/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <h3>Product Display</h3>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-8">
+                                                                            <label>Catelog Mode :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_catalog_model">
+                                                                                    <option {% if productConfig.d_config_catalog_model == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_catalog_model == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show SKU :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_sku">
+                                                                                    <option {% if productConfig.d_config_show_sku == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_sku == 'no' %}
+                                                                                            selected="selected"
+                                                                                            {% endif %}value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Brand :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_brand">
+                                                                                    <option {% if productConfig.d_config_show_brand == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_brand == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Description :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_desc">
+                                                                                    <option {% if productConfig.d_config_show_desc == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_desc == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Quantity Field :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_quantity_field">
+                                                                                    <option {% if productConfig.d_config_quantity_field == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_quantity_field == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Price :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_price">
+                                                                                    <option {% if productConfig.d_config_show_price == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_price == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Price Range :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_price_range">
+                                                                                    <option {% if productConfig.d_config_show_price_range == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_price_range == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Product Image :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_product_image">
+                                                                                    <option {% if productConfig.d_config_show_product_image == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_product_image == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Product Thumbnail Image
+                                                                                :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_product_thumbnail">
+                                                                                    <option {% if productConfig.d_config_show_product_thumbnail == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_product_thumbnail == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <label>Show Product Gallery :</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control"
+                                                                                        name="d_config_show_product_gallery">
+                                                                                    <option {% if productConfig.d_config_show_product_gallery == 'yes' %} selected="selected" {% endif %}
+                                                                                            value="yes">Yes
+                                                                                    </option>
+                                                                                    <option {% if productConfig.d_config_show_product_gallery == 'no' %} selected="selected" {% endif %}
+                                                                                            value="no">No
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

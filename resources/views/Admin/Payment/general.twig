@@ -1,0 +1,54 @@
+{% extends '@CartRabbit/admin_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <form method="post" action="{{ site_addr }}/config/setPaymentConfig">
+                                            <div class="panel panel-info">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Payment/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="col-md-12 form-group">
+                                                        <h3>Payment Config</h3>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <label> Select Default Payment :
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <select class="form-control" name="payment_default">
+                                                                    {% for i,item in config['list'] %}
+                                                                        <option value="{{ i }}" {% if item == config['payment_default'] %} selected=selected {% endif %} >{{ item }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

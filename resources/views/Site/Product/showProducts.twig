@@ -1,0 +1,148 @@
+    {% extends '@CartRabbit/client_singleproduct_template.html.twig' %}
+{% block body %}
+    <div class="flylshop" xmlns="http://www.w3.org/1999/html">
+        <div align="left">
+            {{ secondaryCurrency | raw }}
+            <hr>
+        </div>
+        <input type="hidden" value="{{ links.cart }}" id="btn_my_cart">
+
+        <ul class="products fc-container">
+            {% if products is not empty %}
+                <div class="fc-row">
+
+                    {% for product in products %}
+                        <div class="fc-col-lg-4">
+
+                            <!-- PRODUCT NAME -->
+                            <div>
+                                <a href="{{ product.meta.link }}">
+                                    <h1 class="text_highlight_medium">{{ product.post_title }}</h1>
+                                </a>
+                            </div>
+
+                            <!-- PRODUCT IMAGE -->
+                            <div>
+                                {% include '@CartRabbit/Site/Product/viewImage.twig' %}
+
+                                {% if (setting.d_config_show_sku == 'yes') and product.meta.sku is not empty %}
+                                    <h5>SKU: {{ product.meta.sku }}</h5>
+                                {% endif %}
+                            </div>
+
+                            <!-- PRODUCT DESC -->
+                            {% if product.post_content is not empty %}
+                                <div>
+                                    <small><i>{{ product.post_content }}</i></small>
+                                </div>
+                            {% endif %}
+
+                            <!-- PRODUCT STOCK -->
+                            {% if product.meta.stock.show == true and product.meta.stock.qty > 0 %}
+                                <div>
+                                    <b>Availabel :</b> <i>{{ product.meta.stock.qty }}</i>
+                                </div>
+                            {% endif %}
+                            <!-- PRODUCT VARIANT -->
+                            {% if product.meta.is_variant %}
+                                <a href="{{ product.meta.link }}"><input type="button"
+                                                                         class="fc-btn fc-btn-success fc-btn-sm"
+                                                                         value="Choose Options"></a>
+                            {% else %}
+
+                                <!-- PRODUCT SIMPLE -->
+                                <div>
+                                    <!-- PRODUCT PRICE -->
+                                    {% if (setting.d_config_show_price == 'yes') %}
+                                        <div id="lbl_price_{{ product.ID }}"
+                                             class="">
+                                            {% include '@CartRabbit/Site/Product/viewPrice.twig' %}
+                                        </div>
+
+                                        <!-- TAX INFO -->
+                                        {% include '@CartRabbit/Site/Product/viewTaxInfo.twig' %}
+
+                                    {% endif %}
+                                </div>
+
+                                <!-- CART BUTTON -->
+                                <div>
+                                    {% include '@CartRabbit/Site/Product/viewCart.twig' %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h3>No More products are Available !</h3>
+            {% endif %}
+        </ul>
+
+        {#<div class="CartRabbit">#}
+        <div class="container middle">
+            {{ pagination | raw }}
+        </div>
+        {#</div>#}
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+
+                /** To Limit the Qty Value and Avoid Enter Characters */
+                $(".txt_product_qty").keypress(function (e) {
+                    var minVal = $(this).attr('min');
+                    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                        return false;
+                    }
+                    if (this.value.length == 0 && e.which == 48) {
+                        return false;
+                    }
+                    // 101 Set Limit, Should not Enter More than the Given Min Qty Sale
+                    // CODE HERE
+
+
+                    $(".txt_product_qty").on('change keyup', function () {
+                        var minVal = parseInt($(this).attr('min'));
+                        var maxVal = parseInt($(this).attr('max'));
+                        var $this = $(this)
+                        var t = setInterval(
+                                function () {
+                                    if (($this.val() < minVal || $this.val() > maxVal) && $this.val().length != 0) {
+                                        if ($this.val() < minVal) {
+                                            $this.val(minVal)
+                                        }
+                                        if ($this.val() > maxVal) {
+                                            $this.val(maxVal)
+                                        }
+                                    }
+                                }, 50)
+                    });
+
+
+                    /** On Change Of Qty Value */
+
+                });
+
+                $('.qty').on('focusout', function (e) {
+
+                });
+            });
+
+            function message(name) {
+                notif({
+                    type: "success",
+                    msg: name,
+                    position: "right",
+                    width: 180,
+                    autohide: true,
+                    multiline: true
+                });
+            }
+        })(jQuery);
+    </script>
+
+{% endblock %}
+

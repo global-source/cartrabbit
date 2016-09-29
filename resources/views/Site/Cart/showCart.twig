@@ -1,0 +1,289 @@
+{% extends '@CartRabbit/client_singleproduct_template.html.twig' %}
+{% block body %}
+{% set products = order.cart_contents %}
+    <div class="flylshop fc-container">
+        <div class="fc-fc-row">
+            <div align="right">
+                {% if products | length != 0 or products is not empty %}
+                    <a href="{{ links.checkout }}"> <input type="button" class="fc-btn fc-btn-primary"
+                                                              value="Proceed to Checkout"></a>
+                {% endif %}
+            <div class="fc-text-large">
+                Cart
+            </div>
+        </div>
+        {% if products | length != 0 or products is not empty %}
+
+            <div class="fc-row">
+                <form method="post" action="{{ site_addr }}/products/updateCart">
+                    <table border="0" cellpadding="0" cellspacing="0" class="cart-table">
+                        <thead>
+                        <tr>
+                            <td>Product</td>
+                            <td>Quantity</td>
+                            <td>Price</td>
+                            <td>Total</td>
+                            <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody class="cart_items">
+                        {% for i,product in products %}
+
+                            <tr>
+                                <td>
+                                    <div class="fc-row">
+                                        <div>
+                                            <img src="{{ product.product.meta.image_thump }}"
+
+                                                 alt="image">
+                                        </div>
+                                        <div class="product-name">
+                                <span class="fc-row">
+                                    {{ product.product.post_title }}
+                                </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" name="cartrabbit[cart][{{ i }}][qty]"
+                                            min="{{ product.product.meta.stock.min }}"
+                                            max="{{ product.product.meta.stock.max }}"
+                                           class="fc-input-md"
+                                           id="product_qty"
+                                           value="{{ product.quantity }}">
+                                    <input type="hidden" name="cartrabbit[cart][{{ i }}][product_id]"
+                                           value="{{ product.product_id }}">
+                                </td>
+                                <td>
+                        <span id="per_product_price">
+
+                            {#{% if product['product']['meta']['price']special_price != 0 %}#}
+                            {#{{ product['product']['meta']['price'].f_specialPrice }}#}
+                            {#{% else %}#}
+                            {#{{ product['product']['meta']['price'].f_price }}#}
+                            {#{% endif %}#}
+                            {{ currency.format(product.line_price) }}
+                        </span>
+                                </td>
+                                <td>
+                        <span id="total_product_price">
+                            {{ currency.format(product.line_final_total) }}
+                        </span>
+                                </td>
+                                <td>
+                        <span class="cart-product-options fc-text-small">
+                            <a href=Javascript:void(0) class="remove_cart" id="pro_{{ i }}">Remove</a>
+                        </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="5">
+                        <span class="apply-coupon">
+                            <input type="text" class="fc-input-sm cart-coupon-input" placeholder="Coupon">
+                            <input type="button" class="fc-btn fc-btn-sm fc-btn-success" value="Apply Coupon">
+                        </span>
+                        <span class="update-cart-btn">
+                            <button class="fc-btn fc-btn-sm fc-btn-primary"
+                                    id="btn_update_cart">Update Cart
+                            </button>
+                        </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="fc-row cart-subtotals">
+
+                <div class="fc-text-sub-large cart-subtotals-title">
+                    Cart Totals
+                </div>
+                <table class="cart-table-sub-total">
+                    <tbody>
+                    <tr>
+                        <td>
+                            Subtotal
+                        </td>
+                        <td>
+                             {{ order.getCartSubtotal() | raw }}
+                        </td>
+                    </tr>
+
+                    <!-- LOADING TAXES -->
+                     {% for id, tax in order.getItemisedTaxTotals() %}
+                     <tr>
+                        <td>
+                                <small>{{ tax.label }} : </small>
+
+                        </td>
+                        <td>
+                            {{ currency.format(tax.amount) }}
+                        </td>
+                        </tr>
+                        {% endfor %}
+
+                    {% if order.shipping_total is not empty and session.shippingMethod != null %}
+                        <tr>
+                            <td>
+                                Shipping
+                            </td>
+                            {% set shipping_total = order.getCartShippingTotal() %}
+                            {% if shipping_total == 'Free' %}
+                            <td>
+                            {{ shipping_total }}
+                            </td>{% else %}
+                            <td>
+                                {{ currency.format(shipping_total) }}
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>
+                        <span class="total-price-title">
+                            Total
+                        </span>
+                        </td>
+                        <td>
+
+                        <span class="total-price">
+                            {{ order.getCartOrderTotal() | raw }}
+                        </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="fc-fc-row">
+                    <div align="right">
+                        {% if products | length != 0 or products is not empty %}
+                            <a href="{{ links['checkout'] }}"> <input type="button" class="fc-btn fc-btn-primary"
+                                                                      value="Proceed to Checkout"></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {#<div class="fc-row">#}
+            {#<div class="fc-text-sub-large cart-subtotals-title">#}
+            {#Shipping#}
+            {#</div>#}
+            {#<div class="countries">#}
+
+            {#<form class="shipping_check">#}
+
+            {#<select class="fc-form-control fc-select-small" id="shipping_country">#}
+            {#{% for code,country in countries %}#}
+            {#<option value="{{ code }}">{{ country }}</option>#}
+            {#{% endfor %}#}
+            {#</select>#}
+            {#<br>#}
+
+            {#<select class="fc-form-control fc-select-small" id="shipping_state">#}
+
+            {#</select>#}
+
+            {#<input type="text" class="pincode cart-coupon-input" placeholder="Pin Code">#}
+
+            {#<input type="submit" value="Check">#}
+
+            {#</form>#}
+
+            {#</div>#}
+            {#</div>#}
+
+        {% else %}
+            <h3>You Have No item to Checkout !</h3>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                var site_addr = $("#siteAddress").val();
+
+                $('#cart_update_notification').delay(200).slideDown();
+                $(".remove_cart").on('click', function () {
+                    var id = $(this).attr('id');
+                    id = id.replace('pro_', '');
+                    var qty = $('[name="cartrabbit[cart][' + id + '][qty]"').val();
+                    var pid = $('[name="cartrabbit[cart][' + id + '][product_id]"').val();
+                    $.ajax({
+                        url: '{{ site_addr }}/products/RemoveItem',
+                        type: 'POST',
+                        data: {id: pid, qty: qty},
+                        success: function () {
+                            location.reload();
+                            var report = qty + ' x ' + item + ' removed Successfully !';
+                            warning(report);
+                        }
+                    });
+                });
+                /** Update Total Price Based on the Quantity and Price */
+
+
+                /**
+                 * 103 Select States based on country selection
+                 */
+                $('#shipping_country').on('change', function () {
+                    var country = $(this).val();
+                    $.ajax({
+                        url: '{{ site_addr }}/countrycode',
+                        type: 'POST',
+                        data: {country: country},
+                        success: function (res) {
+                            var toAppend = '';
+                            var ress = JSON.parse(res);
+                            $.each(ress, function (i, state) {
+                                toAppend += '<option value="' + i + '">' + state + '</option>';
+                            });
+                            $('#shipping_state').html(toAppend);
+
+                        }
+                    });
+                });
+
+
+                $('.shipping_check').submit(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '{{ site_addr }}/checkShipping',
+                        type: 'POST',
+                        data: {
+                            country: country
+                        },
+                        success: function (res) {
+                            console.log(result);
+                        }
+                    });
+                });
+
+
+            });
+
+            function message(name) {
+                notif({
+                    type: "info",
+                    msg: name,
+                    position: "right",
+                    width: 180,
+                    autohide: true,
+                    multiline: true
+                });
+            }
+
+            function warning(name) {
+                notif({
+                    type: "danger",
+                    msg: name,
+                    position: "right",
+                    width: 180,
+                    autohide: true,
+                    multiline: true
+                });
+            }
+        })(jQuery);
+    </script>
+{% endblock %}

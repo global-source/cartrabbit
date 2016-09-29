@@ -1,0 +1,43 @@
+.btn_removeAddress {
+    display: none;
+}
+.change-account-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+.change-address-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+.change-delivery-address-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+.change-payment-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+.change-shipping-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+
+.continue-to-payment-btn{
+    cursor:pointer;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 5px;
+}
+.place-order-button {
+    float: right;
+}

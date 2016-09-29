@@ -1,0 +1,471 @@
+{% extends '@CartRabbit/admin_tax_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            {% include '@CartRabbit/Admin/Includes/Configuration/configMenu.twig' %}
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-md-12 flylshop">
+                                        <div class="panel panel-info">
+                                            <form method="post" action="{{ site_addr }}/taxConfig/editTaxProfile">
+                                                <div align="right">
+                                                    <button class="btn btn-primary">Save</button>
+                                                </div>
+                                                {% include '@CartRabbit/Admin/Includes/Configuration/Tax/optionMenu.twig' %}
+                                                <div class="panel-body">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="row">
+                                                                    <h3>{{ content['name'] }} - [ {{ content['zone'] }}
+                                                                        ]</h3>
+                                                                    <div class="form-group">
+                                                                        <label>Name : </label>
+                                                                        <input type="text" name="name"
+                                                                               class="form-control"
+                                                                               value="{{ content['name'] }}"
+                                                                        >
+                                                                    </div>
+                                                                    <input type="hidden" name="tax_profile_id"
+                                                                           value="{{ tax_id }}">
+                                                                    <div class="form-group">
+                                                                        <label>Generic Label : </label>
+                                                                        <input type="text" name="generic_lable"
+                                                                               class="form-control"
+                                                                               value="{{ content['generic_label'] }}"
+                                                                        >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Is Compound : </label>
+                                                                        <select name="isCompound" class="form-control">
+                                                                            <option {% if content['isCompound'] == 'yes' %} selected=selected {% endif %}
+                                                                                    value="yes">Yes
+                                                                            </option>
+                                                                            <option {% if content['isCompound'] == 'no' %} selected=selected {% endif %}
+                                                                                    value="no">No
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Tag : </label>
+                                                                        <input type="text" name="tag"
+                                                                               class="form-control"
+                                                                               value="{{ content['tag'] }}"
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="panel-body">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">
+                                                                    <h3>{{ content['name'] }}'s Rates </h3>
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <div id="resTable">
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Rate ID</th>
+                                                                                {#<th>Name</th>#}
+                                                                                <th>Default</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody id="dyRow">
+                                                                            {% for key,val in content['rates'] %}
+                                                                                <tr class="tableTaxRates">
+                                                                                    <td>{{ val['id'] }}</td>
+                                                                                    {#<td>{{ val['name'] }}</td>#}
+                                                                                    <td>{% if val['default'] is not empty %} Yes {% else %} No {% endif %}</td>
+                                                                                    <td>
+                                                                                        <input type="button"
+                                                                                               class="btn btn-success btn_add_tax_amounts"
+                                                                                               value="Manage Rates"
+                                                                                               data-target="#amountAddModal"
+                                                                                               data-toggle="modal">
+                                                                                        <input type="hidden"
+                                                                                               class="hidden_zone_id"
+                                                                                               value="{{ content['zone'] }}">
+                                                                                        <input type="hidden"
+                                                                                               class="hidden_rate_id"
+                                                                                               value="{{ val['id'] }}">
+
+                                                                                        <input type="button"
+                                                                                               class="btn btn-primary btn_edit_tax_amounts"
+                                                                                               value="Edit"
+                                                                                               data-target="#editRateModal"
+                                                                                               data-toggle="modal"
+                                                                                        >
+                                                                                        <input
+                                                                                                type="button"
+                                                                                                class="btn btn-danger btn_remove_tax_amounts"
+                                                                                                value="Remove">
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                            </tbody>
+                                                                            <tfoot>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <input type="button"
+                                                                                           class="btn btn-primary"
+                                                                                           value="Add"
+                                                                                           data-target="#rateModal"
+                                                                                           data-toggle="modal">
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tfoot>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">
+                                                                    <h3>{{ content['name'] }}'s Zones
+                                                                    </h3>
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <div id="resTable">
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Zone ID</th>
+                                                                                <th>Type</th>
+                                                                                <th>Name</th>
+                                                                                <th>Country Code</th>
+                                                                                <th>Included Postal Codes</th>
+                                                                                <th>Excluded Postal Codes</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody id="dyRow">
+                                                                            {% for key,val in zone['members'] %}
+                                                                                <tr class="zoneList">
+                                                                                    {#<td>{{ val['id'] }}</td>#}
+                                                                                    <td>
+                                                                                        <span class="txt_zone_id">{{ val['id'] }}</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="txt_zone_type">{{ val['type'] }}</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="txt_zone_name">{{ val['name'] }}</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="txt_zone_ccode">{{ val['country_code'] }}</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="txt_zone_in_pcode">{{ val['included_postal_codes'] }}</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="txt_zone_ex_pcode">{{ val['excluded_postal_codes'] }}</span>
+                                                                                    </td>
+                                                                                    <td><input type="button"
+                                                                                               class="btn btn-primary btn-edit-zone"
+                                                                                               data-target="#zoneModal"
+                                                                                               data-toggle="modal"
+                                                                                               value="Edit">
+                                                                                        <input type="button"
+                                                                                               class="btn btn-danger btn-remove-zone"
+                                                                                               value="Remove"></td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                            </tbody>
+                                                                            <tfoot>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <input type="button"
+                                                                                           class="btn btn-primary btn_zone_add"
+                                                                                           value="Add"
+                                                                                           data-target="#zoneModal"
+                                                                                           data-toggle="modal">
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tfoot>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" action="{{ site_addr }}/taxConfig/addTaxRates">
+            <!-- Modal -->
+            <div class="modal fade" id="amountAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title lbl_amount_id" id="myModalLabel">Add Amounts</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="ajax_rate_curd">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form method="post" action="{{ site_addr }}/taxConfig/editTaxRates">
+            <!-- Modal -->
+            <div class="modal fade" id="editRateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title lbl_amount_id" id="myModalLabel">Edit Rates</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Is Default : </label>
+                                <select name="default_status" class="form-control">
+                                    <option value=1>Yes</option>
+                                    <option value=0>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="rate_id" value="">
+                        <input type="hidden" name="tax_id" value="">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form method="post" action="{{ site_addr }}/taxConfig/addTaxRates">
+            <!-- Modal -->
+            <div class="modal fade" id="rateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title lbl_rate_id" id="myModalLabel">New Rate</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" value="{{ tax_id }}"
+                                   name="tax_id"
+                                   id="hidden_tax_id">
+                            <div class="form-group">
+                                <label>Name : </label>
+                                <select class="form-control" name="name">
+                                    {% for value in taxClasses %}
+                                        <option value="{{ value }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Is Default : </label>
+                                <select name="default" class="form-control">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form method="post" action="{{ site_addr }}/taxConfig/addZone" id="form_zone">
+            <!-- Modal -->
+            <div class="modal fade" id="zoneModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title lbl_zone_id" id="myModalLabel">New Zone</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" value="{{ tax_id }}"
+                                   name="tax_id"
+                                   id="hidden_tax_id">
+                            <input type="hidden" value="{{ zone_id }}"
+                                   name="zone_id"
+                                   id="hidden_zone_id">
+                            <div class="form-group">
+                                <label>Type : </label>
+                                <select name="type" class="form-control txt_amount">
+                                    <option value="country">Country</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Name : </label>
+                                <input type="text" name="name" class="form-control txt_amount" placeholder="Zone Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Country Code : </label>
+                                <select name="country_code" class="form-control txt_amount">
+                                    {% for i,country in countries %}
+                                        <option value="{{ i }}">{{ i }} - {{ country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Included Postal Code : </label>
+                                <input type="text" name="included_postal_codes" class="form-control txt_amount"
+                                       placeholder="Included Postal Code">
+                            </div>
+                            <div class="form-group">
+                                <label>Excluded Postal Code : </label>
+                                <input type="text" name="excluded_postal_codes" class="form-control txt_amount"
+                                       placeholder="Excluded Postal Code">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('.btn_add_tax_amounts').on('click', function () {
+
+                    var zone_id = $(this, '.tableTaxRates').siblings('.hidden_zone_id').val();
+                    var rate_id = $(this, '.tableTaxRates').siblings('.hidden_rate_id').val();
+
+                    $.ajax({
+                        url: '{{ site_addr }}/cartConfig/getTaxAmounts',
+                        type: 'POST',
+                        data: {zone: zone_id, rate: rate_id},
+                        success: function (res) {
+                            $('#ajax_rate_curd').html(res);
+                        }
+                    });
+                });
+
+                $('.btn_edit_tax_amounts').on('click', function () {
+                    var rate_id = $(this, '.tableTaxRates').siblings('.hidden_rate_id').val();
+                    var zone_id = $(this, '.tableTaxRates').siblings('.hidden_zone_id').val();
+                    $('[name="rate_id"]').val(rate_id);
+                    $('[name="tax_id"]').val(zone_id);
+                });
+
+                $('.btn_remove_tax_amounts').on('click', function () {
+                    var rate_id = $(this, '.tableTaxRates').siblings('.hidden_rate_id').val();
+                    var zone_id = $(this, '.tableTaxRates').siblings('.hidden_zone_id').val();
+                    var state = confirm('Are You Sure to Remove Tax Rate: "' + rate_id + '" ?');
+
+                    if (state) {
+                        $.ajax({
+                            url: '{{ site_addr }}/taxConfig/removeTaxRates',
+                            type: 'POST',
+                            data: {tax_id: zone_id, rate_id: rate_id},
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+
+                $('.btn-edit-zone').on('click', function () {
+
+                    /** To Collection Zone data from the table */
+                    var id = $(this).closest('tr').find('.txt_zone_id').html();
+                    var type = $(this).closest('tr').find('.txt_zone_type').html();
+                    var name = $(this).closest('tr').find('.txt_zone_name').html();
+                    var ccode = $(this).closest('tr').find('.txt_zone_ccode').html();
+                    var in_postal = $(this).closest('tr').find('.txt_zone_in_pcode').html();
+                    var ex_postal = $(this).closest('tr').find('.txt_zone_ex_pcode').html();
+
+                    /** Re-Declare the Action URL in Zone Form */
+                    $('#form_zone').attr('action', '{{ site_addr }}/taxConfig/editZone');
+                    /** Re-assign the Collected data with the Zone Form */
+                    $('[name="zone_id"]').val(id);
+                    $('[name="type"]').val(type);
+                    $('[name="name"]').val(name);
+                    $('[name="country_code"]').val(ccode);
+                    $('[name="included_postal_codes"]').val(in_postal);
+                    $('[name="excluded_postal_codes"]').val(ex_postal);
+
+                });
+
+                $('.btn_zone_add').on('click', function () {
+                    $('#form_zone').attr('action', '{{ site_addr }}/taxConfig/addZone');
+                    $('#form_zone')[0].reset();
+                });
+
+                $('.btn-remove-zone').on('click', function () {
+
+                    var zone_id = $(this).closest('tr').find('.txt_zone_id').html();
+                    var tax_id = $('#hidden_tax_id').val();
+                    var state = confirm('Are You sure to Remove : ' + zone_id + ' ?');
+                    if (state) {
+                        $.ajax({
+                            url: '{{ site_addr }}/taxConfig/removeZone',
+                            type: 'POST',
+                            data: {zone_id: zone_id, tax_id: tax_id},
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

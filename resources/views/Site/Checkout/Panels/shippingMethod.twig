@@ -1,0 +1,114 @@
+{% block body %}
+    <div id="shipping_content">
+        {% if general.orderSummery.shipping_info.isEnable == false %}
+            {% set shipping_enable = "false" %}
+        {% else %}
+            {% set shipping_enable = "true" %}
+        {% endif %}
+        <div class="fc-title-tab shippingMethodTab">
+        <span class="fc-text-medium">
+            Shipping & Payment
+        </span>
+        </div>
+        <div class="fc-row">
+            {% if shipping_enable == "true" and general.orderSummery.shipping_info.needShipping == true %}
+                <div class="fc-col-lg-6">
+                    <h4>Shipping Methods</h4>
+                    {% set status = 'false' %}
+                    {% if general.shipping.shippingMethods is not empty %}
+                        {% for i, ship in general.shipping.shippingMethods %}
+                            {% if general.shipping.available[i] == 'on' %}
+                                {% set status = 'true' %}
+                                <label>
+                                    <input type="radio"
+                                           name="shipping_type[]" {% if i == session.shippingMethod %} checked="checked" {% endif %}
+                                           class="shipping_type" value="{{ i }}">
+                                    {{ ship }}
+                                </label><br>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if status == 'false' %}
+                        <code>Sorry, Shipping is not available for your location !</code><br>
+                    {% endif %}
+
+                    {% if general.orderSummery.shipping_info.shipping_dont_allow_if_no_shipping == 'no' %}
+                        {% set status = 'true' %}
+                    {% endif %}
+                    <input type="hidden" id="restrict_shipping"
+                           value="{{ status }}">
+
+                    <div class="shippingMethodContainer">
+                        <div class="shipping-content contents">
+
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <input type="hidden" id="shipping_status" value="{{ shipping_enable }}">
+            <div class="fc-col-lg-6">
+                <h4>Payment Methods</h4>
+                {% include '@CartRabbit/Site/Checkout/Panels/PaymentMethod.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block footer %}
+        <script>
+            jQuery.noConflict();
+            (function ($) {
+                $(document).ready(function () {
+//                    loadPayment();
+
+                    $('.shipping_type').on('click', function () {
+
+                        var shipping = $('input[name="shipping_type[]"]:checked').val();
+                        var payment = $('input[name="payment_type[]"]:checked').val();
+                        console.log('CHECKED ! ' + shipping);
+                        ajax_start();
+                        $.ajax({
+                            url: '{{ site_addr }}/config/setShippingMethod',
+                            type: 'POST',
+                            data: {shipping_method: shipping, payment_method: payment},
+                            success: function () {
+                                loadPayment();
+                            },
+                            complete: function () {
+
+                            }
+                        });
+                    });
+
+                    function loadPayment() {
+                        $.ajax({
+                            url: '{{ site_addr }}/checkout/loadPayment',
+                            type: 'POST',
+                            success: function (res) {
+
+                                /** If error is hit, then redirect */
+                                if (res.error_url) {
+                                    location.reload(res.error_url);
+                                }
+                                $('#payment_content').html(res.payment);
+                                $('#summery_content').html(res.summery);
+                                $('#shipping_content').html(res.shipping);
+                                ajax_stop();
+                            }
+                        });
+                    }
+
+                    function ajax_start() {
+                        $('#spin_bar').show();
+                    }
+
+                    function ajax_stop() {
+                        $('#spin_bar').hide();
+                    }
+
+                });
+            })(jQuery);
+        </script>
+
+    {% endblock %}

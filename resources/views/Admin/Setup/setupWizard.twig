@@ -1,0 +1,219 @@
+{% extends '@CartRabbit/admin_setup_template.html.twig' %}
+
+ {% block content %}
+
+ {% endblock %}
+{% block body %}
+    <br>
+    <div class="flylshop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 flylshop">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-10 flylshop">
+                                    <div class="panel">
+                                        <form method="post" enctype="multipart/form-data"
+                                              action="{{ site_addr }}/storeConfig/general">
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="">
+                                                        <h3 class="text-center"><b>CartRabbit</b>
+                                                            <small>Setup Wizard</small>
+                                                        </h3>
+                                                        <div class="stepwizard">
+                                                            <div class="stepwizard-row setup-panel">
+                                                                <div class="stepwizard-step">
+                                                                    <a href="#step-1" type="button"
+                                                                       class="btn btn-primary btn-circle">1</a>
+                                                                    <p>Step 1</p>
+                                                                </div>
+                                                                <div class="stepwizard-step">
+                                                                    <a href="#step-2" type="button"
+                                                                       class="btn btn-default btn-circle"
+                                                                       disabled="disabled">2</a>
+                                                                    <p>Step 2</p>
+                                                                </div>
+                                                                <div class="stepwizard-step">
+                                                                    <a href="#step-3" type="button"
+                                                                       class="btn btn-default btn-circle"
+                                                                       disabled="disabled">3</a>
+                                                                    <p>Finish</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <form role="form">
+                                                            <div class="row setup-content" id="step-1">
+                                                                <div class="col-xs-12">
+                                                                    <div class="col-md-12">
+                                                                        <h3> Step 1</h3>
+                                                                        <div class="form-group">
+                                                                            <label>Store Name : </label>
+                                                                            <input type="text" name="store_name"
+                                                                                   value="{% if cartConfig['store_name'] is not empty %}{{ cartConfig['store_name'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="">
+                                                                            <label class="">Store Location :</label>
+                                                                            <select class="selectpicker form-control"
+                                                                                    name="store_country"
+                                                                                    id="storeCountry"
+                                                                                    data-live-search="true"
+                                                                                    tabindex="-1">
+                                                                                {% for key,val in countries %}
+                                                                                    <option {% if cartConfig['store_country'] == key %}  selected=selected {% endif %}
+                                                                                            value="{{ key }}">{{ val }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div id="storeStateDiv">
+                                                                            <label class="">State :</label>
+                                                                            <select class="form-control"
+                                                                                    name="store_state"
+                                                                                    id="storeState">
+                                                                                <option value="{{ cartConfig['store_state'] }}">{{ cartConfig['store_state'] }}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="">Address line 1 :</label>
+                                                                            <input type="text" name="address1"
+                                                                                   value="{% if cartConfig['address1'] is not empty %}{{ cartConfig['address1'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="">Address line 2 :</label>
+                                                                            <input type="text" name="address2"
+                                                                                   value="{% if cartConfig['address2'] is not empty %}{{ cartConfig['address2'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="">City :</label>
+                                                                            <input type="text" name="city"
+                                                                                   value="{% if cartConfig['city'] is not empty %}{{ cartConfig['city'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="">Postal Code :</label>
+                                                                            <input type="text" name="postal"
+                                                                                   value="{% if cartConfig['postal'] is not empty %}{{ cartConfig['postal'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <br>
+                                                                        <button class="btn btn-primary nextBtn btn-lg pull-right"
+                                                                                type="button">Next
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row setup-content" id="step-2">
+                                                                <div class="col-xs-12">
+                                                                    <div class="col-md-12">
+                                                                        <h3> Step 2</h3>
+                                                                        <div class="form-group">
+                                                                            <label>Currency : </label>
+                                                                            <select class="form-control selectpicker"
+                                                                                    data-live-search="true"
+                                                                                    name="currency">
+                                                                                {% for key,val in currency %}
+                                                                                    <option {% if cartConfig['currency'] == key %}  selected=selected {% endif %}
+                                                                                            value="{{ key }}">{{ key }}
+                                                                                        - {{ val }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label>Position : </label>
+                                                                            <select class="form-control"
+                                                                                    name="position">
+                                                                                <option {% if cartConfig['position'] == 'before' %}  selected=selected {% endif %}
+                                                                                        value='before'>Before ($10)
+                                                                                </option>
+                                                                                <option {% if cartConfig['position'] == 'after' %}  selected=selected {% endif %}
+                                                                                        value='after'>After (10$)
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label>Separator : </label>
+                                                                            <input type="text" name="separator"
+                                                                                   value="{% if cartConfig['separator'] is not empty %}{{ cartConfig['separator'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label>Dec.Separator : </label>
+                                                                            <input type="text" name="dec_separator"
+                                                                                   value="{% if cartConfig['dec_separator'] is not empty %}{{ cartConfig['dec_separator'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label>No.Of Decimals : </label>
+                                                                            <input type="text" name="nodecvalue"
+                                                                                   value="{% if cartConfig['nodecvalue'] is not empty %}{{ cartConfig['nodecvalue'] }}{% endif %}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <button class="btn btn-primary nextBtn btn-lg pull-right"
+                                                                                type="button">Next
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row setup-content" id="step-3">
+                                                                <div class="col-xs-12">
+                                                                    <div class="col-md-12">
+                                                                        <div align="center">
+                                                                            <h4 class="text-primary"><i>Your Store
+                                                                                    Configured Successfully !</i></h4>
+                                                                            <h5 class=""><i>Thanks For using
+                                                                                    CartRabbit...</i></h5>
+                                                                        </div>
+                                                                        <button class="btn btn-success btn-lg pull-right"
+                                                                                type="submit">Finish!
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        jQuery.noConflict();
+        (function ($) {
+            $(document).ready(function () {
+                $('#storeCountry').on('change', function () {
+
+                    var country = $(this).val();
+                    $.ajax({
+                        url: '{{ site_addr }}/countrycode',
+                        type: 'POST',
+                        data: {country: country},
+                        success: function (res) {
+                            var toAppend = '';
+                            var ress = JSON.parse(res);
+                            $.each(ress, function (i, state) {
+                                toAppend += '<option>' + state + '</option>';
+                            });
+                            $('#storeState').html(toAppend);
+                        }
+                    });
+                });
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}
