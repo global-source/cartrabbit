@@ -7,7 +7,8 @@ A modern e-Commerce and Shopping Cart application for Wordpress built on top of 
 
 ## Requirements
 
-PHP 5.6 or higher
+PHP 5.6 or higher    
+
 Wordpress 4.6.x or higher
 
 ##  Installation
@@ -15,27 +16,28 @@ Wordpress 4.6.x or higher
 ### Via Composer
 
 
-=== Linux / Unix / Mac OS X ===
+#### Linux / Unix / Mac OS X
      
      Open the terminal and navigate to /wp-content/plugins directory
      
      Clone the repository
      
-     ```shell
-       $ git clone https://github.com/cartrabbit/cartrabbit.git
-       $ cd cartrabbit
-       $ composer install
+     ```
+      $ git clone https://github.com/cartrabbit/cartrabbit.git
+      $ cd cartrabbit
+      $ composer install
       ```
+   
    Login to the Wordpress Administration and go to Plugins
    Activate the CartRabbit plugin
   
- ### Via Download 
-
+ #### Via Download
+   
   Download the repository and extract it to the /wp-content/plugins/cartrabbit folder
   
   In the terminal, navigate to /wp-content/plugins/cartrabbit
  
-     ```shell       
+     ```       
        $ composer install
       ```
    
@@ -48,7 +50,7 @@ Wordpress 4.6.x or higher
  CartRabbit is an GPL-licenced Open Source project. Fork the repository, add your enhancements and issue a pull request. While issuing the PR, include a short description of the changes made.
  NOTE: Pull requests will be merged based on the merit and the quality of the code.
  
- ##Credits & Acknowledgement
+ ## Credits & Acknowledgement
  
  The project would not be possible without these awesome works from the Open Source community
 
@@ -59,7 +61,7 @@ Wordpress 4.6.x or higher
  [Laravel] (http://www.laravel.com)
   
 
- ## Licence
+ ##Licence
  GNU GPL License
  
  
