@@ -7,9 +7,8 @@ A modern e-Commerce and Shopping Cart application for Wordpress built on top of 
 
 ## Requirements
 
-PHP 5.6 or higher    
-
-Wordpress 4.6.x or higher
+- PHP 5.6 or higher
+- Wordpress 4.6.x or higher
 
 ##  Installation
 
@@ -51,11 +50,11 @@ CartRabbit is an GPL-licenced Open Source project. Fork the repository, add your
  
 The project would not be possible without these awesome works from the Open Source community
 
- [Herbert framework] (https://github.com/getherbert/herbert)
- [Corcel] (https://github.com/jgrossi/corcel)
- [WordPress] (http://www.wordpress.org)
- [Woocommerce] (http://www.woocommerce.com)
- [Laravel] (http://www.laravel.com)
+ - [Herbert framework] (https://github.com/getherbert/herbert)
+ - [Corcel] (https://github.com/jgrossi/corcel)
+ - [WordPress] (http://www.wordpress.org)
+ - [Woocommerce] (http://www.woocommerce.com)
+ - [Laravel] (http://www.laravel.com)
   
 ##Licence
 GNU GPL License
