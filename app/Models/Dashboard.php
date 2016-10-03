@@ -95,11 +95,14 @@ class Dashboard extends Post
 
     public static function getDashboardContents()
     {
-        $response['index'] = self::getDashboardSummery();
-        $response['total_buyers'] = self::totalBuyers();
-        $response['sales'] = self::getSales();
-
-        $response['top_selling_product'] = self::topSellingProducts();
+        $products = new Products();
+        $response['products'] = $products->get_products(true);
+        if (count($response['products']) > 0) {
+            $response['index'] = self::getDashboardSummery();
+            $response['total_buyers'] = self::totalBuyers();
+            $response['sales'] = self::getSales();
+            $response['top_selling_product'] = self::topSellingProducts();
+        }
         return $response;
     }
 
@@ -115,38 +118,36 @@ class Dashboard extends Post
 
     public static function getSales()
     {
-        $orders = Customer::getCustomerOrderWithStateOf('completed');
         $sales = [];
-        $sales['total'] = 0;
-        $sales['today'] = 0;
-        $sales['monthly'] = 0;
-        foreach ($orders as $index => $order) {
-            $month = $order->created_at->format('m');
-            if (!isset($sales['graph']['month'][$month])) {
-//                $sales['graph']['month'][$month] = 0;
-            }
+        try {
+            $orders = Customer::getCustomerOrderWithStateOf('completed');
+            $sales['total'] = 0;
+            $sales['today'] = 0;
+            $sales['monthly'] = 0;
+            foreach ($orders as $index => $order) {
+                $month = $order->created_at->format('m');
 
-            $year = $order->created_at->format('Y');
-            if (!isset($sales['graph']['year'][$year])) {
-//                $sales['graph']['year'][$year] = 0;
+                $year = $order->created_at->format('Y');
+                $sales['total'] += $order->meta->total;
+                $day = $order->created_at->format('d');
+                if (isset($sales['all'][$day])) {
+                    $sales['all'][$day] += $order->meta->total;
+                } else {
+                    $sales['all'][$day] = $order->meta->total;
+                }
+                if ($order->created_at->format('Y-m-d') == Carbon::today()->format('Y-m-d')) {
+                    $sales['today'] += $order->meta->total;
+                }
+                if ($order->created_at->format('m') == Carbon::today()->format('m')) {
+                    $sales['monthly'] += $order->meta->total;
+                }
+                $sales['graph'][$year]['month'][$month] += $order->meta->total;
             }
-            $sales['total'] += $order->meta->total;
-            $day = $order->created_at->format('d');
-            if (isset($sales['all'][$day])) {
-                $sales['all'][$day] += $order->meta->total;
-            } else {
-                $sales['all'][$day] = $order->meta->total;
-            }
-            if ($order->created_at->format('Y-m-d') == Carbon::today()->format('Y-m-d')) {
-                $sales['today'] += $order->meta->total;
-            }
-            if ($order->created_at->format('m') == Carbon::today()->format('m')) {
-                $sales['monthly'] += $order->meta->total;
-            }
-            $sales['graph'][$year]['month'][$month] += $order->meta->total;
-//            $sales['graph']['year'][$year] += $order->meta->total;
+            $sales['graph_count'] = count($sales['graph']);
+            $sales['graph'] = json_encode($sales['graph']);
+        } catch (\Exception $e) {
+            //
         }
-        $sales['graph'] = json_encode($sales['graph']);
         return $sales;
     }
 

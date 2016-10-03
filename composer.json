@@ -15,7 +15,8 @@
     "geoip2/geoip2": "~2.0",
     "flycartinc/inventory": "dev-master",
     "flycartinc/order": "master",
-    "flycartinc/cart": "dev-master"
+    "flycartinc/cart": "dev-master",
+    "phpunit/phpunit": "3.7.14"
   },
   "config": {
     "preferred-install": "dist"

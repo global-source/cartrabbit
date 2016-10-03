@@ -192,6 +192,7 @@ class Products extends Eloquent
     {
         if (empty($this->list)) {
             $query = Product::join('postmeta', 'posts.ID', '=', 'postmeta.post_id')
+                ->where('posts.post_type','cartrabbit_product')
                 ->where('postmeta.meta_key', 'visible_on_storefront')
                 ->where('postmeta.meta_value', 'yes')
                 ->where('post_title', '!=', 'Auto Draft')
@@ -216,9 +217,13 @@ class Products extends Eloquent
      *
      * @return Products as array
      */
-    public function get_products()
+    public function get_products($all = false)
     {
-        $products = $this->allProducts()->forPage($this->page, $this->limit);
+        if ($all) {
+            $products = $this->allProducts();
+        } else {
+            $products = $this->allProducts()->forPage($this->page, $this->limit);
+        }
         $list = [];
         if (!$products) return array();
 

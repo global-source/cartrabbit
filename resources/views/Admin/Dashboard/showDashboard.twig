@@ -3,316 +3,313 @@
 {% block body %}
     <br>
     <div class="flylshop">
+
         <div class="container-fluid">
             <div id="spin_bar"
                  style="position: absolute; left: 0; top: 0; height: 100%; width:100%; z-index: 9999; background-color: #FFFFFF; opacity: .8;">
                 <img src="{{ default.ajax_spin }}" style="left: 50%; top: 50%; position:relative;">
             </div>
-            <!--Overall Status-->
-            <div class="row flylshop">
-                <div class=" col-lg-3 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class=" row">
-                                <div class="col-md-6">
-                                    {#<div id="weekly_visitor"></div>#}
-                                    <i class="glyphicon glyphicon-shopping-cart text-primary"
-                                       style="font-size: 80px;"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h3 class="text-primary">{{ content.total_buyers }}</h3>
-                                    <p class="text-muted">Total Buyers</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class=" col-lg-3 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class=" row">
-                                <div class="col-md-6">
-                                    {#<div id="total_sale"></div>#}
-                                    <i class="glyphicon glyphicon-stats text-primary" style="font-size: 80px;"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h3 class="text-primary">{{ currency.format(content.sales.today) }}</h3>
-                                    <p class="text-muted">Today Sale</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {#<div id="pending_order"></div>#}
-                                    <i class="glyphicon glyphicon-stats text-warning"
-                                       style="font-size: 80px;"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h3 class="text-primary">{{ currency.format(content.sales.monthly) }}</h3>
-                                    <p class="text-muted text-nowrap">Monthly Sale</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class=" col-lg-3 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {#<div id="today_visitor"></div>#}
-                                    <i class="glyphicon glyphicon-stats text-success"
-                                       style="font-size: 80px;"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h3 class="text-primary">{{ currency.format(content.sales.total) }}</h3>
-                                    <p class="text-muted text-nowrap">Total Sale</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--End Of Overall Status-->
-
-
-            <!-- card box 2-->
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4 class="text-dark  text-left ">Total Revenue</h4>
-                            <div class="text-center" id="chart_div">
-                                {#<div id="total_revenue">#}
-                                {#<canvas height="165" width="348"#}
-                                {#style="display: inline-block; width: 348px; height: 165px; vertical-align: top;"></canvas>#}
-                                {#</div>#}
-                                {#<ul class="list-inline">#}
-                                {#<li>#}
-                                {#<h5 class="text-muted ">Target</h5>#}
-                                {#<h4>$1000</h4>#}
-                                {#</li>#}
-                                {#<li>#}
-                                {#<h5 class="text-muted">Last Week#}
-                                {#</h5>#}
-                                {#<h4>$523</h4>#}
-                                {#</li>#}
-                                {#<li>#}
-                                {#<h5 class="text-muted">Last Month</h5>#}
-                                {#<h4>$965</h4>#}
-                                {#</li>#}
-                                {#</ul>#}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 flylshop">
-                    <div class="">
+            {% if content.products | length > 0 %}
+                <!--Overall Status-->
+                <div class="row flylshop">
+                    <div class=" col-lg-3 ">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Checklist</h3>
-                                <div align="right">
-                                    {% set status = 'ok' %}
-                                    {% set color = 'success' %}
-                                    {% for key, value in pages %}
-                                        {% if value == 'NoPage' %}
-                                            {% set status = 'remove' %}
-                                            {% set color = 'danger' %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    Status : <span class="text-{{ color }}"><i
-                                                class="glyphicon glyphicon-{{ status }}"></i></span>
+                            <div class="panel-body">
+                                <div class=" row">
+                                    <div class="col-md-6">
+                                        {#<div id="weekly_visitor"></div>#}
+                                        <i class="glyphicon glyphicon-shopping-cart text-primary"
+                                           style="font-size: 80px;"></i>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h3 class="text-primary">{{ content.total_buyers }}</h3>
+                                        <p class="text-muted">Total Buyers</p>
+                                    </div>
                                 </div>
                             </div>
-                            <ul class="list-group">
-                                {#<li class="list-group-item">#}
-                                {#<div class="row toggle" id="dropdown-detail-2" data-toggle="detail-currency">#}
-                                {#<div class="col-xs-10">#}
-                                {#<h5><a href=javascript:void(0)> Admin | Multiple Currency </a></h5>#}
-                                {#</div>#}
-                                {#<div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>#}
-                                {#</div>#}
-                                {#<div id="detail-currency">#}
-                                {#<hr>#}
-                                {#// Not Yet#}
-                                {#</div>#}
-                                {#</li>#}
-                                <li class="list-group-item">
-                                    <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-1">
-                                        <div class="col-xs-10">
-                                            <h5><a href=javascript:void(0)> Site | Store Pages </a></h5>
-                                        </div>
-                                        <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+                        </div>
+                    </div>
+                    <div class=" col-lg-3 ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class=" row">
+                                    <div class="col-md-6">
+                                        {#<div id="total_sale"></div>#}
+                                        <i class="glyphicon glyphicon-stats text-primary" style="font-size: 80px;"></i>
                                     </div>
-                                    <div id="detail-1">
-                                        <hr>
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-xs-3">
-                                                    <ul class="list-group">
-                                                        <li class="list-group-item"><a
-                                                                    href="?page=dashboard">
-                                                                Set Page for List Product</a>
-                                                            {% set status = 'ok' %}
-                                                            {% set color = 'success' %}
-                                                            {% if pages['page_to_list_product'] == 'NoPage' %}
-                                                                {% set status = 'remove' %}
-                                                                {% set color = 'danger' %}
-                                                            {% endif %}
-                                                            <span class="text-{{ color }}"><i
-                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
-                                                        </li>
-                                                        <li class="list-group-item"><a
-                                                                    href="?page=dashboard">
-                                                                Set Page for Cart Product</a>
-                                                            {% set status = 'ok' %}
-                                                            {% set color = 'success' %}
-                                                            {% if pages['page_to_cart_product'] == 'NoPage' %}
-                                                                {% set status = 'remove' %}
-                                                                {% set color = 'danger' %}
-                                                            {% endif %}
-                                                            <span class="text-{{ color }}"><i
-                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
-                                                        </li>
-                                                        <li class="list-group-item"><a
-                                                                    href="?page=dashboard">
-                                                                Set Page for My Account</a>
-                                                            {% set status = 'ok' %}
-                                                            {% set color = 'success' %}
-                                                            {% if pages['page_to_account'] == 'NoPage' %}
-                                                                {% set status = 'remove' %}
-                                                                {% set color = 'danger' %}
-                                                            {% endif %}
-                                                            <span class="text-{{ color }}"><i
-                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
-                                                        </li>
-                                                        <li class="list-group-item"><a
-                                                                    href="?page=dashboard">
-                                                                Set Page for Checkout</a>
-                                                            {% set status = 'ok' %}
-                                                            {% set color = 'success' %}
-                                                            {% if pages['page_to_checkout'] == 'NoPage' %}
-                                                                {% set status = 'remove' %}
-                                                                {% set color = 'danger' %}
-                                                            {% endif %}
-                                                            <span class="text-{{ color }}"><i
-                                                                        class="glyphicon glyphicon-{{ status }}"></i></span>
-                                                        </li>
-                                                    </ul>
+                                    <div class="col-md-6">
+                                        <h3 class="text-primary">{{ currency.format(content.sales.today) }}</h3>
+                                        <p class="text-muted">Today Sale</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {#<div id="pending_order"></div>#}
+                                        <i class="glyphicon glyphicon-stats text-warning"
+                                           style="font-size: 80px;"></i>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h3 class="text-primary">{{ currency.format(content.sales.monthly) }}</h3>
+                                        <p class="text-muted text-nowrap">Monthly Sale</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-lg-3 ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {#<div id="today_visitor"></div>#}
+                                        <i class="glyphicon glyphicon-stats text-success"
+                                           style="font-size: 80px;"></i>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h3 class="text-primary">{{ currency.format(content.sales.total) }}</h3>
+                                        <p class="text-muted text-nowrap">Total Sale</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End Of Overall Status-->
+
+
+                <!-- card box 2-->
+
+                <div class="row">
+                    {% if content.sales.graph_count > 1 %}
+                        <div class="col-lg-5">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h4 class="text-dark  text-left ">Total Revenue</h4>
+                                    <div class="text-center" id="chart_div">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-3 flylshop">
+                        <div class="">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Checklist</h3>
+                                    <div align="right">
+                                        {% set status = 'ok' %}
+                                        {% set color = 'success' %}
+                                        {% for key, value in pages %}
+                                            {% if value == 'NoPage' %}
+                                                {% set status = 'remove' %}
+                                                {% set color = 'danger' %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        Status : <span class="text-{{ color }}"><i
+                                                    class="glyphicon glyphicon-{{ status }}"></i></span>
+                                    </div>
+                                </div>
+                                <ul class="list-group">
+                                    {#<li class="list-group-item">#}
+                                    {#<div class="row toggle" id="dropdown-detail-2" data-toggle="detail-currency">#}
+                                    {#<div class="col-xs-10">#}
+                                    {#<h5><a href=javascript:void(0)> Admin | Multiple Currency </a></h5>#}
+                                    {#</div>#}
+                                    {#<div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>#}
+                                    {#</div>#}
+                                    {#<div id="detail-currency">#}
+                                    {#<hr>#}
+                                    {#// Not Yet#}
+                                    {#</div>#}
+                                    {#</li>#}
+                                    <li class="list-group-item">
+                                        <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-1">
+                                            <div class="col-xs-10">
+                                                <h5><a href=javascript:void(0)> Site | Store Pages </a></h5>
+                                            </div>
+                                            <div class="col-xs-2"><i class="fa fa-chevron-down pull-right"></i></div>
+                                        </div>
+                                        <div id="detail-1">
+                                            <hr>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item"><a
+                                                                        href="?page=dashboard">
+                                                                    Set Page for List Product</a>
+                                                                {% set status = 'ok' %}
+                                                                {% set color = 'success' %}
+                                                                {% if pages['page_to_list_product'] == 'NoPage' %}
+                                                                    {% set status = 'remove' %}
+                                                                    {% set color = 'danger' %}
+                                                                {% endif %}
+                                                                <span class="text-{{ color }}"><i
+                                                                            class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                            </li>
+                                                            <li class="list-group-item"><a
+                                                                        href="?page=dashboard">
+                                                                    Set Page for Cart Product</a>
+                                                                {% set status = 'ok' %}
+                                                                {% set color = 'success' %}
+                                                                {% if pages['page_to_cart_product'] == 'NoPage' %}
+                                                                    {% set status = 'remove' %}
+                                                                    {% set color = 'danger' %}
+                                                                {% endif %}
+                                                                <span class="text-{{ color }}"><i
+                                                                            class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                            </li>
+                                                            <li class="list-group-item"><a
+                                                                        href="?page=dashboard">
+                                                                    Set Page for My Account</a>
+                                                                {% set status = 'ok' %}
+                                                                {% set color = 'success' %}
+                                                                {% if pages['page_to_account'] == 'NoPage' %}
+                                                                    {% set status = 'remove' %}
+                                                                    {% set color = 'danger' %}
+                                                                {% endif %}
+                                                                <span class="text-{{ color }}"><i
+                                                                            class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                            </li>
+                                                            <li class="list-group-item"><a
+                                                                        href="?page=dashboard">
+                                                                    Set Page for Checkout</a>
+                                                                {% set status = 'ok' %}
+                                                                {% set color = 'success' %}
+                                                                {% if pages['page_to_checkout'] == 'NoPage' %}
+                                                                    {% set status = 'remove' %}
+                                                                    {% set color = 'danger' %}
+                                                                {% endif %}
+                                                                <span class="text-{{ color }}"><i
+                                                                            class="glyphicon glyphicon-{{ status }}"></i></span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4 class="text-dark text-left "><i class="glyphicon glyphicon-pencil text-warning"></i>
-                                Notes !</h4>
-                            <div class="">
-                                <form method="post" id="my_notes" action="{{ site_addr }}/dashboard/saveNotes">
-                                    <ul class="list-inline" id="notes_panel">
-                                        {% for i,note in content['notes'] %}
-                                            <li>
-                                                <label>My Note :</label>
-                                                <input type="text" name="note[]" value="{{ note }}"
-                                                       class="form-control col-md-12">
-                                                <i class="text-danger glyphicon glyphicon-remove-circle remove_note"></i>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                    <input type="button" class="btn btn-success" id="create_note" value="Create New">
-                                    <input type="submit" value="Save" class="btn btn-primary">
-                                </form>
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 class="text-dark text-left "><i class="glyphicon glyphicon-pencil text-warning"></i>
+                                    My Note</h4>
+                                <div class="">
+                                    <form method="post" id="my_notes" action="{{ site_addr }}/dashboard/saveNotes">
+                                        <ul class="list-inline" id="notes_panel">
+                                            {% for i,note in content['notes'] %}
+                                                <li>
+                                                    <label>My Note :</label>
+                                                <textarea name="note[]" rows="5"
+                                                          class="col-md-12">{{ note }}</textarea>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <input type="submit" value="Save" class="btn btn-primary">
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- end of card box2 -->
-            <div class="row">
-                <!--Table Data for Latest Projects-->
-                <div class="col-lg-6 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4 class="text-dark  ">Latest Orders</h4>
-                            <p class="text-muted">
-                                The order details for this week.
-                            </p>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <td>S.no</td>
-                                        <th>Invoice No.</th>
-                                        <th>User</th>
-                                        <th>Ordered On</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for i,order in content.index.orders %}
-                                        {% set billing_address = util.jsonDecode(order.info.meta.billing_address) %}
+                <!-- end of card box2 -->
+                <div class="row">
+                    <!--Table Data for Latest Projects-->
+                    <div class="col-lg-6 ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 class="text-dark  ">Latest Orders</h4>
+                                <p class="text-muted">
+                                    The order details for this week.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
                                         <tr>
-                                            <td>{{ i + 1 }}</td>
-                                            <td># {{ order.info.invoice_prefix ~  order.info.invoice_no }}</td>
-                                            <td>{{ billing_address.fname ~ ' ' ~ billing_address.lname }}</td>
-                                            <td>{{ order.info.created_at }}</td>
-                                            <td>{{ currency.format(order.info.meta.total, 1, order.info.meta.exchange_value, order.info.meta.currency_code) }}</td>
-                                            {% set flag_color = 'success' %}
-                                            {% set order_status = order.info.order_status %}
-                                            {% if order_status == 'failed' %}
-                                                {% set flag_color = 'danger' %}
-                                            {% elseif order_status == 'new' %}
-                                                {% set flag_color = 'primary' %}
-                                            {% elseif order_status == 'completed' %}
-                                                {% set flag_color = 'success' %}
-                                            {% else %}
-                                                {% set flag_color = 'danger' %}
-                                                {% set order_status = 'Pending' %}
-                                            {% endif %}
-                                            <td>
-                                                <span class="col-md-8 label label-{{ flag_color }}">{{ order.info.order_status }}</span>
-                                                <a href="/wp-admin/admin.php?page=cartrabbit_order&order_id={{ order.info.id }}">
-                                                    <button class="col-md-offset-1 col-md-3 btn btn-primary"><i
-                                                                class="glyphicon glyphicon-search"></i></button>
-                                                </a>
-                                            </td>
+                                            <td>S.no</td>
+                                            <th>Invoice No.</th>
+                                            <th>User</th>
+                                            <th>Ordered On</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
                                         </tr>
-                                    {% endfor %}
+                                        </thead>
+                                        <tbody>
+                                        {% for i,order in content.index.orders %}
+                                            {% set billing_address = util.jsonDecode(order.info.meta.billing_address) %}
+                                            <tr>
+                                                <td>{{ i + 1 }}</td>
+                                                <td># {{ order.info.invoice_prefix ~  order.info.invoice_no }}</td>
+                                                <td>{{ billing_address.fname ~ ' ' ~ billing_address.lname }}</td>
+                                                <td>{{ order.info.created_at }}</td>
+                                                <td>{{ currency.format(order.info.meta.total, 1, order.info.meta.exchange_value, order.info.meta.currency_code) }}</td>
+                                                {% set flag_color = 'success' %}
+                                                {% set order_status = order.info.order_status %}
+                                                {% if order_status == 'failed' %}
+                                                    {% set flag_color = 'danger' %}
+                                                {% elseif order_status == 'new' %}
+                                                    {% set flag_color = 'primary' %}
+                                                {% elseif order_status == 'completed' %}
+                                                    {% set flag_color = 'success' %}
+                                                {% else %}
+                                                    {% set flag_color = 'danger' %}
+                                                    {% set order_status = 'Pending' %}
+                                                {% endif %}
+                                                <td>
+                                                    <h5 class="col-md-8 text text-{{ flag_color }}">{{ order.info.order_status }}</h5>
+                                                    <a href="/wp-admin/admin.php?page=cartrabbit_order&order_id={{ order.info.id }}">
+                                                        <button class="col-md-offset-1 col-md-3 btn btn-primary"><i
+                                                                    class="glyphicon glyphicon-search"></i></button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!--Table Data for Latest Projects-->
+                    <!--Table Data for Latest Projects-->
 
 
-                <!--Progress Bar for Top Selling Products-->
-                <div class="col-lg-6 ">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="referrals">
-                                <h4 class="text-dark ">Top Selling Products</h4>
+                    <!--Progress Bar for Top Selling Products-->
+                    <div class="col-lg-6 ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="referrals">
+                                    <h4 class="text-dark ">Top Selling Products</h4>
 
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- End Of Progress Bar for Top Selling Products-->
                 </div>
-                <!-- End Of Progress Bar for Top Selling Products-->
-            </div>
+            {% else %}
+                <hr>
+                <div class="row" style="padding:15%">
+                    <div class="col-md-offset-4 col-md-6">
+                        <i>Create your first product with <h1 style="font-weight: 600"><span
+                                        class="dashicons dashicons-carrot"></span>CartRabbit </h1></i>
+                        <a href="{{ site_addr }}/wp-admin/post-new.php?post_type=cartrabbit_product"><input
+                                    type="button" class="btn btn-success" style="padding-left: 10%; padding-right: 10%"
+                                    value="Create New"></a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
     <input type="hidden" value="{{ content.sales.graph }}" id="graph">
@@ -343,22 +340,6 @@
                     });
 
                     /** Notes Submission */
-                    $('#create_note').on('click', function () {
-                        $('#notes_panel').append(' <li><label> MyNote :</label><input type="text" name="note[]" class="form-control col-md-12"><i class="text-danger glyphicon glyphicon-remove-circle remove_note"></i></li>');
-                    });
-
-                    $(document).on('click', '.remove_note', function () {
-                        var value = $(this).prev('input').val();
-
-                        if (value == '') {
-                            $(this).closest('li').remove();
-                        } else {
-                            var confirmation = confirm('Are You Sure to Remove this Note ?');
-                            if (confirmation) {
-                                $(this).closest('li').remove();
-                            }
-                        }
-                    });
 
                     $('[id^=detail-]').hide();
                     $('.toggle').click(function () {

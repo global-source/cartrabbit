@@ -185,6 +185,18 @@ class Settings extends Eloquent
         $config->save();
     }
 
+    public static function updateConfig($list)
+    {
+        if ($list and is_array($list)) {
+            $id = self::getStoreConfigID();
+            $config = Post::find($id);
+            foreach ($list as $index => $value) {
+                $config->meta->$index = $value;
+                $config->save();
+            }
+        }
+    }
+
     public static function loadShippingConfigurations()
     {
         $data['shipping_enable'] = self::get('shipping_enable', 'no');

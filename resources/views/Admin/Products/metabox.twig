@@ -1,6 +1,7 @@
 {% extends '@CartRabbit/admin_product_template.html.twig' %}
 
 {% block body %}
+
     <div class="flylshop">
         <div class="flylshop">
             <div class="row product-properties-margin" style="padding-left: 10px; padding-right: 5px">
@@ -101,9 +102,10 @@
                                 </div>
                                 {% if data['meta']['product_type'] == 'simpleProduct' %}
                                     <div class="form-group">
-                                        <label>Enable Tax :</label>
-                                        <input type="checkbox" class="form_control" name="enable_tax"
-                                                {% if data['meta']['enable_tax'] == 'on' %} checked=checked {% endif %}>
+                                        <label>Enable Tax :
+                                            <input type="checkbox" class="form_control" name="enable_tax"
+                                                    {% if data['meta']['enable_tax'] == 'on' %} checked=checked {% endif %}>
+                                        </label>
                                     </div>
                                 {% endif %}
                                 <div class="form-group">
@@ -221,10 +223,11 @@
                                                placeholder="ex. 0000">
                                     </div>
                                     <div class="form-group">
-                                        <label>Use Store Configuration : </label>
-                                        <input type="checkbox"
-                                               class="" {% if data['meta']['min_qty_notify_default'] == 'on' %}  checked {% endif %}
-                                               name="min_qty_notify_default">
+                                        <label>Use Store Configuration :
+                                            <input type="checkbox"
+                                                   class="" {% if data['meta']['min_qty_notify_default'] == 'on' %}  checked {% endif %}
+                                                   name="min_qty_notify_default">
+                                        </label>
                                     </div>
                                     <hr>
                                     <div class="form-group">
@@ -246,10 +249,10 @@
                                                placeholder="ex. 9999">
                                     </div>
                                     <div class="form-group">
-                                        <label>Use Store Configuration : </label>
-                                        <input type="checkbox" class="" name="max_sale_qty_default"
-                                                {% if data['meta']['max_sale_qty_default'] == 'on' %}  checked {% endif %}
-                                        >
+                                        <label>Use Store Configuration :
+                                            <input type="checkbox" class="" name="max_sale_qty_default"
+                                                    {% if data['meta']['max_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                            > </label>
                                     </div>
                                     <hr>
                                     <div class="form-group">
@@ -259,10 +262,11 @@
                                                placeholder="ex. 0000">
                                     </div>
                                     <div class="form-group">
-                                        <label>Use Store Configuration : </label>
-                                        <input type="checkbox" class=""
-                                                {% if data['meta']['min_sale_qty_default'] == 'on' %}  checked {% endif %}
-                                               name="min_sale_qty_default">
+                                        <label>Use Store Configuration :
+                                            <input type="checkbox" class=""
+                                                    {% if data['meta']['min_sale_qty_default'] == 'on' %}  checked {% endif %}
+                                                   name="min_sale_qty_default">
+                                        </label>
                                     </div>
                                     <hr>
                                 </div>
@@ -301,22 +305,23 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label>Length Class :</label>
                                         <select class="form-control" name="length_class">
                                             {% for i,value in metrics['length'] %}
-                                                <option {% if data['meta']['length_class'] == value['unit_length_id'] %} selected=selected {% endif %}
-                                                        value={{ value['unit_length_id'] }}>{{ value['name'] }}</option>
+                                                <option {% if data.meta.length_class == value.unit_length_id %} selected=selected {% endif %}
+                                                        value={{ value.unit_length_id }}>{{ value.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <label>Shipping Classes:</label>
+                                    <label>Shipping Class:</label>
                                     <div class="form-group">
                                         <select class="form-control"
                                                 name="shipping_class"
                                                 class="ShippingClasses">
-                                            {% for slug,name in data['meta']['shipping_class_list'] %}
-                                                <option {% if slug == data['meta']['shipping_class_list'] %} selected=selected {% endif %}
+                                            {% for slug,name in data.meta.shipping_class_list %}
+                                                <option {% if slug == data.meta.shipping_class_list %} selected=selected {% endif %}
                                                         value="{{ slug }}">{{ name }}</option>
                                             {% endfor %}
                                         </select>
@@ -324,15 +329,15 @@
                                     <label>Weight :</label>
                                     <div class="form-group">
                                         <input class="form-control" name="weight"
-                                               value="{% if data['meta']['weight'] is not empty %}{{ data['meta']['weight'] }}{% endif %}"
+                                               value="{% if data.meta.weight is not empty %}{{ data.meta.weight }}{% endif %}"
                                         >
                                     </div>
                                     <label>Weight Class :</label>
                                     <div class="form-group">
                                         <select class="form-control" name="weight_class">
-                                            {% for i,value in metrics['weight'] %}
-                                                <option {% if data['meta']['weight_class'] == value['unit_weight_id'] %} selected=selected {% endif %}
-                                                        value={{ value['unit_weight_id'] }}>{{ value['name'] }}</option>
+                                            {% for i,value in metrics.weight %}
+                                                <option {% if data.meta.weight_class == value.unit_weight_id %} selected=selected {% endif %}
+                                                        value={{ value.unit_weight_id }}>{{ value.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -348,8 +353,8 @@
                                         <td>Options</td>
                                     </tr>
                                     </thead>
-                                    {% set productAttr = data['meta']['product_attributes'] %}
-                                    {% set attrib_list = data['meta']['attribute_list'] %}
+                                    {% set productAttr = data.meta.product_attributes %}
+                                    {% set attrib_list = data.meta.attribute_list %}
                                     <tbody id="tbl_body_fields">
                                     <tr>
                                         <td>
@@ -358,12 +363,12 @@
                                                         class="selectpicker attributes_list" name="attributes[]"
                                                         id="attributes"
                                                         tabindex="-1">
-                                                    {% for key,val in data['meta']['attributes'] %}
-                                                        <option value="{{ val['slug'] }}" id="{{ val['slug'] }}"
-                                                                {% if key in cartConfig['attributes'] %}
+                                                    {% for key,val in data.meta.attributes %}
+                                                        <option value="{{ val.slug }}" id="{{ val.slug }}"
+                                                                {% if key in cartConfig.attributes %}
                                                             selected=selected
                                                                 {% endif %}>
-                                                            {{ val['name'] }}</option>
+                                                            {{ val.name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -385,23 +390,23 @@
                                                         data-actions-box="true" data-live-search="true"
                                                         tabindex="-1">
                                                     {% for id,item in attrib_list[name] %}
-                                                        {% if item['term_id'] in productAttr[name]['list'] %}
-                                                            <option value="{{ item['term_id'] }}"
-                                                                    selected>{{ item['name'] }}</option>
+                                                        {% if item.term_id in productAttr[name].list %}
+                                                            <option value="{{ item.term_id }}"
+                                                                    selected>{{ item.name }}</option>
                                                         {% else %}
-                                                            <option value="{{ item['term_id'] }}">{{ item['name'] }}</option>
+                                                            <option value="{{ item.term_id }}">{{ item.name }}</option>
                                                         {% endif %}
                                                     {% endfor %}
                                                 </select></div>
                                             <label><input type="checkbox" class="input_attribute"
-                                                        {% if productAttr[name]['isVisible'] == 'on' %}
+                                                        {% if productAttr[name].isVisible == 'on' %}
                                                             checked=true
                                                         {% endif %}
                                                           name="{{ name }}_visable_on_produt"> Visable
                                                 On Product Page</label><br>
-                                            {% if data['meta']['product_type'] != 'simpleProduct' %}
+                                            {% if data.meta.product_type != 'simpleProduct' %}
                                                 <label><input type="checkbox" class="input_attribute"
-                                                            {% if productAttr[name]['isVisible'] == 'on' %}
+                                                            {% if productAttr[name].isVisible == 'on' %}
                                                                 checked=true
                                                             {% endif %}
                                                               name="{{ name }}_used_for_variant"> Used
@@ -426,7 +431,7 @@
                                 </div>
                             </div>
                             <!-- Variance -->
-                            {% if data['meta']['product_type'] == 'variableProduct' %}
+                            {% if data.meta.product_type == 'variableProduct' %}
                                 <div class="bhoechie-tab-content ">
 
                                     <input type="button" class="btn btn-primary"
@@ -451,7 +456,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="upSellsTable">
-                                    {% for i,value in data['meta']['up_sells'] %}
+                                    {% for i,value in data.meta.up_sells %}
                                         <tr>
                                             <td><input type="hidden" name="up_sells[]" value="{{ value }}">{{ value }}
                                             </td>
@@ -477,7 +482,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="crossSellsTable">
-                                    {% for i,value in data['meta']['cross_sells'] %}
+                                    {% for i,value in data.meta.cross_sells %}
                                         <tr>
                                             <td><input type="hidden" name="cross_sells[]"
                                                        value="{{ value }}">{{ value }}
@@ -510,6 +515,16 @@
         jQuery.noConflict();
         (function ($) {
             $(document).ready(function () {
+
+                $(document).on('submit', '#post', function (event) {
+                    if ($('[name="sku"]').val() == '') {
+                        event.preventDefault();
+                        alert('Please Set SKU');
+                    }
+                });
+                $('[name="sku"]').on('keydown',function () {
+                    $('#publish').removeClass('disabled');
+                });
 
                 $('#btn_save_post').on('click', function () {
                     $('#publish').click();
@@ -778,14 +793,17 @@
                 $(document).on('click', '.btnRemovePrice', function () {
                     var id = $(this).attr('id');
                     var table = $(this);
-                    $.ajax({
-                        url: '{{ site_addr }}/product/removeSpecialPrice',
-                        type: 'POST',
-                        data: {price_id: id},
-                        success: function () {
-                            table.closest('tr').remove();
-                        }
-                    });
+                    var confirm_remove = confirm('Are you sure to Remove ?');
+                    if (confirm_remove) {
+                        $.ajax({
+                            url: '{{ site_addr }}/product/removeSpecialPrice',
+                            type: 'POST',
+                            data: {price_id: id},
+                            success: function () {
+                                table.closest('tr').remove();
+                            }
+                        });
+                    }
                 });
 
                 /**

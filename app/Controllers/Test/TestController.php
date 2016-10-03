@@ -30,6 +30,7 @@ class TestController extends BaseController
 
     public function test(Http $http)
     {
+        dd(is_object(get_user_by('login', 'admin1')));
         dd(Session()->all());
         dd(Session()->remove('uaccount'));
         $product = Product::init(592);

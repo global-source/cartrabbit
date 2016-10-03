@@ -796,4 +796,32 @@ class Util
         }
         return $url;
     }
+
+    public static function full_copy($source, $target)
+    {
+        try {
+            if (is_dir($source)) {
+                @mkdir($target);
+                $d = dir($source);
+                while (FALSE !== ($entry = $d->read())) {
+                    if ($entry == '.' || $entry == '..') {
+                        continue;
+                    }
+                    $Entry = $source . '/' . $entry;
+                    if (is_dir($Entry)) {
+                        self::full_copy($Entry, $target . '/' . $entry);
+                        continue;
+                    }
+                    copy($Entry, $target . '/' . $entry);
+                }
+
+                $d->close();
+            } else {
+                copy($source, $target);
+            }
+        } catch (\Exception $e) {
+            //
+        }
+        return true;
+    }
 }

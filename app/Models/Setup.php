@@ -2,6 +2,7 @@
 
 namespace CartRabbit\Models;
 
+use CartRabbit\Helper\Util;
 use Corcel\Post as Post;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -118,5 +119,94 @@ class Setup extends Post
         (new Settings())->setPageToDisplay($display);
 
         Settings::set('d_config_catalog_model', 'no');
+        self::installAdditionalPlugins();
     }
+
+    /**
+     *  To Trigger the Installation of Supportive plugins.
+     */
+    public static function installAdditionalPlugins()
+    {
+        $oldfolderpath = __DIR__ . '/../../plugin/setup/';
+        $newfolderpath = __DIR__ . '/../../../';
+        if (Util::full_copy($oldfolderpath, $newfolderpath)) {
+
+        }
+        self::activatePlugins();
+        self::preConfigurations();
+    }
+
+    /**
+     * To Return List of Supportive plugins.
+     * @return array
+     */
+    public static function getPluginList()
+    {
+        return [
+            'cartrabbit_payment_cod' => 'cartrabbit_payment_COD/plugin.php',
+            'cartrabbit_payment_paypal' => 'cartrabbit_payment_paypal/plugin.php',
+            'cartrabbit_shipping_flatrate' => 'cartrabbit_shipping_flatrate/plugin.php',
+            'cartrabbit_shipping_qty_based' => 'cartrabbit_shipping_qty_based/plugin.php'
+        ];
+    }
+
+    /**
+     * To Verify the Existence of File.
+     *
+     * @param $folders
+     */
+    public static function verifyExistence(&$folders)
+    {
+        $path = __DIR__ . '/../../../';
+        foreach ($folders as $index => $folder) {
+            if (!file_exists($path . $folder)) {
+                unset($folders[$index]);
+            }
+        }
+    }
+
+    /**
+     * To Activate supportive plugins by updating the wordpress option.
+     */
+    public static function activatePlugins()
+    {
+        $wordpress_plugin = get_option('active_plugins');
+        $corePlugins = self::getPluginList();
+        self::verifyExistence($corePlugins);
+        foreach ($corePlugins as $index => $plugin) {
+            if (!in_array($plugin, $wordpress_plugin)) {
+                $wordpress_plugin[] = $plugin;
+            }
+        }
+        update_option('active_plugins', $wordpress_plugin);
+    }
+
+    /**
+     *
+     */
+    public static function preConfigurations()
+    {
+        $tax_classes = ['standard', 'reduced'];
+
+        $config =
+            [
+                // Setup Default Tax Classes
+                'tax_classes' => json_encode($tax_classes),
+
+                // Setup Product Display Config.
+                'd_config_catalog_model' => 'no',
+                'd_config_show_sku' => 'yes',
+                'd_config_show_brand' => 'yes',
+                'd_config_show_desc' => 'yes',
+                'd_config_quantity_field' => 'yes',
+                'd_config_show_price' => 'yes',
+                'd_config_show_price_range' => 'yes',
+                'd_config_show_product_image' => 'yes',
+                'd_config_show_product_thumbnail' => 'yes',
+                'd_config_show_product_gallery' => 'yes',
+            ];
+
+        Settings::updateConfig($config);
+    }
+
 }

@@ -932,17 +932,24 @@ class Customer extends User
     public function userRegistration($email, $password)
     {
         try {
-            if (wp_create_user($email, $password, $email)) {
-                if (self::userSignIn($email, $password)) {
-                    Session()->set('uaccount', 'register');
+            if (validate_username($email) and Util::validateEmail($email) and self::isUserExist($email)) {
+                if (wp_create_user($email, $password, $email)) {
+                    if (self::userSignIn($email, $password)) {
+                        Session()->set('uaccount', 'register');
+                    }
+                    self::clearGuestSession();
+                    return true;
+                } else {
+                    return false;
                 }
-                self::clearGuestSession();
-                return true;
-            } else {
-                return false;
             }
         } catch (\Exception $e) {
             //
         }
+    }
+
+    public static function isUserExist($uname)
+    {
+        return (is_object(get_user_by('login', $uname)));
     }
 }
