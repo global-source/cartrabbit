@@ -184,9 +184,15 @@ class Product extends Post
 
     public static function init($product_id)
     {
-        if ($product_id) {
-            $instance = self::getInstance($product_id);
-            return $instance->find($product_id);
+        try {
+            if ($product_id) {
+                $instance = self::getInstance($product_id);
+                if ($instance) {
+                    return $instance->find($product_id);
+                }
+            }
+        } catch (\Exception $e) {
+            //
         }
     }
 

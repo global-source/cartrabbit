@@ -522,7 +522,7 @@
                         alert('Please Set SKU');
                     }
                 });
-                $('[name="sku"]').on('keydown',function () {
+                $('[name="sku"]').on('keydown change click',function () {
                     $('#publish').removeClass('disabled');
                 });
 

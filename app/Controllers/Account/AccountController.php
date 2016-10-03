@@ -33,7 +33,7 @@ class AccountController extends BaseController
         $order_id = $http->get('order_id', false);
         $orderInfo = [];
         if ($order_id) {
-            $orderInfo = (new Orders())->getOrder($order_id, true)[0];
+            $orderInfo = (new Orders())->getOrder($order_id, true, false)[0];
         }
         $currency = new Helper\Currency();
         $util = new Helper\Util();

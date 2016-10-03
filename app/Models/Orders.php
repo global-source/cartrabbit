@@ -324,6 +324,13 @@ class Orders extends Eloquent
             $order_item->order_id = $order_id;
             $order_item->save();
 
+            $sku = $items[0]->product->meta['sku'];
+            $product_name = $items[0]->product->post_title;
+
+            // Adding Additional info of a product.
+            $item['sku'] = $sku;
+            $item['product_name'] = $product_name;
+
             /** Create Order Item's Meta */
             foreach ($item as $key => $value) {
                 if ($key !== 'product') {
@@ -371,7 +378,7 @@ class Orders extends Eloquent
         OrderMeta::where('order_id', $order_id)->delete();
     }
 
-    public function getOrder($order_id = false, $is_single = false)
+    public function getOrder($order_id = false, $is_single = false, $withProduct = true)
     {
         $result = array();
 
@@ -388,8 +395,8 @@ class Orders extends Eloquent
             $result[$i]['order_id'] = $order['id'];
             $result[$i]['user'] = self::get_user_data($order['order_user_id']);
             $result[$i]['order'] = $order;
-            /** Exchange Value is Set to Process */
 
+            /** Exchange Value is Set to Process */
             $i ++;
         }
 
@@ -397,12 +404,17 @@ class Orders extends Eloquent
             $order = new Order();
             $items = $order->find($order_id);
             foreach ($items->items()->get() as $key => $item) {
-                $result[0]['order'] = $items;
-                $result[0]['items']['meta'][$key] = $item->meta()->pluck('meta_value', 'meta_key');
-                $product = Product::init($result[0]['items']['meta'][$key]['product_id']);
-                $product->processProduct();
-                $product->setRelation('meta', $product->meta->pluck('meta_value', 'meta_key'));
-                $result[0]['items']['meta'][$key]['product'] = $product;
+                $result['order'] = $items;
+                $result['items']['meta'][$key] = $item->meta()->pluck('meta_value', 'meta_key');
+                if ($withProduct) {
+                    $product = Product::init($result['items']['meta'][$key]['product_id']);
+                    if ($product) {
+                        //TODO: Eliminate the use of process product
+                        $product->processProduct();
+                        $product->setRelation('meta', $product->meta->pluck('meta_value', 'meta_key'));
+                        $result['items']['meta'][$key]['product'] = $product;
+                    }
+                }
             }
         }
 

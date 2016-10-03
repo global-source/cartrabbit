@@ -22,7 +22,7 @@
                                     <tr>
                                         <td><i>{{ item.product.post_title }}</i></td>
                                         <td><i>{{ item.quantity }}</i></td>
-                                        <td><i>{{ currency.format(item.line_total) }}</i></td>
+                                        <td><i>{{ currency.format(item.line_final_total) }}</i></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

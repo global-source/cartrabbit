@@ -1,11 +1,10 @@
 {% extends '@CartRabbit/admin_product_template.html.twig' %}
 
 {% block body %}
-
     <div class="flylshop fc-container">
         <div class="fc-col-lg-12">
             {% if orders | length == 0 %}
-                <h4>Sorry, No More Order Records !</h4>
+                <h4>No More Order History !</h4>
             {% else %}
                 <table class="table table-responsive table-bordered">
                     <thead>
