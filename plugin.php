@@ -49,6 +49,11 @@ function init_Cart()
     \Flycartinc\Cart\Cart::initCart();
 }
 
+function on_activate_plugin()
+{
+    \CartRabbit\Models\Setup::installAdditionalPlugins();
+}
+
 /** Trigger on End of the plugin Loading. */
 function initStore()
 {
@@ -1281,3 +1286,4 @@ add_action('wp_logout', 'userOnLogout');
 add_action('send_confirm_order_mail', 'trigger_new_order_mail');
 add_action('send_complete_order_mail', 'trigger_order_complete_mail');
 add_action('admin_notices', 'verify_geoIP_update');
+register_activation_hook(__FILE__, 'on_activate_plugin');

@@ -519,10 +519,10 @@
                 $(document).on('submit', '#post', function (event) {
                     if ($('[name="sku"]').val() == '') {
                         event.preventDefault();
-                        alert('Please Set SKU');
+                        alert("Please set your product's SKU");
                     }
                 });
-                $('[name="sku"]').on('keydown change click',function () {
+                $('[name="sku"]').on('keydown change click', function () {
                     $('#publish').removeClass('disabled');
                 });
 

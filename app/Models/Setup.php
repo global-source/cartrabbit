@@ -117,9 +117,6 @@ class Setup extends Post
             'page_to_thank' => $thankYou_id
         );
         (new Settings())->setPageToDisplay($display);
-
-        Settings::set('d_config_catalog_model', 'no');
-        self::installAdditionalPlugins();
     }
 
     /**
@@ -182,7 +179,7 @@ class Setup extends Post
     }
 
     /**
-     *
+     * Basic Config data setup.
      */
     public static function preConfigurations()
     {
