@@ -324,8 +324,8 @@ class Orders extends Eloquent
             $order_item->order_id = $order_id;
             $order_item->save();
 
-            $sku = $items[0]->product->meta['sku'];
-            $product_name = $items[0]->product->post_title;
+            $sku = $item->product->meta['sku'];
+            $product_name = $item->product->post_title;
 
             // Adding Additional info of a product.
             $item['sku'] = $sku;

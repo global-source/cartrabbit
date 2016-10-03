@@ -417,7 +417,7 @@ class Settings extends Eloquent
         $post_title = Post::find($product_id)->post_title;
         $post = new Post();
         $post->post_name = 'product-' . $product_id . '-variation-' . $id;
-        $post->post_title = $post_title . ' | ' . array_first($combination);
+        $post->post_title = $post_title . ' | ' . implode(',', $combination);
         $post->post_parent = $product_id;
         $post->post_type = 'cartrabbit_variant';
         $post->save();
