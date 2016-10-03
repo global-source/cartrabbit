@@ -17,9 +17,9 @@
                     <tr>
                         <td>{% set n = n + 1 %}{{ n }}</td>
                         <td>
-                            {{ item.product.post_title ~ ' [' ~ item.product.ID ~ ']' }}
+                            {{ item.product_name ~ ' [' ~ item.product_id ~ ']' }}
                         </td>
-                        <td>{{ item['quantity'] }}</td>
+                        <td>{{ item.quantity }}</td>
 
                         <td>{{ currency.format(item.line_price, 1, order.exchange_value, order.currency_code ) }}</td>
                         <td>{{ currency.format(item.line_final_total, 1, order.exchange_value, order.currency_code ) }}</td>

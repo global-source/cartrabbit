@@ -37,7 +37,10 @@ class AccountController extends BaseController
         }
         $currency = new Helper\Currency();
         $util = new Helper\Util();
-        return parent::view('Site.Account.OrderInfo', compact('orderInfo', 'currency', 'util'));
+
+        //TODO: Improve the formation to eliminate "printing" issue.
+        $address = new Helper\Address();
+        return parent::view('Site.Account.OrderInfo', compact('orderInfo', 'currency', 'util', 'address'));
     }
 
 }

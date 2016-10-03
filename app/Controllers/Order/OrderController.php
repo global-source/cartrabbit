@@ -73,6 +73,7 @@ class OrderController extends BaseController
             'failed' => 'Failed'
         );
         $orderInfo = (new Orders())->getOrder($order_id, true)[0];
+
         $currency = new Helper\Currency();
         $util = new Helper\Util();
         $address = new Helper\Address();

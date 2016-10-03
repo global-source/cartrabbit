@@ -13,6 +13,19 @@
                     <h6 class="text text-danger">Orderd On : <b>{{ orderInfo.order.created_at.format('Y-m-d') }}</b>
                     </h6>
                     <div class="col-md-4">
+                        {#<b>Billing Details</b>#}
+                        {#{% set billing_address = address.format(orderInfo.order.meta.billing_address, true) %}#}
+                        {#{{ billing_address.formatted | raw }}#}
+                        {#{% if billing_address.raw.mobile is not empty %}#}
+                            {#<p class="text-primary"><b>Phone : </b></p>#}
+                            {#<p>{{ billing_address.raw.mobile }},</p>#}
+                        {#{% endif %}#}
+
+                        {#{% if orderInfo.user.email is not empty %}#}
+                            {#<p class="text-primary"><b>E-Mail : </b></p>#}
+                            {#<p>{{ orderInfo.user.email }}.</p>#}
+                        {#{% endif %}#}
+
                         <b>Billing Details</b>
                         {% set billing_address = util.jsonDecode(orderInfo.order.meta.billing_address) %}
                         <br>
@@ -36,6 +49,17 @@
                             <p>{{ orderInfo.user.email }}.</p>
                         {% endif %}
                     </div>
+
+                    {#<div class="col-md-4">#}
+                        {#<b>Shipping Details</b>#}
+                        {#{% set shipping_address = address.format(orderInfo.order.meta.shipping_address, true) %}#}
+                        {#{{ shipping_address.formatted | raw }}#}
+
+                        {#{% if delivery_address.raw.mobile is not empty %}#}
+                            {#<p class="text-primary"><b>Phone : </b></p>#}
+                            {#<p>{{ delivery_address.raw.mobile }}</p>#}
+                        {#{% endif %}#}
+                    {#</div>#}
 
                     <div class="col-md-4">
                         <b>Shipping Details</b>

@@ -404,20 +404,10 @@ class Orders extends Eloquent
             $order = new Order();
             $items = $order->find($order_id);
             foreach ($items->items()->get() as $key => $item) {
-                $result['order'] = $items;
-                $result['items']['meta'][$key] = $item->meta()->pluck('meta_value', 'meta_key');
-                if ($withProduct) {
-                    $product = Product::init($result['items']['meta'][$key]['product_id']);
-                    if ($product) {
-                        //TODO: Eliminate the use of process product
-                        $product->processProduct();
-                        $product->setRelation('meta', $product->meta->pluck('meta_value', 'meta_key'));
-                        $result['items']['meta'][$key]['product'] = $product;
-                    }
-                }
+                $result[0]['order'] = $items;
+                $result[0]['items']['meta'][$key] = $item->meta()->pluck('meta_value', 'meta_key');
             }
         }
-
         return $result;
     }
 
