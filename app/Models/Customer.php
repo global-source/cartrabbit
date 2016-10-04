@@ -652,13 +652,11 @@ class Customer extends User
      */
     public static function getShippingMethod()
     {
-        $customer = Session()->get('customer', 0);
-        if ($customer) {
-            if (isset($customer['shipping_method'])) {
-                return $customer['shipping_method'];
-            }
+        $shipping = Session()->get('chosen_shipping_methods', false);
+        if ($shipping) {
+            $shipping = $shipping[0];
         }
-        return false;
+        return $shipping;
     }
 
     /**
