@@ -151,19 +151,24 @@ class Shipping extends Eloquent
         /** Sort Array with its shipping charges */
         asort($list);
 
+        //TODO: Verify this default assignment is required or not.
         /** Take the least(First) amount as default shipping charge */
-        $rate_id = array_first(array_keys($list));
+//        $rate_id = array_first(array_keys($list));
 
         /** Return the first(Min) shipping as Default rate */
-        $method = $available_methods[$rate_id]['element'];
+//        $method = $available_methods[$rate_id]['element'];
 
         /** Verify the active session's shipping method with Available shipping methods. */
         if (Session()->has('chosen_shipping_methods') or isset($available_methods[Session()->get('chosen_shipping_methods')[0]])) {
             $method = Session()->get('chosen_shipping_methods')[0];
+        } else {
+            $method = false;
         }
 
         /** Sanity Check */
-        if (apply_filters('is_available', $method) == 'off') {
+        $plugin_status = apply_filters('is_available', $method);
+
+        if ($plugin_status == 'off' or $plugin_status == false) {
             Session()->remove('chosen_shipping_methods');
             $method = false;
         }
