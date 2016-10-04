@@ -9,6 +9,7 @@
                         <div class="col-md-2">
                             <label>Enabled/Disabled :</label>
                         </div>
+
                         <div class="col-md-1">
                             <input type="checkbox"
                                    class="form-control" <?php if ($config['core']['meta']['enableShipping'][0] == 'on') { ?> checked <?php } ?>

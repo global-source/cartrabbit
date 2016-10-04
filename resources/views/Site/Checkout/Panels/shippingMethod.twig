@@ -16,6 +16,7 @@
                     <h4>Shipping Methods</h4>
                     {% set status = 'false' %}
                     {% if general.shipping.shippingMethods is not empty %}
+
                         {% for i, ship in general.shipping.shippingMethods %}
                             {% if general.shipping.available[i] == 'on' %}
                                 {% set status = 'true' %}

@@ -131,8 +131,8 @@ class Shipping extends Eloquent
         }
 
         // Save all chosen methods (array)
-        Session()->set('chosen_shipping_methods', $chosen_methods);
-        Session()->set('shipping_method_counts', $method_counts);
+//        Session()->set('chosen_shipping_methods', $chosen_methods);
+//        Session()->set('shipping_method_counts', $method_counts);
 
     }
 
@@ -161,6 +161,7 @@ class Shipping extends Eloquent
         if (Session()->has('chosen_shipping_methods') or isset($available_methods[Session()->get('chosen_shipping_methods')[0]])) {
             $method = Session()->get('chosen_shipping_methods')[0];
         }
+
         return $method;
     }
 

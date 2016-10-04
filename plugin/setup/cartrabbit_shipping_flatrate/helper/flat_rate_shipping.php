@@ -11,7 +11,6 @@ $element = 'cartrabbit_shipping_flat_rate';
 
 class Flat_rate_shipping
 {
-
     static function register_plugin($list)
     {
         $list['cartrabbit_shipping_flat_rate'] = 'Flat Rate Shipping';
@@ -40,11 +39,19 @@ class Flat_rate_shipping
     static function is_available($element)
     {
         if (self::is_me($element)) {
-            $config = Manage_free_shipping::loadConfig();
+            $config = self::loadConfig();
             return $config['meta']['enableShipping'][0];
         } else {
             return $element;
         }
+    }
+
+    static function loadConfig()
+    {
+        global $wpdb;
+        $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_fla_conf'");
+        $result['meta'] = get_post_meta($result['post'][0]->ID);
+        return $result;
     }
 
     static function add_option_menu_item($items)
@@ -68,7 +75,7 @@ class Flat_rate_shipping
     {
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'cartrabbit_ship_flat'");
+        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_fla_conf'");
 
         $storeConfigId = $result[0]->ID;
         if (!$storeConfigId or empty($storeConfigId) or !isset($storeConfigId)) {
@@ -99,7 +106,7 @@ class Flat_rate_shipping
         return wp_insert_post(array(
             'post_name' => 'cartrabbit_flat_shipping_configurations',
             'post_title' => 'CartRabbit Flat Shipping Configurations',
-            'post_type' => 'cartrabbit_ship_flat'
+            'post_type' => 'crt_sh_fla_conf'
         ));
     }
 
@@ -143,17 +150,19 @@ class Flat_rate_shipping
     static function load()
     {
         global $wpdb;
+        //TODO: Eliminate this
         $result = $wpdb->get_results("SELECT wp_posts.ID, wp_postmeta.meta_key, wp_postmeta.meta_value FROM wp_posts, wp_postmeta WHERE
-                                      wp_posts.post_type = 'cartrabbit_config' AND wp_postmeta.post_id = wp_posts.ID
+                                      wp_posts.post_type = 'crt_sh_fla_conf' AND wp_postmeta.post_id = wp_posts.ID
                                       AND wp_postmeta.meta_key = 'enableShipping'
                                       group by wp_posts.ID");
         $storeConfig = $result[0];
+
         $status = 'off';
         if ($storeConfig->meta_key == 'enableShipping') {
             $status = $storeConfig->meta_value;
         }
 
-        $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='cartrabbit_ship_flat'");
+        $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='crt_sh_fla_conf'");
 
         $meta = array();
         $meta['status'] = $status;

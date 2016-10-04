@@ -208,13 +208,11 @@
                                 <div class="">
                                     <form method="post" id="my_notes" action="{{ site_addr }}/dashboard/saveNotes">
                                         <ul class="list-inline" id="notes_panel">
-                                            {% for i,note in content['notes'] %}
                                                 <li>
                                                     <label>My Note :</label>
                                                 <textarea name="note[]" rows="5"
-                                                          class="col-md-12">{{ note }}</textarea>
+                                                          class="col-md-12">{{ content['notes'][0] }}</textarea>
                                                 </li>
-                                            {% endfor %}
                                         </ul>
                                         <input type="submit" value="Save" class="btn btn-primary">
                                     </form>

@@ -17,7 +17,6 @@ if (!defined('ABSPATH')) {
 if (!in_array('cartrabbit/plugin.php', get_option('active_plugins'))) return;
 
 require_once __DIR__ . '/Manage_qty_shipping.php';
-require_once __DIR__ . '/qty_shipping_helper.php';
 global $element;
 $element = 'cartrabbit_shipping_qty_based';
 
@@ -51,7 +50,7 @@ function init($params = array())
 function is_available($element)
 {
     if (is_me($element)) {
-        $config = Manage_free_shipping::loadConfig();
+        $config = Manage_qty_shipping::loadConfig();
         return $config['meta']['enableShipping'][0];
     } else {
         return $element;
@@ -79,7 +78,7 @@ function is_me($element)
 function save_configuration($data)
 {
     if (is_me($data['shipping']['plugin'])) {
-        Manage_free_shipping::save($data);
+        Manage_qty_shipping::save($data);
     }
 }
 
@@ -89,10 +88,10 @@ function save_configuration($data)
 function loadShippingConfigurations($result)
 {
     if (is_me($result['type'])) {
-        $config['items'] = Manage_free_shipping::load();
-        $config['core'] = Manage_free_shipping::loadConfig();
+        $config['items'] = Manage_qty_shipping::load();
+        $config['core'] = Manage_qty_shipping::loadConfig();
         $path = __DIR__ . '/view/Shipping.php';
-        $result['html'] = Helper::processView($path, $config);
+        $result['html'] = Manage_qty_shipping::processView($path, $config);
     }
     return $result;
 }
@@ -102,7 +101,7 @@ function loadShippingConfigurations($result)
  */
 function loadShippingConfigurationsList()
 {
-    return Manage_free_shipping::load();
+    return Manage_qty_shipping::load();
 }
 
 /**
@@ -111,7 +110,7 @@ function loadShippingConfigurationsList()
  */
 function loadShippingRates($package)
 {
-    return Manage_free_shipping::processRates($package);
+    return Manage_qty_shipping::processRates($package);
 }
 
 /**
@@ -138,13 +137,13 @@ function init_source()
 function removeShippingRate($data)
 {
     if (is_me($data['id'])) {
-        Manage_free_shipping::remove($data['row']);
+        Manage_qty_shipping::remove($data['row']);
     }
 }
 
 
 /** Register Payment */
-add_filter('cartrabbit_shipping_plugins', 'Manage_free_shipping::register_plugin');
+add_filter('cartrabbit_shipping_plugins', 'Manage_qty_shipping::register_plugin');
 
 add_filter('cartrabbit_shipping_methods', 'init');
 add_filter('is_available', 'is_available', 10, 2);

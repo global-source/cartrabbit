@@ -6,7 +6,7 @@
  * Date: 21/7/16
  * Time: 12:34 PM
  */
-class Manage_free_shipping
+class Manage_qty_shipping
 {
     static function register_plugin($list)
     {
@@ -27,7 +27,7 @@ class Manage_free_shipping
                 $id = wp_insert_post(array(
                     'post_name' => strtolower(str_replace(' ', '_', $name)),
                     'post_title' => 'CartRabbit ' . $name . ' Shipping Rate',
-                    'post_type' => 'cartrabbit_shipping'
+                    'post_type' => 'crt_sh_qty'
                 ));
             }
             foreach ($value as $index => $item) {
@@ -41,7 +41,7 @@ class Manage_free_shipping
             }
         }
 
-        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'cartrabbit_ship_conf'");
+        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
 
         $storeConfigId = $result[0]->ID;
         if (!$storeConfigId or empty($storeConfigId) or !isset($storeConfigId)) {
@@ -60,30 +60,33 @@ class Manage_free_shipping
     static function createConfig()
     {
         return wp_insert_post(array(
-            'post_name' => 'cartrabbit_shipping_configurations',
-            'post_title' => 'CartRabbit Shipping Configurations',
-            'post_type' => 'cartrabbit_ship_conf'
+            'post_name' => 'cartrabbit_shipping_qty_configurations',
+            'post_title' => 'CartRabbit Qty Based Shipping Configurations',
+            'post_type' => 'crt_sh_qty_conf'
         ));
     }
 
     static function load()
     {
         global $wpdb;
+        //TODO: Eliminate this
         $result = $wpdb->get_results("SELECT wp_posts.ID, wp_postmeta.meta_key, wp_postmeta.meta_value FROM wp_posts, wp_postmeta WHERE
-                                      wp_posts.post_type = 'cartrabbit_config' AND wp_postmeta.post_id = wp_posts.ID
+                                      wp_posts.post_type = 'crt_sh_qty_conf' AND wp_postmeta.post_id = wp_posts.ID
                                       AND wp_postmeta.meta_key = 'enableShipping'
                                       group by wp_posts.ID");
         $storeConfig = $result[0];
+
         $status = 'off';
 
         if ($storeConfig->meta_key == 'enableShipping') {
             $status = $storeConfig->meta_value;
         }
 
-        $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='cartrabbit_shipping'");
+        $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='crt_sh_qty'");
 
         $meta = array();
-        $meta['status'] = $status;
+        $meta['enableShipping'] = $status;
+
         $i = 0;
         foreach ($ids[0] as $id) {
             $meta['list'][$i] = get_post_meta($id->ID);
@@ -96,7 +99,7 @@ class Manage_free_shipping
     static function loadConfig()
     {
         global $wpdb;
-        $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'cartrabbit_ship_conf'");
+        $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
         $result['meta'] = get_post_meta($result['post'][0]->ID);
         return $result;
     }
@@ -164,5 +167,15 @@ class Manage_free_shipping
         return array(
             'standard' => '5'
         );
+    }
+
+    static function processView($path, $data)
+    {
+        ob_start();
+        $config = $data;
+        include($path);
+        $html = ob_get_contents();
+        ob_end_clean();
+        return $html;
     }
 }

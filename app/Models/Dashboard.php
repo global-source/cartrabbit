@@ -53,10 +53,10 @@ class Dashboard extends Post
         $note = json_encode($note);
 
         if ($note and $user) {
-            if (get_user_meta($user, 'my_notes')) {
-                update_user_meta($user, 'my_notes', $note);
+            if (get_user_meta($user, 'cart_rabbit_dash_notes')) {
+                update_user_meta($user, 'cart_rabbit_dash_notes', $note);
             } else {
-                add_user_meta($user, 'my_notes', $note);
+                add_user_meta($user, 'cart_rabbit_dash_notes', $note);
             }
         }
     }
@@ -65,7 +65,7 @@ class Dashboard extends Post
     {
         global $current_user;
         $user = $current_user->ID;
-        $notes = get_user_meta($user, 'my_notes');
+        $notes = get_user_meta($user, 'cart_rabbit_dash_notes');
 
         if (is_string($notes[0])) {
             $notes = json_decode($notes[0], true);
