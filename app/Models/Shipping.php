@@ -77,7 +77,7 @@ class Shipping extends Eloquent
         $package_keys = array_keys($packages);
 
         $package_keys_size = sizeof($package_keys);
-        for ($i = 0; $i < $package_keys_size; $i ++) {
+        for ($i = 0; $i < $package_keys_size; $i++) {
             $this->packages[$package_keys[$i]] = $this->calculate_shipping_for_package($packages[$package_keys[$i]]
             );
         }
@@ -160,6 +160,12 @@ class Shipping extends Eloquent
         /** Verify the active session's shipping method with Available shipping methods. */
         if (Session()->has('chosen_shipping_methods') or isset($available_methods[Session()->get('chosen_shipping_methods')[0]])) {
             $method = Session()->get('chosen_shipping_methods')[0];
+        }
+
+        /** Sanity Check */
+        if (apply_filters('is_available', $method) == 'off') {
+            Session()->remove('chosen_shipping_methods');
+            $method = false;
         }
 
         return $method;

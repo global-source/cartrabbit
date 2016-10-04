@@ -25,7 +25,6 @@ class AccountController extends BaseController
     {
         $orders = (new Account())->getMyOrders();
         $currency = new Helper\Currency();
-        dd($orders);
         return parent::view('Site.Account.myAccount', compact('orders', 'currency'));
     }
 

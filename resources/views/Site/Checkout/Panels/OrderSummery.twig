@@ -94,10 +94,11 @@
         (function ($) {
             $(document).ready(function () {
                 var shipping_status = $('#shipping_status').val();
-                var shipping_restriction = $('#restrict_shipping').val();
+                var no_shipping_restriction = $('#restrict_shipping').val();
                 var address_status = false;
                 var payment = false;
                 var shipping = false;
+                var check_list = false;
                 $('#error_log').html('');
                 $('#error_log').hide();
                 // For Normal User Access.
@@ -129,28 +130,67 @@
                 /** FOR TESTING PURPOSE. */
                 console.log('{{ session.billing_address }}');
                 console.log('shipping_address : {{ session.shipping_address }}');
-                console.log('shipping_restriction : ' + shipping_restriction);
+                console.log('shipping_restriction : ' + no_shipping_restriction);
                 console.log('address_status : ' + address_status);
                 console.log('payment : ' + payment);
                 console.log('shipping : ' + shipping);
                 console.log('shipping Status : ' + shipping_status);
                 console.log('need Shipping : ' + '{{ general.order_summery.order_info.needShipping }}');
 
-                if (shipping_restriction == 'false' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {
-                    if (address_status) {
-                        if (payment) {
-                            $('#place-order').removeAttr('disabled');
-                        }
-                    }
-                } else if (shipping_restriction == 'true' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {
+                if ('{{ general.orderSummery.shipping_info.shipping_dont_allow_if_no_shipping }}' == 'yes') {
                     if (address_status) {
                         if (shipping) {
                             if (payment) {
-                                $('#place-order').removeAttr('disabled');
+                                check_list = true;
                             }
                         }
-
                     }
+
+                } else {
+                    if (address_status) {
+                        if (payment) {
+                            check_list = true;
+                        }
+                    }
+                }
+
+
+                {#if (no_shipping_restriction == 'false' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {#}
+                    {#if ('{{ general.shipping.shippingMethods | length }}' > 0) #}{#}#}
+
+                    {#console.log('step002');#}
+                    {#if (address_status) {#}
+                        {#if (payment) {#}
+                            {#check_list = true;#}
+                        {#}#}
+                    {#}#}
+
+{#//                    } else {#}
+{#//                        console.log('step1');#}
+{#//                        if (address_status) {#}
+{#//                            console.log('step2');#}
+{#//                            console.log('LOG 2');#}
+{#//                            if (payment) {#}
+{#//                                console.log('step3');#}
+{#//                                check_list = true;#}
+{#//                            }#}
+{#//                        }#}
+{#//                    }#}
+                    {#console.log('state 1: ' + check_list);#}
+                {#} else if (no_shipping_restriction == 'true' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {#}
+                    {#if (address_status) {#}
+                        {#if (shipping) {#}
+                            {#if (payment) {#}
+                                {#check_list = true;#}
+                            {#}#}
+                        {#}#}
+
+                    {#}#}
+                    {#console.log('state 2: ' + check_list);#}
+                {#}#}
+
+                if (check_list) {
+                    $('#place-order').removeAttr('disabled');
                 }
 
                 $('#place-order').on('click', function () {
@@ -167,15 +207,15 @@
                                 ajax_stop();
                             } else {
                                 $.ajax({
-                                    url: '{{ site_addr }}//checkout/place_order',
-                                    type: 'POST',
-                                    data: $('#order_summery').serializeArray(),
-                                    success: function (res) {
-                                        $('#checkout_content').html(res);
-                                    },
-                                    complete: function () {
-                                        ajax_stop();
-                                    }
+                                url: '{{ site_addr }}//checkout/place_order',
+                                type: 'POST',
+                                data: $('#order_summery').serializeArray(),
+                                success: function (res) {
+                                $('#checkout_content').html(res);
+                                },
+                                complete: function () {
+                                ajax_stop();
+                                }
                                 });
                             }
                         }

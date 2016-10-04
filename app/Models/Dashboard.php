@@ -3,6 +3,7 @@
 namespace CartRabbit\Models;
 
 use Carbon\Carbon;
+use CartRabbit\Helper\Currency;
 use Corcel\Post as Post;
 use Corcel\User;
 use Flycartinc\Order\Model\Order;
@@ -118,18 +119,21 @@ class Dashboard extends Post
 
     public static function getSales()
     {
+        $currency = new Currency();
         $sales = [];
         try {
             $orders = Customer::getCustomerOrderWithStateOf('completed');
+
             $sales['total'] = 0;
             $sales['today'] = 0;
             $sales['monthly'] = 0;
             foreach ($orders as $index => $order) {
+
                 $month = $order->created_at->format('m');
+                $day = $order->created_at->format('d');
 
                 $year = $order->created_at->format('Y');
                 $sales['total'] += $order->meta->total;
-                $day = $order->created_at->format('d');
                 if (isset($sales['all'][$day])) {
                     $sales['all'][$day] += $order->meta->total;
                 } else {
@@ -141,10 +145,17 @@ class Dashboard extends Post
                 if ($order->created_at->format('m') == Carbon::today()->format('m')) {
                     $sales['monthly'] += $order->meta->total;
                 }
-                $sales['graph'][$year]['month'][$month] += $order->meta->total;
+                if ($order->created_at->format('d') == Carbon::today()->format('d')) {
+                    $sales['daily'] += $order->meta->total;
+                }
+
+                $sales['graph'][$year]['month'][$month] += $currency->format($order->meta->total, null, $order->meta->exchange_value, null, false)->getAmount();
+
+                $sales['graph'][$year][$month]['day'][$day] += $currency->format($order->meta->total, null, $order->meta->exchange_value, null, false)->getAmount();
             }
             $sales['graph_count'] = count($sales['graph']);
-            $sales['graph'] = json_encode($sales['graph']);
+            $sales['graph'] = \CartRabbit\Helper\Dashboard::dailyChart($sales['graph']);
+//            $sales['graph'] = json_encode($sales['graph']);
         } catch (\Exception $e) {
             //
         }

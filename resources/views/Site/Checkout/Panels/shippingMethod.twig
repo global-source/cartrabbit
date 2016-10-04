@@ -10,6 +10,7 @@
             Shipping & Payment
         </span>
         </div>
+
         <div class="fc-row">
             {% if shipping_enable == "true" and general.orderSummery.shipping_info.needShipping == true %}
                 <div class="fc-col-lg-6">
@@ -34,7 +35,7 @@
                         <code>Sorry, Shipping is not available for your location !</code><br>
                     {% endif %}
 
-                    {% if general.orderSummery.shipping_info.shipping_dont_allow_if_no_shipping == 'no' %}
+                    {% if general.orderSummery.shipping_info.shipping_dont_allow_if_no_shipping == 'false' %}
                         {% set status = 'true' %}
                     {% endif %}
                     <input type="hidden" id="restrict_shipping"

@@ -100,6 +100,7 @@ class Checkout extends Eloquent
     public static function validateCheckout($order)
     {
         $shipping = $order->shipping_info;
+//        dd($shipping);
         $session = Session()->all();
         $error_log = [];
         if ($session['uaccount'] != 'noRecord') {
@@ -115,7 +116,9 @@ class Checkout extends Eloquent
                     } else {
                         if ($shipping['isEnable'] == true) {
                             if ($shipping['needShipping'] == true) {
-                                $error_log = 'Please Select Shipping Method !';
+                                if (Settings::get('shipping_dont_allow_if_no_shipping') == 'yes') {
+                                    $error_log = 'Please Select Shipping Method !';
+                                }
                             }
                         }
                     }

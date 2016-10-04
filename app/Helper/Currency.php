@@ -134,7 +134,7 @@ class Currency
      * @param $cost Integer price of an item
      * @return Formated Price Value
      */
-    public function format($cost, $qty = null, $default_exchange = null, $currency_code = null)
+    public function format($cost, $qty = null, $default_exchange = null, $currency_code = null, $with_symbol = true)
     {
         if ($cost == '' or !isset($cost) or is_null($cost)) return false;
 
@@ -156,6 +156,7 @@ class Currency
 
         $from = $currencyRepository->get($default);
         $price = new Price($cost, $from);
+
         /** To Get Total cost of a Product */
         if (isset($qty)) {
             $price = $price->multiply($qty);
@@ -167,12 +168,20 @@ class Currency
 
         $price = $price->convert($currency, $exchange);
 
+        if ($with_symbol) {
+            self::formatSymbol($price);
+        }
+
+        return $price;
+    }
+
+    public static function formatSymbol(&$price)
+    {
         $numberFormatRepository = new NumberFormatRepository;
         $numberFormat = $numberFormatRepository->get('en-US');
 
         $currencyFormatter = new NumberFormatter($numberFormat, NumberFormatter::CURRENCY);
         $price = $currencyFormatter->formatCurrency($price->getAmount(), $price->getCurrency());
-        return $price;
     }
 
     /**
@@ -344,7 +353,7 @@ class Currency
     public function getCartTotal($costs, $qty)
     {
         $total = 0;
-        for ($i = 0; $i < count($costs); $i ++) {
+        for ($i = 0; $i < count($costs); $i++) {
             $total += ($costs[$i][0] * $qty[$i][0]);
         }
         return $this->format($total);
