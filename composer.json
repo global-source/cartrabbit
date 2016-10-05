@@ -4,7 +4,7 @@
   "license": "MIT",
   "require": {
     "getherbert/framework": "dev-dev",
-    "jgrossi/corcel": "1.0.3",
+    "jgrossi/corcel": "1.1.7",
     "commerceguys/addressing": "~0.5",
     "commerceguys/pricing": "master",
     "commerceguys/intl": ">=0.7.1",

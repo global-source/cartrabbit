@@ -12,7 +12,7 @@ use Herbert\Framework\Models\PostMeta;
 use CartRabbit\Helper\MetaConverter;
 use CartRabbit\Helper;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use vierbergenlars\LibJs\Util;
+
 
 /**
  * Class products
@@ -35,6 +35,8 @@ class Settings extends Eloquent
      * @var array
      */
     protected static $difference = array();
+
+    protected static $permanant_links = array();
 
     /**
      * Settings constructor.
@@ -1767,9 +1769,16 @@ class Settings extends Eloquent
      */
     public function getPermalinkSettings()
     {
-        $option = Option::where('option_name', 'cartrabbit_permalink');
-        $data = isset($option->first()->option_value) ? json_decode($option->first()->option_value, true) : array();
-        return $data;
+        if(empty(self::$permanant_links)) {
+            $option = Option::where('option_name', 'cartrabbit_permalink')->first();
+            $data = isset($option->option_value) ? json_decode($option->option_value, true) : array();
+
+            //initialise the basic settings.
+            if(!isset($data['product_category_base'])) $data['product_category_base'] = 'category';
+            self::$permanant_links = $data;
+        }
+        return self::$permanant_links;
+
     }
 
     /**

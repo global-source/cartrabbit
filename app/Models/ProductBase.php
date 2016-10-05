@@ -25,6 +25,8 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
      */
     protected $product_id;
 
+    public $permalink;
+
     /**
      * ProductBase constructor.
      * @param array $attributes
@@ -35,7 +37,8 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
 
         //To Adding the Permalink changes to Object Relation
         $permalink_options = (new Settings())->getPermalinkSettings();
-        $this->setRelation('permalink', (object)$permalink_options);
+      //  $this->setRelation('permalink', (object)$permalink_options);
+        $this->permalink = empty($permalink_options) ?  new \stdClass() : (object) $permalink_options ;
     }
 
     /**
@@ -123,9 +126,6 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
      */
     public function getBrand()
     {
-        if (empty($this->meta->brand) or is_null($this->meta->brand)) {
-            $this->meta->brand = get_term($this->meta->brand)->name;
-        }
         return $this->meta->brand;
     }
 
@@ -617,6 +617,7 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
         /** Retrieve the Category name */
         $category = $category[0]->slug;
         /** To Set the Category base */
+
         $category_base = $this->permalink->product_category_base;
 
         /** To Set Product Link in Based on the Permalink Type */
