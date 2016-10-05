@@ -4,6 +4,7 @@ namespace CartRabbit\Models;
 
 use Carbon\Carbon;
 use CartRabbit\Helper\Currency;
+use CartRabbit\Helper\Util;
 use Corcel\Post as Post;
 use Corcel\User;
 use Flycartinc\Order\Model\Order;
@@ -102,8 +103,8 @@ class Dashboard extends Post
             $response['index'] = self::getDashboardSummery();
             $response['total_buyers'] = self::totalBuyers();
             $response['sales'] = self::getSales();
-            $response['top_selling_product'] = self::topSellingProducts();
         }
+
         return $response;
     }
 
@@ -112,17 +113,13 @@ class Dashboard extends Post
         return Order::groupBy('order_user_id')->get()->count();
     }
 
-    public static function topSellingProducts()
-    {
-
-    }
-
     public static function getSales()
     {
         $currency = new Currency();
         $sales = [];
         try {
             $orders = Customer::getCustomerOrderWithStateOf('completed');
+            self::getTopSellingProducts($orders, $sales);
 
             $sales['total'] = 0;
             $sales['today'] = 0;
@@ -160,6 +157,27 @@ class Dashboard extends Post
             //
         }
         return $sales;
+    }
+
+    public static function getTopSellingProducts($orders, &$sales)
+    {
+        foreach ($orders as $index => $order) {
+            $items = $order->items()->get();
+            foreach ($items as $id => $item) {
+                if (!isset($sales['top_selling'][$item->meta->product_id])) {
+//                    $sales['top_selling'][$item->meta->product_id] = 0;
+                    $sales['top_selling'][$item->meta->product_id]['quantity'] = 0;
+                    $sales['top_selling'][$item->meta->product_id]['name'] = $item->meta->product_name;
+                    $sales['top_selling'][$item->meta->product_id]['sku'] = $item->meta->sku;
+                }
+
+                $sales['top_selling'][$item->meta->product_id]['quantity'] += $item->meta->quantity;
+            }
+        }
+        uasort($sales['top_selling'], array((new Util()), 'qty_sorting'));
+
+//        ksort($sales['top_selling']);
+
     }
 
     /**

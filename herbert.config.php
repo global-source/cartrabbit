@@ -103,11 +103,14 @@ return [
      */
     'assets' => '/resources/assets/',
 
+
     'site_url' => plugin_dir_url(__FILE__),
 
     'site_path' => plugin_dir_path(__FILE__),
 
     'site_addr' => get_site_url(),
+
+    'library' => __DIR__ . '/app/library',
 
     'enc_key' => '!@#$%^OLKINU1234',
 

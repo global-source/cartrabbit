@@ -27,7 +27,6 @@
                                 <thead>
                                 <tr>
                                     <td>ID</td>
-                                    <td>Name</td>
                                     <td>Minimum Quantity</td>
                                     <td>Maximum Quantity</td>
                                     <td>Rate</td>
@@ -42,11 +41,6 @@
                                     foreach ($config['items']['list'] as $i => $val) { ?>
                                         <tr>
                                             <td><?php echo $id ?></td>
-                                            <td><input type="text"
-                                                       name="cartrabbit[shipping][<?php echo $i ?>][shippingName]"
-                                                       class="form-control"
-                                                       value="<?php echo $val['shippingName'][0] ?>">
-                                            </td>
                                             <td><input type="text"
                                                        name="cartrabbit[shipping][<?php echo $i ?>][minQty]"
                                                        class="form-control"

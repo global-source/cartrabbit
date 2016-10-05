@@ -75,11 +75,6 @@
                                 <?php } ?>
                                     value="failed">Failed
                                 </option>
-                                <option <?php if ($config['cod_default_payment_status'] == 'processing') { ?>
-                                    selected=selected
-                                <?php } ?>
-                                    value="processing">Processing
-                                </option>
                             </select>
                         </div>
                     </div>

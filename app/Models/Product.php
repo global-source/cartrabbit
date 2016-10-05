@@ -87,7 +87,6 @@ class Product extends Post
         /** @var $product_class string is overwrite with it's corresponding namespace. */
         $product_class = 'CartRabbit\Models\\' . $product_class;
 
-        //class_exists not work in directly in without specifying the namespace.
         if (!class_exists($product_class)) {
             $product_class = 'ProductSimple';
         }

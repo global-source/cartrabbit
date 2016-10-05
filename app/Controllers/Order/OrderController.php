@@ -63,8 +63,8 @@ class OrderController extends BaseController
     public function getOrderByID($order_id)
     {
         $order_status = array(
-            'processing' => 'Processing',
-            'pendingPayment' => 'Pending payment',
+            'pending' => 'Pending payment',
+            'shipped' => 'Shipped',
             'new' => 'New',
             'onHold' => 'On Hold',
             'completed' => 'Completed',

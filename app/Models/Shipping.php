@@ -81,6 +81,7 @@ class Shipping extends Eloquent
             $this->packages[$package_keys[$i]] = $this->calculate_shipping_for_package($packages[$package_keys[$i]]
             );
         }
+        
         // Get all chosen methods
         $chosen_methods = Session()->get('chosen_shipping_methods');
         $method_counts = Session()->get('shipping_method_counts');

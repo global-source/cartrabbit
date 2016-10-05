@@ -50,12 +50,14 @@ class Checkout extends Eloquent
         return $result;
     }
 
-    public static function getShippingPlugin()
+    public static function getShippingPlugin($quantity = false)
     {
         $shipping['shippingMethods'] = apply_filters('cartrabbit_shipping_plugins', array());
         foreach ($shipping['shippingMethods'] as $key => $shipping_method) {
             $shipping['available'][$key] = apply_filters('is_available', $key);
+//            $shipping['rate'][$key] = apply_filters('cartrabbit_package_rates', $key);
         }
+//        dd($shipping);
         return $shipping;
     }
 

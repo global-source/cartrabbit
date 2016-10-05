@@ -824,4 +824,24 @@ class Util
         }
         return true;
     }
+
+
+    /**
+     * item_sorting function.
+     *
+     * @access public
+     * @param mixed $a
+     * @param mixed $b
+     * @return void
+     */
+    public function qty_sorting($a, $b)
+    {
+        if ($a['quantity'] == $b['quantity']) {
+            if ($a['quantity'] == $b['quantity']) {
+                return 0;
+            }
+            return ($a['quantity'] < $b['quantity']) ? 1 : -1;
+        }
+        return ($a['quantity'] < $b['quantity']) ? 1 : -1;
+    }
 }

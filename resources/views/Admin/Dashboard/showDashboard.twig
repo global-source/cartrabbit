@@ -219,8 +219,8 @@
                                 <div class="">
                                     <form method="post" id="my_notes" action="{{ site_addr }}/dashboard/saveNotes">
                                         <ul class="list-inline" id="notes_panel">
-                                            <li>
-                                                <textarea name="note[]" rows="5"
+                                            <li style="width:100%;">
+                                                <textarea name="note[]" style="width: 100%; height: 200px;"
                                                           class="col-md-12">{{ content['notes'][0] }}</textarea>
                                             </li>
                                         </ul>
@@ -246,7 +246,7 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <td>S.no</td>
+                                            <td>#</td>
                                             <th>Invoice No.</th>
                                             <th>User</th>
                                             <th>Ordered On</th>
@@ -259,7 +259,7 @@
                                             {% set billing_address = util.jsonDecode(order.info.meta.billing_address) %}
                                             <tr>
                                                 <td>{{ i + 1 }}</td>
-                                                <td># {{ order.info.invoice_prefix ~  order.info.invoice_no }}</td>
+                                                <td>{{ order.info.invoice_prefix ~  order.info.invoice_no }}</td>
                                                 <td>{{ billing_address.fname ~ ' ' ~ billing_address.lname }}</td>
                                                 <td>{{ order.info.created_at }}</td>
                                                 <td>{{ currency.format(order.info.meta.total, 1, order.info.meta.exchange_value, order.info.meta.currency_code) }}</td>
@@ -300,6 +300,36 @@
                             <div class="panel-body">
                                 <div class="referrals">
                                     <h4 class="text-dark ">Top Selling Products</h4>
+                                    <table class="table table-borderless table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Total Total Sales</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set n = 1 %}
+                                        {% for i, product in content.sales.top_selling %}
+                                            <tr>
+                                                <td>{{ n }}</td>
+                                                <td title="{{ product.sku }}"><a
+                                                            href="{{ site_addr }}/wp-admin/post.php?post={{ i }}&action=edit">
+                                                        {{ product.name }}</a></td>
+                                                <td>{{ product.quantity }}</td>
+                                            </tr>
+                                            {% set n = n +1 %}
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Total Buy</th>
+                                            <th>Quick View</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
 
                                 </div>
                             </div>
