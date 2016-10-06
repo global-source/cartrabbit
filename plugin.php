@@ -934,10 +934,11 @@ function cartrabbit_product_list_template($page_template)
                 } elseif ($key == 'page_to_checkout') {
                     $page_template = plugin_dir_path(__FILE__) . 'templates/PageToDisplay/cartrabbit-checkout-template.php';
                     $html = $page_template;
-                } elseif ($key == 'page_to_thank') {
-                    $page_template = plugin_dir_path(__FILE__) . 'templates/PageToDisplay/cartrabbit-thank-page-template.php';
-                    $html = $page_template;
                 }
+//                elseif ($key == 'page_to_thank') {
+//                    $page_template = plugin_dir_path(__FILE__) . 'templates/PageToDisplay/cartrabbit-thank-page-template.php';
+//                    $html = $page_template;
+//                }
             }
         }
     }

@@ -49,7 +49,7 @@ class BaseController
     {
         $context['site_url'] = Helper::get('site_url');
         $context['site_addr'] = Helper::get('site_addr');
-        $context['default'] = self::getDefaultConfig();
+        $context['default'] = Helper\Util::getDefaultConfig();
         $context['links'] = (new Helper\Util())->getStaticLinks();
     }
 
@@ -94,19 +94,7 @@ class BaseController
         return $path;
     }
 
-    /**
-     * This function return the Default Product Image
-     * for Replacing Broken or Missing Images.
-     *
-     * @return array
-     */
-    public static function getDefaultConfig()
-    {
-        return [
-            'product_image' => Helper::get('site_url') . 'resources/assets/img/default_product.gif',
-            'ajax_spin' => Helper::get('site_url') . 'resources/assets/img/spin.gif'
-        ];
-    }
+
 
     /**
      * This return the default pages for simple redirection

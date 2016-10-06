@@ -37,8 +37,8 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
 
         //To Adding the Permalink changes to Object Relation
         $permalink_options = (new Settings())->getPermalinkSettings();
-      //  $this->setRelation('permalink', (object)$permalink_options);
-        $this->permalink = empty($permalink_options) ?  new \stdClass() : (object) $permalink_options ;
+        //  $this->setRelation('permalink', (object)$permalink_options);
+        $this->permalink = empty($permalink_options) ? new \stdClass() : (object)$permalink_options;
     }
 
     /**
@@ -497,9 +497,13 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
      */
     public function initBasic()
     {
+        // Default Image
+        $default_image = Helper\Util::getDefaultConfig()['product_image'];
+
         $this->meta->is_variant = false;
         $this->getBrand();
         $this->meta->gallery = json_decode($this->meta->_product_image_gallery_raw);
+        $this->meta->raw_image = ($this->meta->image == '' || empty($this->meta->image)) ? $default_image : $this->meta->image;
     }
 
     /**

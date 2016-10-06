@@ -1,6 +1,8 @@
 <?php namespace CartRabbit;
 
-    /** @var \Herbert\Framework\Router $router */
+/** @var \Herbert\Framework\Router $router */
+
+$auth = __NAMESPACE__ . '\Middlewares\Auth';
 
 //this is a test root. Delete it before packaging
 $router->get([
@@ -28,7 +30,7 @@ $router->post([
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@getSpecialPrice'
 ]);
 
-/** ******************************** Utility *********************************** */
+/** --------------------------------- Utility --------------------------------- */
 
 /**
  * Validate Email
@@ -49,7 +51,7 @@ $router->post([
 $router->post([
     'as' => 'Cart Config General',
     'uri' => '/cartConfig/general',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveCartGeneralConfig'
 ]);
 
@@ -58,7 +60,7 @@ $router->post([
 $router->post([
     'as' => 'Store Config General',
     'uri' => '/storeConfig/general',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveStoreGeneralConfig'
 ]);
 
@@ -67,7 +69,7 @@ $router->post([
 $router->post([
     'as' => 'Product Config General',
     'uri' => '/productConfig/general',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveProductGeneralConfig'
 ]);
 
@@ -76,7 +78,7 @@ $router->post([
 $router->post([
     'as' => 'Cart Secondary Currency',
     'uri' => '/config/secCurrency',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveCartSecondaryCurrency'
 ]);
 
@@ -86,7 +88,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Secondary Currency',
     'uri' => '/config/removeSecondaryCurrency',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeSecondaryCurrency'
 ]);
 
@@ -95,7 +97,7 @@ $router->post([
 $router->post([
     'as' => 'Cart Secondary Currency',
     'uri' => '/cartConfig/cart',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveCartConfiguration'
 ]);
 
@@ -104,7 +106,7 @@ $router->post([
 $router->post([
     'as' => 'Cart Tax Configuration',
     'uri' => '/cartConfig/Tax',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveCartTaxConfig'
 ]);
 
@@ -113,7 +115,7 @@ $router->post([
 $router->post([
     'as' => 'Add Tax Classes',
     'uri' => '/cartConfig/TaxClass',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveCartTaxClass'
 ]);
 
@@ -122,7 +124,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Tax Classes',
     'uri' => '/cartConfig/RemoveTaxClass',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeCartTaxClass'
 ]);
 
@@ -131,7 +133,7 @@ $router->post([
 $router->post([
     'as' => 'Config Tax Amounts',
     'uri' => '/cartConfig/getTaxAmounts',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@getTaxAmountConfiguration'
 ]);
 
@@ -140,7 +142,7 @@ $router->post([
 $router->post([
     'as' => 'Store Inventory Configuration',
     'uri' => '/cartConfig/Inventory',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveInventoryConfigurations'
 ]);
 
@@ -149,7 +151,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Secondary Currencies',
     'uri' => '/cartConfig/removeSecondaryCurrency',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeSecondaryCurrency'
 ]);
 
@@ -158,7 +160,7 @@ $router->post([
 $router->post([
     'as' => 'Set Page to Display Products',
     'uri' => '/cartConfig/pageToDisplay',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@setPageToDisplayProducts'
 ]);
 
@@ -167,7 +169,7 @@ $router->post([
 $router->post([
     'as' => 'Display Products',
     'uri' => '/productsList',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@getProductList'
 ]);
 
@@ -176,7 +178,7 @@ $router->post([
 $router->post([
     'as' => 'Add Brand',
     'uri' => '/product/addBrand',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@addBrandTaxonomy'
 ]);
 
@@ -185,7 +187,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Brand',
     'uri' => '/product/removeBrand',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeBrandTaxonomy'
 ]);
 
@@ -194,7 +196,7 @@ $router->post([
 $router->post([
     'as' => 'Save Special Price',
     'uri' => '/product/addSpecialPrice',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@addSpecialPrice'
 ]);
 
@@ -203,7 +205,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Special Price',
     'uri' => '/product/removeSpecialPrice',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@removeSpecialPrice'
 ]);
 
@@ -212,7 +214,7 @@ $router->post([
 $router->post([
     'as' => 'Get Special Price',
     'uri' => '/product/getSpecialPriceList',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@getSpecialPriceListByID'
 ]);
 
@@ -221,7 +223,7 @@ $router->post([
 $router->post([
     'as' => 'Edit Tax Profile',
     'uri' => '/taxConfig/editTaxProfile',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@editTaxProfile'
 ]);
 
@@ -230,7 +232,7 @@ $router->post([
 $router->post([
     'as' => 'Edit Tax Amount',
     'uri' => '/taxConfig/editTaxAmount',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveTaxAmount'
 ]);
 
@@ -239,7 +241,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Tax Amount',
     'uri' => '/taxConfig/removeTaxAmount',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeTaxAmount'
 ]);
 
@@ -248,7 +250,7 @@ $router->post([
 $router->post([
     'as' => 'Add Tax Rate',
     'uri' => '/taxConfig/addTaxRates',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveTaxRate'
 ]);
 
@@ -257,7 +259,7 @@ $router->post([
 $router->post([
     'as' => 'Edit Tax Rate',
     'uri' => '/taxConfig/editTaxRates',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@editTaxRate'
 ]);
 
@@ -266,7 +268,7 @@ $router->post([
 $router->post([
     'as' => 'Save Product Display',
     'uri' => '/cartConfig/productDisplay',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@saveProductDisplayConfiguration'
 ]);
 
@@ -275,7 +277,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Tax Rate',
     'uri' => '/taxConfig/removeTaxRates',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeTaxRate'
 ]);
 
@@ -284,7 +286,7 @@ $router->post([
 $router->post([
     'as' => 'Add Zone',
     'uri' => '/taxConfig/addZone',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@addZone'
 ]);
 
@@ -293,7 +295,7 @@ $router->post([
 $router->post([
     'as' => 'Add Zone',
     'uri' => '/taxConfig/editZone',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@editZone'
 ]);
 
@@ -302,7 +304,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Zone',
     'uri' => '/taxConfig/removeZone',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeZone'
 ]);
 
@@ -311,7 +313,7 @@ $router->post([
 $router->post([
     'as' => 'Load Term Members',
     'uri' => '/product/termMeta',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@extractAttributes'
 ]);
 
@@ -320,7 +322,7 @@ $router->post([
 $router->post([
     'as' => 'Save Product`s Term Members',
     'uri' => '/product/savetermMeta',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@saveProductAttributes'
 ]);
 
@@ -329,7 +331,7 @@ $router->post([
 $router->post([
     'as' => 'Save Variation Products',
     'uri' => '/product/saveVariationProducts',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@saveVariationProducts'
 ]);
 
@@ -338,7 +340,7 @@ $router->post([
 $router->post([
     'as' => 'Remove Term From Product`s Members',
     'uri' => '/product/removeTermOption',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@removeProductAttrOption'
 ]);
 
@@ -347,7 +349,7 @@ $router->post([
 $router->post([
     'as' => 'Generate product attribute combinations View',
     'uri' => '/product/generateVariationList',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@generateVariationList'
 ]);
 
@@ -356,7 +358,7 @@ $router->post([
 $router->post([
     'as' => 'Validate Variant',
     'uri' => '/product/validateVariationList',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@validateVariationList'
 ]);
 
@@ -365,7 +367,7 @@ $router->post([
 $router->post([
     'as' => 'New Validate Variant',
     'uri' => '/product/newVariation',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@addVariation'
 ]);
 
@@ -374,89 +376,9 @@ $router->post([
 $router->post([
     'as' => 'Remove Validate Variant',
     'uri' => '/product/removeVariation',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@removeVariation'
 ]);
-
-/** ****************************MANAGE SHIPPING [plugin]******************************** */
-
-
-/** To Manage Shipping Configuration */
-
-$router->post([
-    'as' => 'Shipping Config',
-    'uri' => '/config/shippingConfig',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@manageShippingConfig'
-]);
-
-/** To Manage Shipping */
-
-$router->post([
-    'as' => 'Shipping',
-    'uri' => '/config/shipping',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@manageShipping'
-]);
-
-/** To Remove Shipping */
-
-$router->post([
-    'as' => 'Remove Shipping',
-    'uri' => '/config/removeShipping',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeShipping'
-]);
-
-/** To Set Shipping Method to Calculate */
-
-$router->post([
-    'as' => 'set Shipping',
-    'uri' => '/config/setShippingMethod',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\CheckOut\CheckoutController@setShippingMethod'
-]);
-
-/** To Set Payment Method to Calculate */
-
-$router->post([
-    'as' => 'set Payment Config',
-    'uri' => '/config/setPaymentConfig',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@setPaymentConfig'
-]);
-
-/** To Set Payment Plugin's Config */
-
-$router->post([
-    'as' => 'set Payment Plugin Config',
-    'uri' => '/config/setPaymentPluginConfig',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@setPaymentPluginConfig'
-]);
-
-/** ****************************ORDER******************************** */
-
-/** To Store Order Configurations */
-
-$router->post([
-    'as' => 'To Save Order Config',
-    'uri' => '/config/config',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Order\OrderController@saveOrderConfig'
-]);
-
-/** To update Order Status */
-
-$router->post([
-    'as' => 'Update Order Status',
-    'uri' => '/order/updateOrderStatus',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Order\OrderController@updateOrderStatus'
-]);
-
-
-/** ******************************** Change Product Type  *********************************** */
 
 /**
  * Change product type
@@ -465,11 +387,89 @@ $router->post([
 $router->post([
     'as' => 'Change Product Type',
     'uri' => '/product/changeType',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@resetProductType'
 ]);
 
-/** ******************************* DASHBOARD ******************************************** */
+
+/** ------------------------------MANAGE SHIPPING [plugin]-------------------------------- */
+
+
+/** To Manage Shipping Configuration */
+
+$router->post([
+    'as' => 'Shipping Config',
+    'uri' => '/config/shippingConfig',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@manageShippingConfig'
+]);
+
+/** To Manage Shipping */
+
+$router->post([
+    'as' => 'Shipping',
+    'uri' => '/config/shipping',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@manageShipping'
+]);
+
+/** To Remove Shipping */
+
+$router->post([
+    'as' => 'Remove Shipping',
+    'uri' => '/config/removeShipping',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@removeShipping'
+]);
+
+/** To Set Shipping Method to Calculate */
+
+$router->post([
+    'as' => 'set Shipping',
+    'uri' => '/config/setShippingMethod',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\CheckOut\CheckoutController@setShippingMethod'
+]);
+
+/** To Set Payment Method to Calculate */
+
+$router->post([
+    'as' => 'set Payment Config',
+    'uri' => '/config/setPaymentConfig',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@setPaymentConfig'
+]);
+
+/** To Set Payment Plugin's Config */
+
+$router->post([
+    'as' => 'set Payment Plugin Config',
+    'uri' => '/config/setPaymentPluginConfig',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\SettingsController@setPaymentPluginConfig'
+]);
+
+/** ---------------------------------ORDER---------------------------------------------- */
+
+/** To Store Order Configurations */
+
+$router->post([
+    'as' => 'To Save Order Config',
+    'uri' => '/config/config',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Order\OrderController@saveOrderConfig'
+]);
+
+/** To update Order Status */
+
+$router->post([
+    'as' => 'Update Order Status',
+    'uri' => '/order/updateOrderStatus',
+    'middleware' => $auth,
+    'uses' => __NAMESPACE__ . '\Controllers\Order\OrderController@updateOrderStatus'
+]);
+
+/** --------------------------------- DASHBOARD -------------------------------------- */
 
 /**
  * Change product type
@@ -478,7 +478,7 @@ $router->post([
 $router->post([
     'as' => 'Dashboard Notes',
     'uri' => '/dashboard/saveNotes',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\DashboardController@saveNotes'
 ]);
 
@@ -489,7 +489,7 @@ $router->post([
 $router->post([
     'as' => 'Download Geo IP',
     'uri' => '/dashboard/downloadGeoIP',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Admin\DashboardController@downloadGeoIP'
 ]);
 
@@ -636,7 +636,7 @@ $router->post([
 //]);
 
 
-/** ****************************PAYMENT******************************** */
+/** -------------------------------PAYMENT--------------------------------- */
 
 /** Init Pre Payment Session */
 
@@ -654,7 +654,7 @@ $router->post([
     'uses' => __NAMESPACE__ . '\Controllers\CheckOut\CheckoutController@setPaymentMethod'
 ]);
 
-/** ****************************ORDER******************************** */
+/** ------------------------------ ORDER------------------------------------- */
 
 /** For Pre Confirm Payment */
 
@@ -750,7 +750,7 @@ $router->post([
     'uses' => __NAMESPACE__ . '\Controllers\Order\OrderController@getOrdersPagination'
 ]);
 
-/** ******************************** My Account *********************************** */
+/** --------------------------------- MY ACCOUNT --------------------------------- */
 
 /** Get My Order */
 

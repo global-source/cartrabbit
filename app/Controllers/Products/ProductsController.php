@@ -93,8 +93,8 @@ class ProductsController extends BaseController
 //        $product = $out;
         $currency = new Helper\Currency();
         $setting = Settings::getProductDisplayConfig();
-
-        return parent::view('Site.Product.viewProduct', compact('product', 'setting', 'currency'));
+//        $default = parent::getDefaultConfig();
+        return parent::view('Site.Product.viewProduct', compact('product', 'setting', 'currency', 'default'));
     }
 
     /**

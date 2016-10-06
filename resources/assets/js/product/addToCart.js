@@ -3,13 +3,13 @@ jQuery.noConflict();
     var site_addr = $('#site_address').val();
     var variants = $('#variant_combination').val();
 
-    var variant_attributes = $('#variant_attributes').val();
-    var variant_option_list = $('#option_list').val();
-    var variant_sets = $('#variant_sets').val();
-    var parent_product = $('#txt_product_id').val();
-
     /** In Multiple Product list View, there is no variants data to display */
     if (variants) {
+        var variant_attributes = $('#variant_attributes').val();
+        var variant_option_list = $('#option_list').val();
+        var variant_sets = $('#variant_sets').val();
+        var parent_product = $('#txt_product_id').val();
+
         variant_attributes = JSON.parse(variant_attributes);
         variant_option_list = JSON.parse(variant_option_list);
         variant_sets = JSON.parse(variant_sets);
@@ -26,7 +26,6 @@ jQuery.noConflict();
         $('.btn_cart_add').attr('disabled', 'disables');
     }
 
-    var sets = [];
     var id = 0;
     var value = [];
     var triggered = true;
@@ -149,11 +148,11 @@ jQuery.noConflict();
                 /** Is Sku available */
                 /** Is SKU not empty */
                     //if (variants[activeId]['sku'] != '') {
-                $('#product_sku').html(variants[activeId]['sku']);
+                $('#product_sku').html('SKU : ' + variants[activeId]['sku']);
                 //}
 
                 /** To show Variant Description */
-
+                console.log(variants[activeId]);
                 /** Is Variant Description not empty */
                 if (variants[activeId]['variantDesc'] != '') {
                     $('.desc-display').html(variants[activeId]['variantDesc']);
@@ -447,7 +446,10 @@ jQuery.noConflict();
         resetProductImage();
         $('#log').hide();
         $('#product_price').html('');
+        $('#product_sku').html('');
+        $('.desc-display').html('');
         $('.txt_product_qty').val(0);
+        $('.info_log').html('');
         $('.btn_cart_add').attr('disabled', 'disabled');
     });
 

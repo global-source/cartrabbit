@@ -359,6 +359,7 @@ class ProductVariable extends ProductBase
         $this->extractAttributeSets($list);
 
         $this->meta->list = $list;
+        $this->meta->list2 = json_encode($list);
     }
 
     /**

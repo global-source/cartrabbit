@@ -85,13 +85,18 @@ class Setup extends Post
 
         $page_index = array();
         foreach ($pages as $index => $item) {
-            $post = new Post();
-            foreach ($item as $key => $value) {
-                $key = 'post_' . $key;
-                $post->$key = $value;
+            $page = Post::type('page')->where('post_title', 'products');
+            if ($page->count() == 0) {
+                $post = new Post();
+                foreach ($item as $key => $value) {
+                    $key = 'post_' . $key;
+                    $post->$key = $value;
+                }
+                $post->save();
+                $page_index[$index] = $post->ID;
+            } else {
+                $page_index[$index] = $page->pluck('ID')->first();
             }
-            $post->save();
-            $page_index[$index] = $post->ID;
         }
         /** Create Prodcuts Page for List Products */
         $product_id = $page_index['products'];

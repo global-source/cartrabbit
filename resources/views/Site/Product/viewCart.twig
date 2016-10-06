@@ -5,10 +5,12 @@
             {% set i = 0 %}
         {% endif %}
         {% if product.meta.is_variant == true %}
+
             <input type="hidden" value="{{ product.meta.variants }}" id="variant_combination">
+
             <input type="hidden" value="{{ product.meta.list.html.options | json_encode }}" id="variant_attributes">
             <input type="hidden" value="{{ product.meta.list.sets | json_encode }}" id="variant_sets">
-            <input type="hidden" id="option_list" value="{{ product.meta.list.html.items | json_encode }}">
+            <input type="hidden" value="{{ product.meta.list.html.items | json_encode }}" id="option_list">
         {% endif %}
 
         <input type="hidden" value="{{ site_addr }}" id="site_address">
@@ -25,15 +27,22 @@
             <span class="text text-danger log" id="log_{{ product.ID }}"></span>
             <p id="log"></p>
             {% if product.meta.visible_on_storefront == true %}
+                <div style="clear: both;"></div>
                 <div class="">
                     <div class="lbl_status_msg"></div>
                     {% if (setting.d_config_catalog_model == 'no') %}
-                        {{ product.displayQuantity() | raw }}
-                        <span id="lbl_add_cart_response_{{ product.ID }}"></span>
-                        <input type="button" class="fc-btn fc-btn-success fc-btn-lg btn_cart_add"
-                               id="btn_add_{{ product.ID }}"
-                               value="{{ product.meta.add_cart_text }}">
-
+                        <div class="fc-row">
+                            <span class="info_log" id="lbl_add_cart_response_{{ product.ID }}"></span>
+                            <div class="fc-col-lg-4">
+                                {{ product.displayQuantity() | raw }}
+                            </div>
+                            <div class="fc-col-lg-8">
+                                <input type="button"
+                                       class="fc-btn fc-btn-success fc-btn-lg btn_cart_add"
+                                       id="btn_add_{{ product.ID }}"
+                                       value="{{ product.meta.add_cart_text }}">
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
             {% else %}

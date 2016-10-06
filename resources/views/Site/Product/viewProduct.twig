@@ -13,19 +13,23 @@
                     <!-- PRODUCT SKU -->
                     {% include '@CartRabbit/Site/Product/viewImage.twig' %}
                     {% if (setting.d_config_show_sku == 'yes') %}
-                        <h5>SKU:&nbsp;<span class="sku-display" id="product_sku">{{ product.meta.sku }}</span></h5>
+                        <h5><span class="sku-display"
+                                  id="product_sku">{% if product.meta.sku != '' %} SKU:&nbsp;{{ product.meta.sku }}{% endif %}</span>
+                        </h5>
                     {% endif %}
 
                     <!-- PRODUCT BRAND -->
                     {% if (setting.d_config_show_brand == 'yes') %}
                         {% if product.meta.brand != 'none' %}
-                            <h5>Brand:&nbsp;<span class="brand-display">{{ product.meta.brand }}</span></h5>
+                            <h5>
+                                <span class="brand-display">{% if product.meta.brand != '' %}Brand:&nbsp;{{ product.meta.brand }} {% endif %}</span>
+                            </h5>
                         {% endif %}
                     {% endif %}
 
                     <!-- PRODUCT DESC -->
                     {% if (setting.d_config_show_desc == 'yes') %}
-                        <h5><span class="desc-display">{{ product.descr }}</span></h5>
+                        <h5><span class="desc-display">{{ product.post_content }}</span></h5>
                     {% endif %}
                 </div>
                 <!-- PRODUCT GALLERY -->

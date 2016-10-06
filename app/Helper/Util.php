@@ -50,6 +50,20 @@ class Util
     }
 
     /**
+     * This function return the Default Product Image
+     * for Replacing Broken or Missing Images.
+     *
+     * @return array
+     */
+    public static function getDefaultConfig()
+    {
+        return [
+            'product_image' => Helper::get('site_url') . 'resources/assets/img/default_product.gif',
+            'ajax_spin' => Helper::get('site_url') . 'resources/assets/img/spin.gif'
+        ];
+    }
+
+    /**
      * To Extract prefix contents from meta contents to retrieve the value
      *
      * @param $cartItems array of items

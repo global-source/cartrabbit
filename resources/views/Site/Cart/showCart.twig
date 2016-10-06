@@ -28,26 +28,30 @@
                         </thead>
                         <tbody class="cart_items">
                         {% for i,product in products %}
-
+                            {% set product_info = product.product %}
                             <tr>
                                 <td>
                                     <div class="fc-row">
                                         <div>
-                                            <img src="{{ product.product.meta.image_thump }}"
+                                        {% set image = product_info.meta.image_thump %}
+                                        {% if image == '' or image is not defined %}
+                                                {% set image = default.product_image %}
+                                        {% endif %}
+                                            <img src="{{ image }}"
 
                                                  alt="image">
                                         </div>
                                         <div class="product-name">
                                 <span class="fc-row">
-                                    {{ product.product.post_title }}
+                                    {{ product_info.post_title }}
                                 </span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <input type="number" name="cartrabbit[cart][{{ i }}][qty]"
-                                            min="{{ product.product.meta.stock.min }}"
-                                            max="{{ product.product.meta.stock.max }}"
+                                            min="{{ product_info.meta.stock.min }}"
+                                            max="{{ product_info.meta.stock.max }}"
                                            class="fc-input-md"
                                            id="product_qty"
                                            value="{{ product.quantity }}">
@@ -56,12 +60,6 @@
                                 </td>
                                 <td>
                         <span id="per_product_price">
-
-                            {#{% if product['product']['meta']['price']special_price != 0 %}#}
-                            {#{{ product['product']['meta']['price'].f_specialPrice }}#}
-                            {#{% else %}#}
-                            {#{{ product['product']['meta']['price'].f_price }}#}
-                            {#{% endif %}#}
                             {{ currency.format(product.line_price) }}
                         </span>
                                 </td>
