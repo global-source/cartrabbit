@@ -20,6 +20,28 @@ $router->post([
     'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@getStates'
 ]);
 
+/** To Get Special Price Of a Product By ID */
+
+$router->post([
+    'as' => 'Get Special Price',
+    'uri' => '/product/getSpecialPrice',
+    'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@getSpecialPrice'
+]);
+
+/** ******************************** Utility *********************************** */
+
+/**
+ * Validate Email
+ */
+
+$router->post([
+    'as' => 'Email Validation',
+    'uri' => '/util/validateEmail',
+    'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@validateEmail'
+]);
+
+/********************************** ******************************************************************/
+
 /********************************** BACKEND ROUTES **************************************************/
 
 /** To Create or Update Cart Configurations */
@@ -447,19 +469,6 @@ $router->post([
     'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@resetProductType'
 ]);
 
-/** ******************************** Utility *********************************** */
-
-/**
- * Validate Email
- */
-
-$router->post([
-    'as' => 'Email Validation',
-    'uri' => '/util/validateEmail',
-    'middleware' => __NAMESPACE__ . '\Middlewares\Auth',
-    'uses' => __NAMESPACE__ . '\Controllers\Admin\AdminController@validateEmail'
-]);
-
 /** ******************************* DASHBOARD ******************************************** */
 
 /**
@@ -519,15 +528,6 @@ $router->post([
     'uri' => '/cart/getCartSummery',
     'uses' => __NAMESPACE__ . '\Controllers\Cart\CartController@getCartSummery'
 ]);
-
-/** To Get Special Price Of a Product By ID */
-
-$router->post([
-    'as' => 'Get Special Price',
-    'uri' => '/product/getSpecialPrice',
-    'uses' => __NAMESPACE__ . '\Controllers\Products\ProductsController@getSpecialPrice'
-]);
-
 
 /** To Check User Name/ E-Mail for CheckOut Page */
 
@@ -759,4 +759,4 @@ $router->post([
     'uri' => '/order/getMyOrder',
     'uses' => __NAMESPACE__ . '\Controllers\Account\AccountController@getMyOrder'
 ]);
-
+/** ******************************** *********************************************** */

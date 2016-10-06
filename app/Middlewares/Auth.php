@@ -4,8 +4,6 @@ namespace CartRabbit\Middlewares;
 use CartRabbit\Helper;
 use Exception;
 
-//use MongoDB\Driver\Exception\Exception
-
 /**
  * Class Middleware
  * @package CartRabbit\library
@@ -40,10 +38,10 @@ class Auth
             if (in_array($this->rights, $user_rights)) {
                 $request->handle();
             } else {
-                throw new Exception('Error On Handling');
+                wp_die(__('You do not have sufficient permissions to access this page.'), 403);
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            wp_die(__($e->getMessage()), 403);;
         }
     }
 
