@@ -307,7 +307,7 @@
                 /** Enabling / Disabling the Address Process */
                 $('.address_panel').on('click', function () {
                     var address_status = getAddressButtonStatus();
-
+                    console.log(address_status);
                     if (address_status) {
                         $('#btn_set_address').removeAttr('disabled');
                     } else {
@@ -389,7 +389,11 @@
                     var address_status = getAddressButtonStatus();
 
                     if ($(this).is(':checked')) {
-                        $('#btn_set_address').attr('disabled', 'true');
+                        if ($('[name=shipping_address]').is(':checked')) {
+                            $('#btn_set_address').removeAttr('disabled');
+                        } else {
+                            $('#btn_set_address').attr('disabled', 'true');
+                        }
                         loadDelivery();
                     } else {
                         if (address_status) {
@@ -430,6 +434,8 @@
                     $('#paymentContinue').prop('disabled', true);
                     $("[name='payment_type']").prop('checked', false);
                     $("[name='shipping_type']").prop('checked', false);
+                    $("[name='billing_address']").prop('checked', false);
+                    $("[name='shipping_address']").prop('checked', false);
                     $('.change-payment-btn').css('display', 'none');
 //                    $('.change-shipping-btn').css('display', 'none');
                     $('#chk_use_different_shipping').attr('checked', false);

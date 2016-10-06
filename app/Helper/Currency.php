@@ -263,12 +263,14 @@ class Currency
      */
     public static function getExchangeValueByCurrencyCode($code = false)
     {
-        $currency = json_decode(self::getStoredCurrencyDataByCode($code));
-        if (isset($currency->exchange)) {
-            return $currency->exchange;
-        } else {
-            return 1;
+        $exchange = 1;
+        if ($code) {
+            $currency = json_decode(self::getStoredCurrencyDataByCode($code));
+            if (isset($currency->exchange)) {
+                $exchange = $currency->exchange;
+            }
         }
+        return $exchange;
     }
 
     /**
@@ -281,7 +283,7 @@ class Currency
         if (isset($currency[$code])) {
             return $currency[$code];
         } else {
-            return array();
+            return json_encode([]);
         }
     }
 

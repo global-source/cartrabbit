@@ -8,6 +8,7 @@ $auth = __NAMESPACE__ . '\Middlewares\Auth';
 $router->get([
     'as' => 'Test',
     'uri' => '/test',
+    'middleware' => $auth,
     'uses' => __NAMESPACE__ . '\Controllers\Test\TestController@test'
 ]);
 

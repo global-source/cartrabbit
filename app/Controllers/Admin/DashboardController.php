@@ -74,6 +74,7 @@ class DashboardController extends BaseController
     {
         $countries = (new CountryRepository())->getList();
         $currency = (new CurrencyRepository())->getList();
+
         return parent::view('Admin.Setup.setupWizard', compact('countries', 'currency'));
     }
 

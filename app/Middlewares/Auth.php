@@ -36,7 +36,7 @@ class Auth
         $user_rights = $this->getUserRights();
         try {
             if (in_array($this->rights, $user_rights)) {
-                $request->handle();
+                return $request;
             } else {
                 wp_die(__('You do not have sufficient permissions to access this page.'), 403);
             }

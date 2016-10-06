@@ -128,7 +128,8 @@ class Util
                         'cart' => 'page_to_cart_product',
                         'products' => 'page_to_list_product',
                         'checkout' => 'page_to_checkout',
-                        'myAccount' => 'page_to_account'
+                        'myAccount' => 'page_to_account',
+                        'thank' => 'page_to_thank'
                     ],
                     'except' => 'NoPage'
                 ]

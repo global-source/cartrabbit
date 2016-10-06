@@ -69,23 +69,23 @@ class Setup extends Post
                 'type' => 'page',
                 'content' => '[CartRabbitAccount]'
             ),
-            'prePayment' => array(
-                'title' => 'Pre Payment',
-                'name' => 'prePayment',
-                'type' => 'page',
-                'content' => '[CartRabbitPrePayment]'
-            ),
+//            'prePayment' => array(
+//                'title' => 'Pre Payment',
+//                'name' => 'prePayment',
+//                'type' => 'page',
+//                'content' => '[CartRabbitPrePayment]'
+//            ),
             'thankYou' => array(
                 'title' => 'ThankYou',
                 'name' => 'thankYou',
                 'type' => 'page',
-                'content' => '[CartRabbitThankYou]'
+                'content' => 'Thanks For Using !'
             )
         );
 
         $page_index = array();
         foreach ($pages as $index => $item) {
-            $page = Post::type('page')->where('post_title', 'products');
+            $page = Post::type('page')->where('post_title', $index);
             if ($page->count() == 0) {
                 $post = new Post();
                 foreach ($item as $key => $value) {

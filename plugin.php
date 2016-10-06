@@ -51,7 +51,7 @@ function init_Cart()
 
 function on_activate_plugin()
 {
-    \CartRabbit\Models\Setup::installAdditionalPlugins();
+
 }
 
 /** Trigger on End of the plugin Loading. */
