@@ -10,7 +10,6 @@ jQuery.noConflict();
         var count = $('.shipping_table tr').length;
         var row = '<tr>' +
             '<td>' + count + '</td>' +
-            '<td><input type="text" class="form-control" name="cartrabbit[shipping][' + count + '][shippingName]"> </td> ' +
             '<td><input type="text" class="form-control" name="cartrabbit[shipping][' + count + '][minQty]"> </td> ' +
             '<td><input type="text" class="form-control" name="cartrabbit[shipping][' + count + '][maxQty]"> </td> ' +
             '<td><input type="text" class="form-control" name="cartrabbit[shipping][' + count + '][rate]"> </td> ' +

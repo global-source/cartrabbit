@@ -77,7 +77,6 @@
                                 <tfoot>
                                 <tr>
                                     <td>ID</td>
-                                    <td>Name</td>
                                     <td>Minimum Quantity</td>
                                     <td>Maximum Quantity</td>
                                     <td>Rate</td>

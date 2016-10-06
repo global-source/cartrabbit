@@ -89,7 +89,7 @@ class CheckoutController extends BaseController
         $content['countries'] = (new CountryRepository())->getList();
         $general['payment'] = Checkout::getPayment();
 
-        $shipping_form = parent::view('Site.Checkout.Panels.shippingMethod', compact('general', 'session', 'content'));
+        $shipping_form = parent::view('Site.Checkout.Panels.shippingMethod', compact('general', 'session', 'content', 'currency'));
 
         $summery_form = parent::view('Site.Checkout.Panels.OrderSummery', compact('general', 'currency', 'session', 'content'));
 

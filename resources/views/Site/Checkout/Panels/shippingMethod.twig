@@ -17,7 +17,6 @@
                     <h4>Shipping Methods</h4>
                     {% set status = 'false' %}
                     {% if general.shipping.shippingMethods is not empty %}
-
                         {% for i, ship in general.shipping.shippingMethods %}
                             {% if general.shipping.available[i] == 'on' %}
                                 {% set status = 'true' %}
@@ -26,6 +25,7 @@
                                            name="shipping_type[]" {% if i == session.shippingMethod %} checked="checked" {% endif %}
                                            class="shipping_type" value="{{ i }}">
                                     {{ ship }}
+                                    <b>{{ currency.format(general.orderSummery.shipping_rates[i].total) }}</b>
                                 </label><br>
                             {% endif %}
                         {% endfor %}

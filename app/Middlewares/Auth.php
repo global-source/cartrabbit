@@ -29,7 +29,7 @@ class Auth
     }
 
     /**
-     *
+     * Managing Requests
      */
     public function handle($request)
     {

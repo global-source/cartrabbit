@@ -39,6 +39,8 @@ class Shipping extends Eloquent
     /** @var array Stores packages to ship and to get quotes for. */
     public $packages = array();
 
+    public $shipping_rates = array();
+
     /**
      * Shipping constructor.
      * @param array $attributes
@@ -81,7 +83,7 @@ class Shipping extends Eloquent
             $this->packages[$package_keys[$i]] = $this->calculate_shipping_for_package($packages[$package_keys[$i]]
             );
         }
-        
+
         // Get all chosen methods
         $chosen_methods = Session()->get('chosen_shipping_methods');
         $method_counts = Session()->get('shipping_method_counts');
@@ -207,6 +209,7 @@ class Shipping extends Eloquent
 //                    $shipping_methods = (array)$shipping_methods;
 //                }
                 foreach ($shipping_methods as $shipping_method) {
+
                     if (apply_filters('is_available', array($shipping_method))) {
 
                         $rates = apply_filters('cartrabbit_calculate_shipping', array($shipping_method, $package));
@@ -225,6 +228,8 @@ class Shipping extends Eloquent
         } else {
             $package['rates'] = $stored_rates['rate'];
         }
+        $this->shipping_rates = $package['rates']['rates'];
+
         return $package;
     }
 
