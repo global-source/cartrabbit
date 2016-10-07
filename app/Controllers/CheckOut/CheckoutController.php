@@ -205,12 +205,12 @@ class CheckoutController extends BaseController
 
     public function setShippingMethod(Http $http)
     {
-        Customer::updateMethod($http);
+        return Customer::updateMethod($http);
     }
 
     public function setPaymentMethod(Http $http)
     {
-        Customer::updateMethod($http);
+        return Customer::updateMethod($http);
     }
 
     public static function getOrder()

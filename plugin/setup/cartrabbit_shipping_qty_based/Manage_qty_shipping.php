@@ -150,7 +150,7 @@ class Manage_qty_shipping
         return $package;
     }
 
-    function processTaxRates($cost)
+    static function processTaxRates($cost)
     {
         $rates = self::taxes();
 
@@ -164,7 +164,7 @@ class Manage_qty_shipping
         return $total;
     }
 
-    function taxes()
+    static function taxes()
     {
         return array(
             'standard' => '5'

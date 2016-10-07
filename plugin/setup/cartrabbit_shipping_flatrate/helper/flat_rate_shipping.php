@@ -64,7 +64,7 @@ class Flat_rate_shipping
     /**
      * @param $data
      */
-    function save_configuration($data)
+    static function save_configuration($data)
     {
         if (self::is_me($data['shipping']['plugin'])) {
             self::save($data);
@@ -125,7 +125,7 @@ class Flat_rate_shipping
     /**
      * @return string
      */
-    function loadShippingConfigurations($result)
+    static function loadShippingConfigurations($result)
     {
         if (self::is_me($result['type'])) {
             $config = [];

@@ -412,6 +412,7 @@ class Customer extends User
         if ($payment) {
             Customer::setSession('payment_method', $payment);
         }
+        return true;
     }
 
     /**

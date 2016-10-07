@@ -36,14 +36,14 @@ class Payment_paypal
     }
 
 
-    function register_plugin_menu($items)
+    static function register_plugin_menu($items)
     {
         $items['PayPal'] = '?page=cartrabbit-config&tab=payment&opt=' . self::$element;
 
         return $items;
     }
 
-    function load_plugin_data($element)
+    static function load_plugin_data($element)
     {
         if (self::is_me($element)) {
             return self::loadPaypalConfigurations($element);
@@ -116,7 +116,7 @@ class Payment_paypal
         return null;
     }
 
-    function pre_payment_form($data)
+    static function pre_payment_form($data)
     {
         $element = $data['plugin_name'];
         if (self::is_me($element)) {
@@ -133,7 +133,7 @@ class Payment_paypal
         return $data;
     }
 
-    function payment_process($data)
+    static function payment_process($data)
     {
         $element = $data['payment_name'];
         if (self::is_me($element)) {
@@ -274,7 +274,7 @@ class Payment_paypal
         return $url;
     }
 
-    function processView($path, $data)
+    static function processView($path, $data)
     {
         ob_start();
         $config = $data;
