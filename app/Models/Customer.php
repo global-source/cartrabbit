@@ -578,7 +578,7 @@ class Customer extends User
                 $billing_address[$key] = (array)json_decode($address);
             }
         }
-        $billing_address['active'] = Session()->get('customer', [])['billing_address'];
+        $billing_address['active'] = array_get(Session()->get('customer', []), 'billing_address', false);
         return $billing_address;
     }
 

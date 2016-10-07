@@ -50,7 +50,7 @@ class Flat_rate_shipping
     {
         global $wpdb;
         $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_fla_conf'");
-        $result['meta'] = get_post_meta($result['post'][0]->ID);
+        $result['meta'] = get_post_meta(array_first(array_get($result, 'post', [])->ID));
         return $result;
     }
 

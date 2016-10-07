@@ -23,7 +23,7 @@ class Payment_paypal
         }
     }
 
-    function register_plugin($list)
+    static function register_plugin($list)
     {
 //        $data = Manage_plugin::load();
         if (!isset($data)) {
