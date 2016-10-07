@@ -22,14 +22,14 @@ class Address
 
             $address = new \CommerceGuys\Addressing\Model\Address();
             $address = $address
-                ->withRecipient($user_address['name'])
-                ->withCountryCode($user_address['country'])
-                ->withOrganization($user_address['organization'])
-                ->withAdministrativeArea($user_address['administrativeArea'])
-                ->withPostalCode($user_address['postalCode'])
-                ->withAddressLine1($user_address['address1'])
-                ->withAddressLine2($user_address['address2'])
-                ->withLocality($user_address['locale']);
+                ->withRecipient(array_get($user_address, 'name', ''))
+                ->withCountryCode(array_get($user_address, 'country', ''))
+                ->withOrganization(array_get($user_address, 'organization', ''))
+                ->withAdministrativeArea(array_get($user_address, 'administrativeArea', ''))
+                ->withPostalCode(array_get($user_address, 'postalCode', ''))
+                ->withAddressLine1(array_get($user_address, 'address1', ''))
+                ->withAddressLine2(array_get($user_address, 'address2', ''))
+                ->withLocality(array_get($user_address, 'locale', ''));
 
             // Only for Display Purpose.
             if ($isDisplay) {

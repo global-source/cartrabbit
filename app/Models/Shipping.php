@@ -149,7 +149,9 @@ class Shipping extends Eloquent
     {
         $list = array();
         foreach ($available_methods as $index => $value) {
-            $list[$value['element']] = array_get($value, 'total', 0);
+            if (isset($value['element'])) {
+                $list[$value['element']] = array_get($value, 'total', 0);
+            }
         }
 
         /** Sort Array with its shipping charges */
