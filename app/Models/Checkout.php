@@ -70,17 +70,17 @@ class Checkout extends Eloquent
         global $current_user;
         $customer = new Customer();
 
-        $session['billing_address_verified'] = Session()->get('customer', [])['billing_address_verified'];
-        $session['shipping_address_verified'] = Session()->get('customer', [])['shipping_address_verified'];
+//        $session['billing_address_verified'] = Session()->get('customer', [])['billing_address_verified'];
+//        $session['shipping_address_verified'] = Session()->get('customer', [])['shipping_address_verified'];
 
         $session['billing_address'] = Session()->get('customer', [])['billing_address'];
         $session['shipping_address'] = Session()->get('customer', [])['shipping_address'];
 
         if (!empty($session['billing_address'])) {
-            $session['billing_address']['states'] = json_decode(Util::getStatesByCountryCode($session['billing_address']['country']), true);
+            $session['billing_address']['states'] = json_decode(Util::getStatesByCountryCode(array_get($session['billing_address'], 'country', 'none')), true);
         }
         if (!empty($session['shipping_address'])) {
-            $session['shipping_address']['states'] = json_decode(Util::getStatesByCountryCode($session['shipping_address']['d_country']), true);
+            $session['shipping_address']['states'] = json_decode(Util::getStatesByCountryCode(array_get($session['shipping_address'], 'd_country', 'none')), true);
         }
 
         $session['uaccount'] = Session()->get('uaccount', 'noRecord');

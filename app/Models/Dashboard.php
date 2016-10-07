@@ -124,12 +124,23 @@ class Dashboard extends Post
             $sales['total'] = 0;
             $sales['today'] = 0;
             $sales['monthly'] = 0;
+            $sales['graph'] = [];
             foreach ($orders as $index => $order) {
-
                 $month = $order->created_at->format('m');
                 $day = $order->created_at->format('d');
 
                 $year = $order->created_at->format('Y');
+                if (!isset($sales['graph'][$year])) {
+                    $sales['graph'][$year] = [];
+                }
+                if (!isset($sales['graph'][$year]['month'][$month])) {
+                    $sales['graph'][$year]['month'][$month] = 0;
+                }
+                if (!isset($sales['graph'][$year][$month]['day'][$day])) {
+                    $sales['graph'][$year][$month]['day'][$day] = 0;
+                }
+
+
                 $sales['total'] += $order->meta->total;
                 if (isset($sales['all'][$day])) {
                     $sales['all'][$day] += $order->meta->total;
@@ -152,9 +163,8 @@ class Dashboard extends Post
             }
             $sales['graph_count'] = count($sales['graph']);
             $sales['graph'] = \CartRabbit\Helper\Dashboard::dailyChart($sales['graph']);
-//            $sales['graph'] = json_encode($sales['graph']);
         } catch (\Exception $e) {
-            //
+            wp_die(__('Unable Process Graph Data !'));
         }
         return $sales;
     }
@@ -163,6 +173,7 @@ class Dashboard extends Post
     {
         foreach ($orders as $index => $order) {
             $items = $order->items()->get();
+            //TODO: Implement Product get Limit
             foreach ($items as $id => $item) {
                 if (!isset($sales['top_selling'][$item->meta->product_id])) {
 //                    $sales['top_selling'][$item->meta->product_id] = 0;

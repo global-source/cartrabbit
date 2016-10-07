@@ -1769,12 +1769,12 @@ class Settings extends Eloquent
      */
     public function getPermalinkSettings()
     {
-        if(empty(self::$permanant_links)) {
+        if (empty(self::$permanant_links)) {
             $option = Option::where('option_name', 'cartrabbit_permalink')->first();
             $data = isset($option->option_value) ? json_decode($option->option_value, true) : array();
 
             //initialise the basic settings.
-            if(!isset($data['product_category_base'])) $data['product_category_base'] = 'category';
+            if (!isset($data['product_category_base'])) $data['product_category_base'] = 'category';
             self::$permanant_links = $data;
         }
         return self::$permanant_links;

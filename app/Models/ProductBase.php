@@ -619,32 +619,36 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
         $category = wp_get_object_terms($this->ID, 'genre');
 
         /** Retrieve the Category name */
-        $category = $category[0]->slug;
+        $category = object_get(array_first($category), 'slug', 'none');
+
         /** To Set the Category base */
 
         $category_base = $this->permalink->product_category_base;
 
-        /** To Set Product Link in Based on the Permalink Type */
-        if ($this->permalink->permalink == 'plain' or $this->permalink->permalink == 'default_permalink') {
+        if (isset($this->permalink->permalink)) {
+            /** To Set Product Link in Based on the Permalink Type */
+            if ($this->permalink->permalink == 'plain' or $this->permalink->permalink == 'default_permalink') {
 
-            /** If permalink type is "Plain" or "Default", */
-            $link = get_permalink($this->ID);
+                /** If permalink type is "Plain" or "Default", */
+                $link = get_permalink($this->ID);
 
-        } elseif ($this->permalink->permalink == 'product/') {
+            } elseif ($this->permalink->permalink == 'product/') {
 
-            /** If permalink type is "Shop Based", */
-            $link = $site_addr . '/product/' . $slug;
+                /** If permalink type is "Shop Based", */
+                $link = $site_addr . '/product/' . $slug;
 
-        } elseif ($this->permalink->permalink == 'product/%product-category%' and $this->permalink->type != 'custom') {
+            } elseif ($this->permalink->permalink == 'product/%product-category%' and $this->permalink->type != 'custom') {
 
-            /** If permalink type is "Category Base", */
-            $link = $site_addr . '/' . (($category_base) ? $category_base : 'cat') . '/' . $category . '/' . $slug;
+                /** If permalink type is "Category Base", */
+                $link = $site_addr . '/' . (($category_base) ? $category_base : 'cat') . '/' . $category . '/' . $slug;
 
-        } elseif ($this->permalink->type == 'custom') {
+            } elseif ($this->permalink->type == 'custom') {
 
-            /** If permalink type is "Custom", */
-            $link = $site_addr . '/' . str_replace('%product-category%', $category, $this->permalink->permalink) . '/' . $slug;
+                /** If permalink type is "Custom", */
+                $link = $site_addr . '/' . str_replace('%product-category%', $category, $this->permalink->permalink) . '/' . $slug;
+            }
         }
+
         $this->meta->link = $link;
     }
 

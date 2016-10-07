@@ -109,6 +109,8 @@ class Pagination
         $segment = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
         $segment = implode($segment, '/');
         $pagination = '';
+        $extra = implode('/', $extra);
+
         // if total number of products is equal to product limit to display,
         // then pagination will not be created.
         if ((int)$this->total != (int)$this->limit) {

@@ -106,9 +106,9 @@
                     address_status = true;
                     // For Guest User Access.
                 } else if ('{{ session.uaccount }}' == 'guest') {
-                    if ('{{ session.billing_address_verified }}' == 1 && '{{ session.shipping_address_verified }}' == 1) {
-                        address_status = true;
-                    }
+                    {#if ('{{ session.billing_address_verified }}' == 1 && '{{ session.shipping_address_verified }}' == 1) {#}
+                    address_status = true;
+//                    }
                 }
 
                 $('#place-order').attr('disabled', 'disabled');
@@ -156,37 +156,37 @@
 
 
                 {#if (no_shipping_restriction == 'false' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {#}
-                    {#if ('{{ general.shipping.shippingMethods | length }}' > 0) #}{#}#}
+                {#if ('{{ general.shipping.shippingMethods | length }}' > 0) #}{#}#}
 
-                    {#console.log('step002');#}
-                    {#if (address_status) {#}
-                        {#if (payment) {#}
-                            {#check_list = true;#}
-                        {#}#}
-                    {#}#}
+                {#console.log('step002');#}
+                {#if (address_status) {#}
+                {#if (payment) {#}
+                {#check_list = true;#}
+                {#}#}
+                {#}#}
 
-{#//                    } else {#}
-{#//                        console.log('step1');#}
-{#//                        if (address_status) {#}
-{#//                            console.log('step2');#}
-{#//                            console.log('LOG 2');#}
-{#//                            if (payment) {#}
-{#//                                console.log('step3');#}
-{#//                                check_list = true;#}
-{#//                            }#}
-{#//                        }#}
-{#//                    }#}
-                    {#console.log('state 1: ' + check_list);#}
+                {#//                    } else {#}
+                {#//                        console.log('step1');#}
+                {#//                        if (address_status) {#}
+                {#//                            console.log('step2');#}
+                {#//                            console.log('LOG 2');#}
+                {#//                            if (payment) {#}
+                {#//                                console.log('step3');#}
+                {#//                                check_list = true;#}
+                {#//                            }#}
+                {#//                        }#}
+                {#//                    }#}
+                {#console.log('state 1: ' + check_list);#}
                 {#} else if (no_shipping_restriction == 'true' || shipping_status == 'false' || '{{ general.orderSummery.shipping_info.needShipping }}' != true) {#}
-                    {#if (address_status) {#}
-                        {#if (shipping) {#}
-                            {#if (payment) {#}
-                                {#check_list = true;#}
-                            {#}#}
-                        {#}#}
+                {#if (address_status) {#}
+                {#if (shipping) {#}
+                {#if (payment) {#}
+                {#check_list = true;#}
+                {#}#}
+                {#}#}
 
-                    {#}#}
-                    {#console.log('state 2: ' + check_list);#}
+                {#}#}
+                {#console.log('state 2: ' + check_list);#}
                 {#}#}
 
                 if (check_list) {
@@ -207,15 +207,15 @@
                                 ajax_stop();
                             } else {
                                 $.ajax({
-                                url: '{{ site_addr }}//checkout/place_order',
-                                type: 'POST',
-                                data: $('#order_summery').serializeArray(),
-                                success: function (res) {
-                                $('#checkout_content').html(res);
-                                },
-                                complete: function () {
-                                ajax_stop();
-                                }
+                                    url: '{{ site_addr }}//checkout/place_order',
+                                    type: 'POST',
+                                    data: $('#order_summery').serializeArray(),
+                                    success: function (res) {
+                                        $('#checkout_content').html(res);
+                                    },
+                                    complete: function () {
+                                        ajax_stop();
+                                    }
                                 });
                             }
                         }

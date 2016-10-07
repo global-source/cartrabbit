@@ -116,21 +116,21 @@ class Customer extends User
         $session = Session()->get('customer', 0);
         if ($session == 0 and $current_user->ID == 0) {
             /** Update User Address. */
-            $location = \CartRabbit\Helper\GeoIP::getLocation($_SERVER['REMOTE_ADDR']);
-
-            /** Location should have country code. */
-            if (!is_null($location->country)) {
-                $billing_address['city'] = $location->city;
-                $billing_address['country'] = $location->country;
-                $billing_address['postalCode'] = $location->postalCode;
-                if ($location->state) {
-                    $billing_address['zone'] = $location->country . '-' . $location->state;
+            $location = GeoIP::getLocation($_SERVER['REMOTE_ADDR']);
+            if ($location) {
+                /** Location should have country code. */
+                if (!is_null($location->country)) {
+                    $billing_address['city'] = $location->city;
+                    $billing_address['country'] = $location->country;
+                    $billing_address['postalCode'] = $location->postalCode;
+                    if ($location->state) {
+                        $billing_address['zone'] = $location->country . '-' . $location->state;
+                    }
+                    $customer['billing_address'] = $billing_address;
+                    $customer['shipping_address'] = $billing_address;
+                    Session()->set('customer', $customer);
                 }
-                $customer['billing_address'] = $billing_address;
-                $customer['shipping_address'] = $billing_address;
-                Session()->set('customer', $customer);
             }
-
         }
     }
 
