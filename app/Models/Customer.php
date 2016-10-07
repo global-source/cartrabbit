@@ -8,6 +8,7 @@
 
 namespace CartRabbit\Models;
 
+use CartRabbit\Helper\GeoIP;
 use Corcel\User;
 use Illuminate\Support\Facades\Session;
 use Flycartinc\Order\Model\Order as Order;
