@@ -95,7 +95,7 @@ class Customer extends User
             $this->_data['shipping_state'] = $this->_data['state'];
         }
 
-        $this->customer_address = Session()->get('customer', [])['billing_address'];
+        $this->customer_address = array_get(Session()->get('customer', []), 'billing_address', '');
     }
 
     /**
@@ -115,10 +115,10 @@ class Customer extends User
     {
         global $current_user;
         $session = Session()->get('customer', 0);
-        if ($session == 0 and $current_user->ID == 0) {
+        if ($session == 0 && $current_user->ID == 0) {
             /** Update User Address. */
             $location = GeoIP::getLocation($_SERVER['REMOTE_ADDR']);
-            if ($location) {
+            if (isset($location) && isset($location->country)) {
                 /** Location should have country code. */
                 if (!is_null($location->country)) {
                     $billing_address['city'] = $location->city;
