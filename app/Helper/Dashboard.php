@@ -39,6 +39,10 @@ class Dashboard
 
         $symbol = $firstPrice->getCurrency()->getSymbol();
 
+        $month = is_array($month) ? array_first($month) : $month;
+
+        $month_total = is_array($month_total) ? array_first($month_total) : $month;
+
         $script = '
         google.load("visualization", "1", {packages:["corechart"]});
         google.setOnLoadCallback(drawChart);

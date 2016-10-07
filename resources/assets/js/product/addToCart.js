@@ -405,22 +405,28 @@ jQuery.noConflict();
 
         var id = $(this).attr('id');
         id = id.replace('btn_add_', '');
+        var qty = $('#qty_' + id).val();
+        console.log(qty);
+        if (qty > 0) {
+            var cart_link = $('#btn_my_cart').val();
+            $.ajax({
+                url: site_addr + '/products/addToCart',
+                type: 'POST',
+                data: data,
+                success: function (res) {
 
-        var cart_link = $('#btn_my_cart').val();
-        $.ajax({
-            url: site_addr + '/products/addToCart',
-            type: 'POST',
-            data: data,
-            success: function (res) {
-
-                if (res.error) {
-                    $('#lbl_add_cart_response_' + id).html(res.error);
-                } else {
-                    $('#lbl_add_cart_response_' + id).html('Item Added Successfully ! \n Check it on <a href="' + cart_link + '">Cart</a>');
-                    updateCartSummery();
+                    if (res.error) {
+                        $('#lbl_add_cart_response_' + id).html(res.error);
+                    } else {
+                        $('#lbl_add_cart_response_' + id).html('Item Added Successfully ! \n Check it on <a href="' + cart_link + '">Cart</a>');
+                        updateCartSummery();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            $('#lbl_add_cart_response_' + id).html('This Entry is Restricted !');
+        }
+
     });
 
     /**

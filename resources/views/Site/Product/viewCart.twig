@@ -31,13 +31,13 @@
                 <div class="">
                     <div class="lbl_status_msg"></div>
                     {% if (setting.d_config_catalog_model == 'no') %}
+                        <span class="info_log" id="lbl_add_cart_response_{{ product.ID }}"></span>
                         <div class="fc-row">
-                            <span class="info_log" id="lbl_add_cart_response_{{ product.ID }}"></span>
-                            <div class="fc-col-lg-4">
+                            <div class="fc-col-lg-12">
                                 {{ product.displayQuantity() | raw }}
-                            </div>
-                            <div class="fc-col-lg-8">
-                                <input type="button" style="text-transform: capitalize; !important;"
+                            {#</div>#}
+                            {#<div class="fc-col-lg-8">#}
+                                <input type="button" style="text-transform: capitalize; !important; width: 65%"
                                        class="fc-btn fc-btn-success btn_cart_add"
                                        id="btn_add_{{ product.ID }}"
                                        value="{{ product.meta.add_cart_text }}">

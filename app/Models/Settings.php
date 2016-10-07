@@ -1502,8 +1502,8 @@ class Settings extends Eloquent
     {
         $product = Product::getInstance($post_id);
         $data['meta'] = $product->find($post_id)->meta()->pluck('meta_value', 'meta_key')->toArray();
-        $data['meta']['up_sells'] = json_decode($data['meta']['up_sells']);
-        $data['meta']['cross_sells'] = json_decode($data['meta']['cross_sells']);
+        $data['meta']['up_sells'] = json_decode(array_get($data['meta'], 'up_sells', []));
+        $data['meta']['cross_sells'] = json_decode(array_get($data['meta'], 'cross_sells', []));
         $data['special_price'] = Price::where('post_id', $post_id)->get();
         $this->processAttributes($data);
 

@@ -983,14 +983,14 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
         $html = '';
         $stock = $this->meta['stock'];
         if (Settings::get('d_config_quantity_field') == 'yes') {
-            $html .= "<input type='number' name='txt_product_qty' id='qty_{$this->getId()}'
+            $html .= "<input type='number' name='txt_product_qty' style='width: 30%;' id='qty_{$this->getId()}'
                         class='form-control txt_product_qty fc-input'
                         value='{$stock->min}'
                          min='{$stock->min}'
                          />
                         ";
         } else {
-            $html .= "<input type='hidden' name='txt_product_qty' id='qty_{$this->getId()}'
+            $html .= "<input type='hidden' name='txt_product_qty' style='width: 30%;' id='qty_{$this->getId()}'
                         class='form-control txt_product_qty fc-input'
                         value='{$stock->min}'
                          min='{$stock->min}'
