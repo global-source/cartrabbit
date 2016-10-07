@@ -58,7 +58,7 @@ class AdminController extends BaseController
             $data = (new Settings())->processProductContents($post_id, $data);
         }
 
-        $taxClasses = json_decode(Settings::get('tax_classes', ''), true);
+        $taxClasses = json_decode(Settings::get('tax_classes', '[]'), true);
         if (!is_array($taxClasses) AND empty($taxClasses)) {
             $taxClasses = '';
         }
