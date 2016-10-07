@@ -41,6 +41,7 @@ class Flat_rate_shipping
         if (self::is_me($element)) {
             $config = self::loadConfig();
             return $config['meta']['enableShipping'][0];
+
         } else {
             return $element;
         }
@@ -50,7 +51,7 @@ class Flat_rate_shipping
     {
         global $wpdb;
         $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_fla_conf'");
-        $result['meta'] = get_post_meta(object_get(array_get($result, 'post', []), 'ID', null));
+        $result['meta'] = get_post_meta(array_first($result['post'])->ID);
         return $result;
     }
 

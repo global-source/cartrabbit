@@ -6,6 +6,8 @@
  * Date: 21/7/16
  * Time: 12:34 PM
  */
+use Corcel\Post;
+
 class Manage_qty_shipping
 {
     static function register_plugin($list)
@@ -100,7 +102,7 @@ class Manage_qty_shipping
     {
         global $wpdb;
         $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
-        $result['meta'] = get_post_meta(object_get(array_get($result, 'post', []), 'ID', null));
+        $result['meta'] = get_post_meta(array_first($result['post'])->ID);
         return $result;
     }
 

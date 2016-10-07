@@ -37,26 +37,26 @@
                                 <tbody class="shipping_table">
                                 <?php
                                 $id = 1;
-                                if ($config['items']['list']) {
+                                if (isset($config['items']['list'])) {
                                     foreach ($config['items']['list'] as $i => $val) { ?>
                                         <tr>
                                             <td><?php echo $id ?></td>
                                             <td><input type="text"
                                                        name="cartrabbit[shipping][<?php echo $i ?>][minQty]"
                                                        class="form-control"
-                                                       value="<?php echo $val['minQty'][0] ?>"></td>
+                                                       value="<?php echo array_first($val['minQty']) ?>"></td>
                                             <td><input type="text"
                                                        name="cartrabbit[shipping][<?php echo $i ?>][maxQty]"
                                                        class="form-control"
-                                                       value="<?php echo $val['maxQty'][0] ?>"></td>
+                                                       value="<?php echo array_first($val['maxQty']) ?>"></td>
                                             <td><input type="text"
                                                        name="cartrabbit[shipping][<?php echo $i ?>][rate]"
                                                        class="form-control"
-                                                       value="<?php echo $val['rate'][0] ?>"></td>
+                                                       value="<?php echo array_first($val['rate']) ?>"></td>
                                             <td><input type="text"
                                                        name="cartrabbit[shipping][<?php echo $i ?>][extra]"
                                                        class="form-control"
-                                                       value="<?php echo $val['extra'][0] ?>"></td>
+                                                       value="<?php echo array_first($val['extra']) ?>"></td>
                                             <td>
                                                 <i id=" <?php echo $i ?>"
                                                    class="glyphicon glyphicon-remove text-danger btn_remove_shipping_rate"></i>

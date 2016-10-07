@@ -30,7 +30,6 @@ class CheckoutController extends BaseController
         parent::__construct();
         $order = new Order();
         $order->initOrder();
-
         if (!$order->cart_status) {
             return parent::redirectTo('cart', true);
         }

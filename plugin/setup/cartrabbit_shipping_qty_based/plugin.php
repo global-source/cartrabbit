@@ -17,9 +17,10 @@ if (!defined('ABSPATH')) {
 if (!in_array('cartrabbit/plugin.php', get_option('active_plugins'))) return;
 
 require_once __DIR__ . '/Manage_qty_shipping.php';
-global $element;
-$element = 'cartrabbit_shipping_qty_based';
 
+global $element;
+
+$element = 'cartrabbit_shipping_qty_based';
 
 /**
  * Returns the Array of menu items
@@ -51,7 +52,8 @@ function is_available($element)
 {
     if (is_me($element)) {
         $config = Manage_qty_shipping::loadConfig();
-        return $config['meta']['enableShipping'][0];
+        return array_first($config['meta']['enableShipping']);
+
     } else {
         return $element;
     }

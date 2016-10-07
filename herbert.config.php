@@ -103,7 +103,6 @@ return [
      */
     'assets' => '/resources/assets/',
 
-
     'site_url' => plugin_dir_url(__FILE__),
 
     'site_path' => plugin_dir_path(__FILE__),

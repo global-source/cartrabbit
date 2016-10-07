@@ -107,6 +107,7 @@ class Shipping extends Eloquent
                 // If not set, not available, or available methods have changed, set to the DEFAULT option
                 if ($chosen_method !== false || $method_count != sizeof($available_methods)) {
                     //TODO: Verify its need.
+
                     $chosen_method = apply_filters('cartrabbit_shipping_chosen_method', $this->get_default_method($available_methods, $chosen_method), $available_methods);
 
                     /** If Shipping has "Chosen Method" */
@@ -208,13 +209,14 @@ class Shipping extends Eloquent
 //                if (is_object($shipping_methods)) {
 //                    $shipping_methods = (array)$shipping_methods;
 //                }
+
                 foreach ($shipping_methods as $shipping_method) {
 
-                    if (apply_filters('is_available', array($shipping_method))) {
-
+                    if (apply_filters('is_available', $shipping_method->id)) {
                         $rates = apply_filters('cartrabbit_calculate_shipping', array($shipping_method, $package));
                         // Place rates in package array
                         if (!empty($rates) && is_array($rates)) {
+
                             foreach ($rates as $rate) {
                                 $package['rates'][$rate['id']] = $rate;
                             }
