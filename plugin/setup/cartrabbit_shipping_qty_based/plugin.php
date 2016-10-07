@@ -52,8 +52,9 @@ function is_available($element)
 {
     if (is_me($element)) {
         $config = Manage_qty_shipping::loadConfig();
-        return array_first($config['meta']['enableShipping']);
-
+        if (isset($config['meta']['enableShipping'])) {
+            return array_first($config['meta']['enableShipping']);
+        }
     } else {
         return $element;
     }

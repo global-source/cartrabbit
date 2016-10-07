@@ -12,7 +12,9 @@
 
                         <div class="col-md-1">
                             <input type="checkbox"
-                                   class="form-control" <?php if ($config['core']['meta']['enableShipping'][0] == 'on') { ?> checked <?php } ?>
+                                   class="form-control" <?php if (isset($config['core']['meta']['enableShipping'])) {
+                                if (array_first($config['core']['meta']['enableShipping']) == 'on') { ?> checked <?php }
+                            } ?>
                                    name="cartrabbit[shipping][enabled]">
                         </div>
                     </div>

@@ -123,8 +123,10 @@ class Dashboard extends Post
 
             $sales['total'] = 0;
             $sales['today'] = 0;
+            $sales['daily'] = 0;
             $sales['monthly'] = 0;
             $sales['graph'] = [];
+
             foreach ($orders as $index => $order) {
                 $month = $order->created_at->format('m');
                 $day = $order->created_at->format('d');

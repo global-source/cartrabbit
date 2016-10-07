@@ -648,7 +648,6 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
                 $link = $site_addr . '/' . str_replace('%product-category%', $category, $this->permalink->permalink) . '/' . $slug;
             }
         }
-
         $this->meta->link = $link;
     }
 

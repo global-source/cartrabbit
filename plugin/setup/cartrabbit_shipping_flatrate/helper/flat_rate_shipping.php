@@ -40,7 +40,9 @@ class Flat_rate_shipping
     {
         if (self::is_me($element)) {
             $config = self::loadConfig();
-            return $config['meta']['enableShipping'][0];
+            if(isset($config['meta']['enableShipping'])){
+                return array_first($config['meta']['enableShipping']);
+            }
 
         } else {
             return $element;
