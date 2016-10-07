@@ -69,8 +69,8 @@ class Dashboard extends Post
         $user = $current_user->ID;
         $notes = get_user_meta($user, 'cart_rabbit_dash_notes');
 
-        if (is_string($notes[0])) {
-            $notes = json_decode($notes[0], true);
+        if (is_string(array_first($notes))) {
+            $notes = json_decode(array_first($notes), true);
         }
         return $notes;
     }
@@ -185,7 +185,7 @@ class Dashboard extends Post
                 $sales['top_selling'][$item->meta->product_id]['quantity'] += $item->meta->quantity;
             }
         }
-        uasort($sales['top_selling'], array((new Util()), 'qty_sorting'));
+        uasort(array_get($sales, 'top_selling', []), array((new Util()), 'qty_sorting'));
 
 //        ksort($sales['top_selling']);
 

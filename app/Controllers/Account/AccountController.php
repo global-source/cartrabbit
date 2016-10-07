@@ -2,11 +2,9 @@
 
 namespace CartRabbit\Controllers\Account;
 
-use Flycartinc\Order\Model\Order;
 use Herbert\Framework\Http;
 use CartRabbit\Controllers\BaseController;
 use CartRabbit\Helper;
-use CartRabbit\Helper\EventManager;
 use CartRabbit\Models\Account;
 use CartRabbit\Models\Orders;
 

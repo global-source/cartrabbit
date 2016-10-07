@@ -25,15 +25,16 @@ class Dashboard
         $year = Carbon::today()->format('Y');
         $month = Carbon::today()->format('m');
 
-        $chart_data = $amounts[$year][$month][$chart];
+        $chart_data = array_get(array_get(array_get($amounts, $year, []), $month, []), $chart, []);
 
         $currency = Settings::get('currency', false);
 
         //day chart axis.
-        $month_total = $amounts[$year]['month'][$month];
+        $month_total = array_get(array_get(array_get($amounts, $year, []), 'month', []), $month, []);
         $chart_title = 'Daily Revenue';
         $currencyRepository = new CurrencyRepository();
         $currency = $currencyRepository->get($currency);
+        // FOR GETTING SYMBOL ONLY
         $firstPrice = new Price('99.99', $currency);
 
         $symbol = $firstPrice->getCurrency()->getSymbol();
