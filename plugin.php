@@ -17,11 +17,9 @@ if (!defined('ABSPATH')) {
 function verify_geoIP_update()
 {
     if (!file_exists(\CartRabbit\Helper::get('site_path') . '/resources/assets/mmdb/GeoLite2-City.mmdb')) {
-
         if (array_get($_GET, 'page', 'none') == 'dashboard') {
             return print '<div id="message" class="update-nag geo_ip_download_curl">Your <strong>GeoIP</strong> database is missing, <a href="#">download now</a></div>';
         }
-
     }
 }
 

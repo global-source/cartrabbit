@@ -70,16 +70,13 @@ class Checkout extends Eloquent
         global $current_user;
         $customer = new Customer();
 
-//        $session['billing_address_verified'] = Session()->get('customer', [])['billing_address_verified'];
-//        $session['shipping_address_verified'] = Session()->get('customer', [])['shipping_address_verified'];
+        $session['billing_address'] = array_get(Session()->get('customer', []), 'billing_address', false);
+        $session['shipping_address'] = array_get(Session()->get('customer', []), 'shipping_address', false);
 
-        $session['billing_address'] = Session()->get('customer', [])['billing_address'];
-        $session['shipping_address'] = Session()->get('customer', [])['shipping_address'];
-
-        if (!empty($session['billing_address'])) {
+        if (!empty($session['billing_address']) && $session['billing_address']) {
             $session['billing_address']['states'] = json_decode(Util::getStatesByCountryCode(array_get($session['billing_address'], 'country', 'none')), true);
         }
-        if (!empty($session['shipping_address'])) {
+        if (!empty($session['shipping_address']) && $session['shipping_address']) {
             $session['shipping_address']['states'] = json_decode(Util::getStatesByCountryCode(array_get($session['shipping_address'], 'd_country', 'none')), true);
         }
 
@@ -88,7 +85,7 @@ class Checkout extends Eloquent
             $session['uaccount'] = $current_user->ID;
         }
         $session['paymentMethod'] = $customer->getPaymentMethod();
-        $session['shippingMethod'] = Session()->get('chosen_shipping_methods', false)[0];
+        $session['shippingMethod'] = array_first(Session()->get('chosen_shipping_methods', false));
 
         $status = 'false';
         if (!empty($session['billing_address']) and !empty($session['shipping_address'])) {
