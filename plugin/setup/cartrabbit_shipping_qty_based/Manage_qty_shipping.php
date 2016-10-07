@@ -74,11 +74,11 @@ class Manage_qty_shipping
                                       wp_posts.post_type = 'crt_sh_qty_conf' AND wp_postmeta.post_id = wp_posts.ID
                                       AND wp_postmeta.meta_key = 'enableShipping'
                                       group by wp_posts.ID");
-        $storeConfig = $result[0];
+        $storeConfig = array_first($result);
 
         $status = 'off';
 
-        if ($storeConfig->meta_key == 'enableShipping') {
+        if (object_get($storeConfig, 'meta_key', '') == 'enableShipping') {
             $status = $storeConfig->meta_value;
         }
 
@@ -88,7 +88,7 @@ class Manage_qty_shipping
         $meta['enableShipping'] = $status;
 
         $i = 0;
-        foreach ($ids[0] as $id) {
+        foreach (array_first($ids) as $id) {
             $meta['list'][$i] = get_post_meta($id->ID);
             $meta['list'][$i]['id'] = $id->ID;
             $i++;
@@ -100,7 +100,7 @@ class Manage_qty_shipping
     {
         global $wpdb;
         $result['post'] = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
-        $result['meta'] = get_post_meta(array_first(array_get($result, 'post', [])->ID));
+        $result['meta'] = get_post_meta(object_get(array_get($result, 'post', []), 'ID', null));
         return $result;
     }
 
@@ -144,7 +144,7 @@ class Manage_qty_shipping
 
     static function processRates($package)
     {
-        $package['rates']['cartrabbit_shipping_qty_based'] = self::parserRates(self::load()['list'], $package);
+        $package['rates']['cartrabbit_shipping_qty_based'] = self::parserRates(array_get(self::load(), 'list', []), $package);
         return $package;
     }
 

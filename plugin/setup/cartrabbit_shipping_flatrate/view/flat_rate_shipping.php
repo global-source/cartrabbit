@@ -12,7 +12,7 @@
                         <div class="col-md-1">
                             <input type="checkbox"
                                    class="form-control"
-                                <?php if ($config['list'][0]['enableShipping'][0] == 'on') { ?> checked=checked <?php } ?>
+                                <?php if (array_first(array_get(array_first(array_get($config, 'list', [])), 'enableShipping', '')) == 'on') { ?> checked=checked <?php } ?>
                                    name="cartrabbit[shipping][enabled]">
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control"
-                                   value="<?php echo $config['list'][0]['shipping_cost'][0] ?>"
+                                   value="<?php echo array_first(array_get(array_first(array_get($config, 'list', [])), 'shipping_cost', '')) ?>"
                                    name="cartrabbit[shipping][shipping_cost]">
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control"
-                                   value="<?php echo $config['list'][0]['handling_cost'][0] ?>"
+                                   value="<?php echo array_first(array_get(array_first(array_get($config, 'list', [])), 'handling_cost', '')) ?>"
                                    name="cartrabbit[shipping][handling_cost]">
                         </div>
                     </div>

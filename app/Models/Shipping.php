@@ -148,7 +148,7 @@ class Shipping extends Eloquent
     {
         $list = array();
         foreach ($available_methods as $index => $value) {
-            $list[$value['element']] = $value['total'];
+            $list[$value['element']] = array_get($value, 'total', 0);
         }
 
         /** Sort Array with its shipping charges */
@@ -249,8 +249,8 @@ class Shipping extends Eloquent
 
         $shipping_methods_to_load[] = apply_filters('cartrabbit_shipping_methods', array());
 
-        if (!empty($shipping_methods_to_load[0])) {
-            foreach ($shipping_methods_to_load[0] as $method) {
+        if (!empty(array_first($shipping_methods_to_load))) {
+            foreach (array_first($shipping_methods_to_load) as $method) {
                 $this->register_shipping_method($method);
             }
             $this->sort_shipping_methods();
