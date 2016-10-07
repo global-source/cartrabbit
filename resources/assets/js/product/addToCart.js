@@ -15,13 +15,6 @@ jQuery.noConflict();
         variant_sets = JSON.parse(variant_sets);
         variants = $.parseJSON(variants);
 
-        //console.log('VARIANT ATTRIBUTES');
-        //console.log(variant_attributes);
-        //console.log('VARIANTS');
-        //console.log(variants);
-        //console.log('VARIANT SETS');
-        //console.log(variant_sets);
-
         /** Initially Disable the Cart Button, If Product has Variants */
         $('.btn_cart_add').attr('disabled', 'disables');
     }
@@ -377,21 +370,22 @@ jQuery.noConflict();
     });
 
     $('.txt_product_qty').change(function (e) {
-        var var_id = $('#txt_variant_id').val();
-        var qty = $('.txt_product_qty').val();
-        var price = $('.product_price').val();
+        var qty = $(this).val();
+        var id = $(this).attr('id');
+        id = id.replace('qty_', '');
         var option = $('.select_attribute_option').val();
+
         if (option != 'none') {
             $.ajax(
                 {
                     url: site_addr + "/product/getSpecialPrice",
                     type: 'POST',
                     data: {
-                        id: var_id,
+                        id: id,
                         qty: qty
                     },
                     success: function (result) {
-                        updatePrice(result);
+                        updatePrice(result, id);
                     },
                     error: function (request) {
                         alert(request.responseText);
@@ -496,20 +490,20 @@ jQuery.noConflict();
     }
 
     /** For Updating the Special price of the product "On Qty Change" */
-    function updatePrice(result) {
+    function updatePrice(result, id) {
         result = JSON.parse(result);
         console.log(result);
         //If Special price is available, then update the special price and strice the actual price.
         if ((result.special_price > 0) && result.is_discounted == true && (result.special_price != result.base_price)) {
             html = '<span class="price-strike"><span class="text-strike">' + result.f_base_price + '</span></span><span>' + result.f_special_price + '</span>';
-            $('#product_price').html(html);
+            $('#product_price_' + id).html(html);
             $('.price-display').show();
         }
         else {
             //If Special price is not available, then display the actual price.
             if (result.price > 0) {
                 html = '<span>' + result.f_price + '</span>';
-                $('#product_price').html(result.f_price);
+                $('#product_price_' + id).html(result.f_price);
                 $('.price-display').show();
             }
         }

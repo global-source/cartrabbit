@@ -124,7 +124,7 @@ class Pagination
             } else {
                 $pagination .= '<a href="' . $path . '/' . $segment . '?' . $extra . '&limit=' . $this->limit . '&ppage=0"></a>&nbsp;&nbsp;';
             }
-            $pagination .= '<a href="' . $path . '/' . $segment . '?' . $extra . '&limit=' . $this->limit . '&ppage=' . $page . '"></a>&nbsp;&nbsp;';
+            $pagination .= '<a href="' . $path . '/' . $segment . '?' . $extra . '&limit=' . $this->limit . '&ppage=0"></a>&nbsp;&nbsp;';
         }
 
         return $pagination;

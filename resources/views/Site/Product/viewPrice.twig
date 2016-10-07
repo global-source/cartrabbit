@@ -3,7 +3,7 @@
     {% if (setting.d_config_show_price == 'yes') %}
 
         <div class="text_highlight_large">
-            Price:&nbsp;<span id="product_price" class="price-display-style">
+            Price:&nbsp;<span id="product_price_{{ product.ID }}" class="price-display-style">
                 {% if price.is_discounted %}
                     {% if price.special_price < price.base_price and price.special_price > 0 %}
                         <span class="price-strike"><span

@@ -991,6 +991,7 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
                         ";
         } else {
             $html .= "<input type='hidden' name='txt_product_qty' id='qty_{$this->getId()}'
+                        class='form-control txt_product_qty fc-input'
                         value='{$stock->min}'
                          min='{$stock->min}'
                          />
