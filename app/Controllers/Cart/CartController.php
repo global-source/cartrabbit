@@ -62,7 +62,7 @@ class CartController extends BaseController
     public function addCart(Http $http)
     {
         $item['pro_id'] = $http->get('pro_id', false);
-        $item['var_id'] = $http->get('var_id', false);
+        $item['var_id'] = $http->get('id', false);
         $item['quantity'] = $http->get('txt_product_qty', false);
         $item['variation'] = $http->get('variant_combination', false);
         $item['is_variant'] = false;

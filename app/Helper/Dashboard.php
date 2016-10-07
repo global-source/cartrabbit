@@ -45,7 +45,7 @@ class Dashboard
 
        function drawChart() {
         var daychart = google.visualization.arrayToDataTable([
-            ["' . $month . '","' . $month_total . '"],';
+            ["' . array_first($month) . '","' . array_sum($month_total) . '"],';
         $daily_title = 'Daily Report';
         /**
          * array of items.

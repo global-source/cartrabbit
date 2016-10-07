@@ -2,13 +2,14 @@ jQuery.noConflict();
 (function ($) {
     var site_addr = $('#site_address').val();
     var variants = $('#variant_combination').val();
+    var parent_product = false;
 
     /** In Multiple Product list View, there is no variants data to display */
     if (variants) {
         var variant_attributes = $('#variant_attributes').val();
         var variant_option_list = $('#option_list').val();
         var variant_sets = $('#variant_sets').val();
-        var parent_product = $('#txt_product_id').val();
+        parent_product = $('#txt_product_id').val();
 
         variant_attributes = JSON.parse(variant_attributes);
         variant_option_list = JSON.parse(variant_option_list);
@@ -172,7 +173,7 @@ jQuery.noConflict();
                     price_out = price_obj.f_price;
                 }
 
-                $('#product_price').html(price_out);
+                $('#product_price_' + parent_product).html(price_out);
                 /** Set Product Stock */
                 if (variants[activeId]['stock']['show'] == true) {
                     $('.stock-availability').html('Available :' + variants[activeId]['stock']['qty']);
@@ -370,9 +371,14 @@ jQuery.noConflict();
     });
 
     $('.txt_product_qty').change(function (e) {
-        var qty = $(this).val();
         var id = $(this).attr('id');
         id = id.replace('qty_', '');
+
+        var form = $('#cart_add_' + id).serializeArray()
+        id = $('#cart_add_' + id + ' input[name=id]').val();
+        if (parent_product != false) {
+            id = parent_product;
+        }
         var option = $('.select_attribute_option').val();
 
         if (option != 'none') {
@@ -380,10 +386,7 @@ jQuery.noConflict();
                 {
                     url: site_addr + "/product/getSpecialPrice",
                     type: 'POST',
-                    data: {
-                        id: id,
-                        qty: qty
-                    },
+                    data: form,
                     success: function (result) {
                         updatePrice(result, id);
                     },
@@ -402,14 +405,14 @@ jQuery.noConflict();
 
         var id = $(this).attr('id');
         id = id.replace('btn_add_', '');
-        console.log(id);
+
         var cart_link = $('#btn_my_cart').val();
         $.ajax({
             url: site_addr + '/products/addToCart',
             type: 'POST',
             data: data,
             success: function (res) {
-                console.log(res);
+
                 if (res.error) {
                     $('#lbl_add_cart_response_' + id).html(res.error);
                 } else {
@@ -439,7 +442,7 @@ jQuery.noConflict();
         $('.stock-availability').html('');
         resetProductImage();
         $('#log').hide();
-        $('#product_price').html('');
+        $('.product_price_display').html('');
         $('#product_sku').html('');
         $('.desc-display').html('');
         $('.txt_product_qty').val(0);
@@ -492,7 +495,7 @@ jQuery.noConflict();
     /** For Updating the Special price of the product "On Qty Change" */
     function updatePrice(result, id) {
         result = JSON.parse(result);
-        console.log(result);
+
         //If Special price is available, then update the special price and strice the actual price.
         if ((result.special_price > 0) && result.is_discounted == true && (result.special_price != result.base_price)) {
             html = '<span class="price-strike"><span class="text-strike">' + result.f_base_price + '</span></span><span>' + result.f_special_price + '</span>';

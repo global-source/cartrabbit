@@ -201,7 +201,7 @@ class ProductsController extends BaseController
     public function getSpecialPrice(Http $http)
     {
         $id = $http->get('id', 0);
-        $qty = $http->get('qty', 1);
+        $qty = $http->get('txt_product_qty', 1);
 
         $pricing = "{}";
 

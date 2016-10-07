@@ -185,10 +185,9 @@ class Dashboard extends Post
                 $sales['top_selling'][$item->meta->product_id]['quantity'] += $item->meta->quantity;
             }
         }
-        uasort(array_get($sales, 'top_selling', []), array((new Util()), 'qty_sorting'));
-
-//        ksort($sales['top_selling']);
-
+        if (isset($sales['top_selling'])) {
+            uasort($sales['top_selling'], array((new Util()), 'qty_sorting'));
+        }
     }
 
     /**
