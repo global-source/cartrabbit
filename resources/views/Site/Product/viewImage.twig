@@ -2,24 +2,26 @@
 
     {% if (setting.d_config_show_product_image == 'yes') %}
         {% set image = product.meta.image %}
-        {% if product.meta.image == '' or product.meta.image ==0 %}
-            {% set image = default.product_image %}
-        {% endif %}
+
+        <!-- Process with Thumbnail -->
         {% if (setting.d_config_show_product_thumbnail == 'yes') %}
+
             {% set image = product.meta.image_thump %}
-            {% if product.meta.image_thump == '' or product.meta.image_thump ==0 %}
+            {% if image == '' or image == '0' %}
                 {% set image = default.product_image %}
             {% endif %}
-            <img class="productImage-display"
-                    {% if product.meta.image_thump is not empty %} src="{{ image }}" {% else %} src="" alt="No Image" {% endif %}
-                 height="80" width="80">
 
         {% else %}
-            {{ dd(image) }}
-            {% if product.meta.image is not empty %}
-                <img class="productImage-display" {% if product.meta.image is not empty %} src="{{ image }}" {% else %} src="" alt="No Image" {% endif %}
-                     height="300" width="300">
+            <!-- Process Main Image -->
+            {% if image == '' or image == '0' %}
+                {% set image = default.product_image %}
             {% endif %}
+
         {% endif %}
+
+        <!-- Default Image Template -->
+        <img class="productImage-display" src="{{ image }}" src="" alt="No Image"
+             height="300" width="300">
+
     {% endif %}
 {% endblock %}
