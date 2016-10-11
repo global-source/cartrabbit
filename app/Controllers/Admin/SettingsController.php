@@ -775,7 +775,7 @@ class SettingsController extends BaseController
         }
 
         /** Install Additional Plugins */
-        Setup::installAdditionalPlugins();
+        Setup::preConfigurations();
         wp_redirect(get_site_url() . '/wp-admin/admin.php?page=cartrabbit-config');
     }
 
