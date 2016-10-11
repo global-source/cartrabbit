@@ -51,9 +51,9 @@ function init($params = array())
 function is_available($element)
 {
     if (is_me($element)) {
-        $config = Manage_qty_shipping::loadConfig();
-        if (isset($config['meta']['enableShipping'])) {
-            return array_first($config['meta']['enableShipping']);
+        $config = Manage_qty_shipping::load();
+        if (isset($config['enabled'])) {
+            return $config['enabled'];
         }
     } else {
         return $element;
@@ -92,7 +92,6 @@ function loadShippingConfigurations($result)
 {
     if (is_me($result['type'])) {
         $config['items'] = Manage_qty_shipping::load();
-        $config['core'] = Manage_qty_shipping::loadConfig();
         $path = __DIR__ . '/view/Shipping.php';
         $result['html'] = Manage_qty_shipping::processView($path, $config);
     }

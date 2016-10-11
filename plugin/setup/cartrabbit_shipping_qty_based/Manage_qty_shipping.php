@@ -43,17 +43,25 @@ class Manage_qty_shipping
             }
         }
 
-        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
-
-        $storeConfigId = $result[0]->ID;
-        if (!$storeConfigId or empty($storeConfigId) or !isset($storeConfigId)) {
-            $storeConfigId = self::createConfig();
-        }
+//        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_qty_conf'");
+//
+//        $storeConfigId = $result[0]->ID;
+//        if (!$storeConfigId or empty($storeConfigId) or !isset($storeConfigId)) {
+//            $storeConfigId = self::createConfig();
+//        }
+//
         if ($status != 'on') {
             $status = 'off';
         }
+        $return['enabled'] = $status;
 
-        update_post_meta($storeConfigId, 'enableShipping', $status);
+        if (get_option('crt_sh_qty_conf')) {
+            update_option('crt_sh_qty_conf', json_encode($return));
+        } else {
+            add_option('crt_sh_qty_conf', json_encode($return));
+        }
+
+//        update_post_meta($storeConfigId, 'enabled', $status);
 
         /** Redirect to its Landing Page */
         wp_redirect(get_site_url() . '/wp-admin/admin.php?page=cartrabbit-config&tab=shipping&opt=cartrabbit_shipping_qty_based');
@@ -72,22 +80,22 @@ class Manage_qty_shipping
     {
         global $wpdb;
         //TODO: Eliminate this
-        $result = $wpdb->get_results("SELECT wp_posts.ID, wp_postmeta.meta_key, wp_postmeta.meta_value FROM wp_posts, wp_postmeta WHERE
-                                      wp_posts.post_type = 'crt_sh_qty_conf' AND wp_postmeta.post_id = wp_posts.ID
-                                      AND wp_postmeta.meta_key = 'enableShipping'
-                                      group by wp_posts.ID");
-        $storeConfig = array_first($result);
+//        $result = $wpdb->get_results("SELECT wp_posts.ID, wp_postmeta.meta_key, wp_postmeta.meta_value FROM wp_posts, wp_postmeta WHERE
+//                                      wp_posts.post_type = 'crt_sh_qty_conf' AND wp_postmeta.post_id = wp_posts.ID
+//                                      AND wp_postmeta.meta_key = 'enabled'
+//                                      group by wp_posts.ID");
+//        $storeConfig = array_first($result);
+//
 
-        $status = 'off';
-
-        if (object_get($storeConfig, 'meta_key', '') == 'enableShipping') {
-            $status = $storeConfig->meta_value;
+        $status = json_decode(get_option('crt_sh_qty_conf'), true)['enabled'];
+        if (empty($status) or is_null($status)) {
+            $status = 'off';
         }
 
         $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='crt_sh_qty'");
 
         $meta = array();
-        $meta['enableShipping'] = $status;
+        $meta['enabled'] = $status;
 
         $i = 0;
         foreach (array_first($ids) as $id) {
