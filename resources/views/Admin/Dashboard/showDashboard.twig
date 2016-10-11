@@ -277,7 +277,7 @@
                                                 {% endif %}
                                                 <td>
                                                     <h5 class="col-md-8 text text-{{ flag_color }}">{{ order.info.order_status }}</h5>
-                                                    <a href="/wp-admin/admin.php?page=cartrabbit_order&order_id={{ order.info.id }}">
+                                                    <a href="{{ site_addr }}/wp-admin/admin.php?page=cartrabbit_order&order_id={{ order.info.id }}">
                                                         <button class="col-md-offset-1 col-md-3 btn btn-primary"><i
                                                                     class="glyphicon glyphicon-search"></i></button>
                                                     </a>

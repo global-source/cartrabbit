@@ -75,7 +75,7 @@ class Customer extends User
         if (is_user_logged_in() && Orders::get_user_data()) {
             foreach ($this->_data as $key => $value) {
                 $meta_value = get_user_meta(get_current_user_id(), (false === strstr($key, 'shipping_') ? 'billing_' : '') . $key, true);
-                $this->_data[$key] = $meta_value ? $meta_value : $this->_data[$key];
+                $this->_data[$key] = $meta_value ? $meta_value : array_get($this->_data, $key, '');
             }
         }
 
@@ -84,7 +84,7 @@ class Customer extends User
         }
 
         if (empty($this->_data['shipping_country'])) {
-            $this->_data['shipping_country'] = $this->_data['country'];
+            $this->_data['shipping_country'] = array_get($this->_data, 'country', '');
         }
 
         if (empty($this->_data['state'])) {
@@ -92,7 +92,7 @@ class Customer extends User
         }
 
         if (empty($this->_data['shipping_state'])) {
-            $this->_data['shipping_state'] = $this->_data['state'];
+            $this->_data['shipping_state'] = array_get($this->_data, 'state', '');
         }
 
         $this->customer_address = array_get(Session()->get('customer', []), 'billing_address', '');
@@ -121,11 +121,11 @@ class Customer extends User
             if (isset($location) && isset($location->country)) {
                 /** Location should have country code. */
                 if (!is_null($location->country)) {
-                    $billing_address['city'] = $location->city;
-                    $billing_address['country'] = $location->country;
-                    $billing_address['postalCode'] = $location->postalCode;
+                    $billing_address['city'] = object_get($location, 'city', '');
+                    $billing_address['country'] = object_get($location, 'country', '');
+                    $billing_address['postalCode'] = object_get($location, 'postalCode', '');
                     if ($location->state) {
-                        $billing_address['zone'] = $location->country . '-' . $location->state;
+                        $billing_address['zone'] = object_get($location, 'country', '') . '-' . object_get($location, 'state', '');
                     }
                     $customer['billing_address'] = $billing_address;
                     $customer['shipping_address'] = $billing_address;
@@ -313,7 +313,7 @@ class Customer extends User
      */
     public function get_shipping_country()
     {
-        return $this->customer_address['country'];
+        return array_get($this->customer_address, 'country', '');
     }
 
     /**
@@ -321,7 +321,7 @@ class Customer extends User
      */
     public function get_shipping_state()
     {
-        return $this->customer_address['zone'];;
+        return array_get($this->customer_address, 'zone', '');
     }
 
     /**
@@ -329,7 +329,7 @@ class Customer extends User
      */
     public function get_shipping_postcode()
     {
-        return $this->customer_address['postalCode'];;
+        return array_get($this->customer_address, 'postalCode', '');
     }
 
     /**
@@ -337,7 +337,7 @@ class Customer extends User
      */
     public function get_shipping_city()
     {
-        return $this->customer_address['city'];;
+        return array_get($this->customer_address, 'city', '');
     }
 
     /**
@@ -351,7 +351,7 @@ class Customer extends User
         }
         $customer_address = [];
         try {
-            $customer_address = Session()->get('customer', [])['billing_address'];
+            $customer_address = array_get(Session()->get('customer', []), 'billing_address', '');
 
             if (!$customer_address) {
                 if (!empty($this)) {
@@ -374,7 +374,7 @@ class Customer extends User
         }
         $customer_address = [];
         try {
-            $customer_address = Session()->get('customer', [])['shipping_address'];
+            $customer_address = array_get(Session()->get('customer', []), 'shipping_address', '');
             if (!$customer_address) {
                 if (!empty($this)) {
                     $customer_address = $this->customer_address;
@@ -611,15 +611,15 @@ class Customer extends User
             if (!is_null($type)) {
                 switch ($type) {
                     case 'billing':
-                        unset($customer['billing_address']);
+                        if (isset($customer['billing_address'])) unset($customer['billing_address']);
                         break;
                     case 'shipping':
-                        unset($customer['shipping_address']);
+                        if (isset($customer['shipping_address'])) unset($customer['shipping_address']);
                         break;
                 }
             } else {
-                unset($customer['billing_address']);
-                unset($customer['shipping_address']);
+                if (isset($customer['shipping_address'])) unset($customer['shipping_address']);
+                if (isset($customer['billing_address'])) unset($customer['billing_address']);
             }
             Session()->set('customer', $customer);
         }
@@ -635,15 +635,15 @@ class Customer extends User
             if (!is_null($type)) {
                 switch ($type) {
                     case 'shipping':
-                        unset($customer['shipping_method']);
+                        if (isset($customer['shipping_method'])) unset($customer['shipping_method']);
                         break;
                     case 'payment':
-                        unset($customer['payment_method']);
+                        if (isset($customer['payment_method'])) unset($customer['payment_method']);
                         break;
                 }
             } else {
-                unset($customer['shipping_method']);
-                unset($customer['payment_method']);
+                if (isset($customer['shipping_method'])) unset($customer['shipping_method']);
+                if (isset($customer['payment_method'])) unset($customer['payment_method']);
             }
             Session()->set('customer', $customer);
         }
@@ -852,20 +852,25 @@ class Customer extends User
      */
     public function checkAccount($http)
     {
-        $account = ($http->has('account')) ? $http->get('account') : null;
-        if (!filter_var($account, FILTER_VALIDATE_EMAIL)) {
-            if (username_exists($account)) {
-                $res = 'EXIST';
+        $account = $http->get('account', null);
+        $res = 'DONT-ALLOW';
+
+        if (!is_null($account)) {
+            if (!filter_var($account, FILTER_VALIDATE_EMAIL)) {
+                if (username_exists($account)) {
+                    $res = 'EXIST';
+                } else {
+                    $res = 'DONT-ALLOW';
+                }
             } else {
-                $res = 'DONT-ALLOW';
-            }
-        } else {
-            if (email_exists($account)) {
-                $res = 'EXIST';
-            } else {
-                $res = 'ALLOW';
+                if (email_exists($account)) {
+                    $res = 'EXIST';
+                } else {
+                    $res = 'ALLOW';
+                }
             }
         }
+
         return $res;
     }
 
