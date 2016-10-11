@@ -129,10 +129,12 @@ class ProductVariable extends ProductBase
 
         $post->meta->product_id = $product_id;
         foreach ($meta as $data) {
-            if (is_array($http[$data])) {
-                $post->meta->$data = json_encode($http[$data]);
-            } else {
-                $post->meta->$data = $http[$data];
+            if (isset($http[$data])) {
+                if (is_array($http[$data])) {
+                    $post->meta->$data = json_encode($http[$data]);
+                } else {
+                    $post->meta->$data = $http[$data];
+                }
             }
             $post->save();
         }
@@ -145,25 +147,59 @@ class ProductVariable extends ProductBase
      */
     public static function initialProductSetup(&$http)
     {
+        //TODO: Verify this
         /** To Set Minimum Sale Qty, if Empty */
-        if ($http['min_sale_qty'] == '' OR $http['min_sale_qty'] == 0) {
+        if (isset($http['min_sale_qty'])) {
+            if (($http['min_sale_qty'] == '' OR $http['min_sale_qty'] == 0)) {
+                $http['min_sale_qty'] = 1;
+            }
+        } else {
             $http['min_sale_qty'] = 1;
         }
+
         /** To Set Maximum Sale Qty, if Empty */
-        if ($http['max_sale_qty'] == '' OR $http['max_sale_qty'] == 0) {
-            $http['max_sale_qty'] = $http['stock'];
-        }
-        if ($http['add_cart_text'] == '') $http['add_cart_text'] = 'Add To Cart';
-
-        if ($http['manage_stock'] == 'yes') {
-            if ($http['stock'] == '' OR $http['stock'] == 0) {
-                $http['stockStatus'] = 'outOfStock';
-                $http['stock'] = 0;
+        if (isset($http['max_sale_qty'])) {
+            if ($http['max_sale_qty'] == '' OR $http['max_sale_qty'] == 0) {
+                if (isset($http['stock'])) {
+                    $http['max_sale_qty'] = $http['stock'];
+                } else {
+                    $http['max_sale_qty'] = 0;
+                }
             }
+        } else {
+            $http['max_sale_qty'] = 0;
         }
-        if ($http['regular_price'] == '') $http['regular_price'] = 0;
 
-        $http['on_hand'] = 0;
+        if (isset($http['add_cart_text'])) {
+            if ($http['add_cart_text'] == '') $http['add_cart_text'] = 'Add To Cart';
+        } else {
+            $http['add_cart_text'] = 'Add';
+        }
+
+        if (isset($http['manage_stock'])) {
+            if ($http['manage_stock'] == 'yes') {
+                if ($http['stock'] == '' OR $http['stock'] == 0) {
+                    $http['stockStatus'] = 'outOfStock';
+                    $http['stock'] = 0;
+                }
+            }
+        } else {
+            $http['stockStatus'] = 'outOfStock';
+            $http['stock'] = 0;
+        }
+
+        if (isset($http['regular_price'])) {
+            if ($http['regular_price'] == '') $http['regular_price'] = 0;
+        } else {
+            $http['regular_price'] = 0;
+        }
+
+
+        if (isset($http['on_hand'])) {
+            $http['on_hand'] = 0;
+        } else {
+            $http['on_hand'] = 0;
+        }
     }
 
     /**
@@ -443,7 +479,7 @@ class ProductVariable extends ProductBase
 
             /** To Re-Assign the Set with Unique ID */
             foreach ($dummyVariant as $d_key => $d_value) {
-                $set[$index . '_' . $i ++] = $d_value;
+                $set[$index . '_' . $i++] = $d_value;
             }
             unset($set[$index]);
         }
@@ -512,7 +548,7 @@ class ProductVariable extends ProductBase
         $num = 2;
         do {
             $alt_slug = $key . "-$num";
-            $num ++;
+            $num++;
             $sku = PostMeta::where('meta_key', 'sku')->where('meta_value', $key)->get()->count();
             /** Loop Until get Unique "sku". */
         } while ($sku);
