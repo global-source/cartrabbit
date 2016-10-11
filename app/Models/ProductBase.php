@@ -669,7 +669,6 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
         }
     }
 
-
     /**
      * {@inheritdoc}
      */

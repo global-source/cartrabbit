@@ -1,4 +1,5 @@
 <?php
+namespace CartRabbit\Helper;
 
 class SPCache {
 	const DOMAIN = 'spcached';

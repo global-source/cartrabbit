@@ -9,9 +9,7 @@ use Herbert\Framework\Http;
 use Corcel\Post;
 
 use CartRabbit\library\Pagination;
-use CartRabbit\Models\Cart;
 use CartRabbit\Models\Orders;
-use CartRabbit\Models\Products;
 use CartRabbit\Models\Settings;
 
 
@@ -53,9 +51,20 @@ class OrderController extends BaseController
         $order_id = $http->has('order_id') ? $http->get('order_id') : null;
 
         if (!is_null($order_id)) {
-            $html = $this->getOrderByID($order_id);
+            if (Helper\SPCache::has('order_single_' . $order_id)) {
+                $html = json_decode(Helper\SPCache::get('order_single_' . $order_id), true);
+            } else {
+                $html = $this->getOrderByID($order_id);
+                Helper\SPCache::add('order_single_' . $order_id, json_encode($html->getBody()), 24 * 3600);
+            }
+
         } else {
-            $html = $this->getAllOrders($http);
+            if (Helper\SPCache::has('order_list')) {
+                $html = json_decode(Helper\SPCache::get('order_list'), true);
+            } else {
+                $html = $this->getAllOrders($http);
+                Helper\SPCache::add('order_list', json_encode($html->getBody()), 24 * 3600);
+            }
         }
         return $html;
     }

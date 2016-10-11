@@ -2,6 +2,7 @@
 
 namespace CartRabbit\Models;
 
+use CartRabbit\Helper\SPCache;
 use Flycartinc\Order\Model\Order;
 use Flycartinc\Order\Model\OrderItem;
 use Flycartinc\Order\Model\OrderMeta;
@@ -298,6 +299,8 @@ class Orders extends Eloquent
         if ($uni_order_id) {
 
         }
+        /** Clearing Cache */
+        SPCache::forget('order_list');
         return $uni_order_id;
     }
 
@@ -397,7 +400,7 @@ class Orders extends Eloquent
             $result[$i]['order'] = $order;
 
             /** Exchange Value is Set to Process */
-            $i ++;
+            $i++;
         }
 
         if ($is_single) {
