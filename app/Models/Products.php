@@ -196,6 +196,7 @@ class Products extends Eloquent
                 ->where('postmeta.meta_key', 'visible_on_storefront')
                 ->where('postmeta.meta_value', 'yes')
                 ->where('post_title', '!=', 'Auto Draft')
+                ->where('post_status', '!=', 'trash')
                 ->pluck('id');
             $this->list = $query;
         } else {
