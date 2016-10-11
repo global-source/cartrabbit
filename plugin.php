@@ -14,15 +14,6 @@ if (!defined('ABSPATH')) {
     die('Access denied.');
 }
 
-function verify_geoIP_update()
-{
-    if (!file_exists(\CartRabbit\Helper::get('site_path') . '/resources/assets/mmdb/GeoLite2-City.mmdb')) {
-        if (array_get($_GET, 'page', 'none') == 'dashboard') {
-            return print '<div id="message" class="update-nag geo_ip_download_curl">Your <strong>GeoIP</strong> database is missing, <a href="#">download now</a></div>';
-        }
-    }
-}
-
 /**
  * Base Getherbert Classes
  */
@@ -33,6 +24,16 @@ require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';
 require_once __DIR__ . '/app/Controllers/Admin/AdminController.php';
 require_once __DIR__ . '/plugin/imageUploader.php';
 require_once __DIR__ . '/plugin/functions.php';
+
+
+function verify_geoIP_update()
+{
+    if (!file_exists(\CartRabbit\Helper::get('site_path') . '/resources/assets/mmdb/GeoLite2-City.mmdb')) {
+        if (array_get($_GET, 'page', 'none') == 'dashboard') {
+            return print '<div id="message" class="update-nag geo_ip_download_curl">Your <strong>GeoIP</strong> database is missing, <a href="#">download now</a></div>';
+        }
+    }
+}
 
 use CartRabbit\Models\Products;
 
@@ -997,8 +998,9 @@ function filter_product_list()
 /**
  * Triggered After Plugin Activated
  */
-function InitalConfig()
+function InitalConfig($plugin)
 {
+    if ($plugin != 'cartrabbit/plugin.php') return false;
 
     /** Basic Setup
      *

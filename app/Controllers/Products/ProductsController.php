@@ -45,7 +45,7 @@ class ProductsController extends BaseController
     {
         $currency = new Helper\Currency();
         $setting = new Settings();
-        $limit = ($http->has('limit') ? $http->get('limit') : 1);
+        $limit = ($http->has('limit') ? $http->get('limit') : 5);
         $Page = ($http->has('ppage') ? $http->get('ppage') : 1);
         $segments = $http->segments();
         $pagination = new Pagination();
