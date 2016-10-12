@@ -1723,7 +1723,6 @@ class Settings extends Eloquent
      */
     public function savePermalinkSettings($post)
     {
-
         $required = array(
             'product_category_base',
             'product_tag_base',
@@ -1744,6 +1743,12 @@ class Settings extends Eloquent
         foreach ($required as $require) {
             $data[$require] = $post[$require];
         }
+
+//        if (get_option('cartrabbit_permalink')) {
+//            update_option('cartrabbit_permalink', json_encode($data));
+//        } else {
+//            add_option('cartrabbit_permalink', json_encode($data));
+//        }
 
         $options = new Option();
         $option = $options->where('option_name', 'cartrabbit_permalink')->get();
