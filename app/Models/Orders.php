@@ -270,13 +270,23 @@ class Orders extends Eloquent
                 $data = $session['payment'];
 
             } elseif ($index == 'payment_method_raw') {
-                $data = $payment_plugin['paymentMethods'][array_get($session, 'payment', false)];
+
+                if (isset($session['payment'])) {
+                    $data = $payment_plugin['paymentMethods'][$session['payment']];
+                } else {
+                    $data = '';
+                }
+
 
             } elseif ($index == 'shipping_method') {
                 $data = $session['shipping'];
 
             } elseif ($index == 'shipping_method_raw') {
-                $data = $shipping_plugin['shippingMethods'][array_get($session, 'shipping', false)];
+                if (isset($session['shipping'])) {
+                    $data = $shipping_plugin['shippingMethods'][$session['shipping']];
+                } else {
+                    $data = '';
+                }
 
             } elseif ($index == 'trace_order') {
                 $data = json_encode($traceOrder);
