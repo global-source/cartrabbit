@@ -17,8 +17,9 @@ if (!Capsule::Schema()->hasTable('cartrabbit_orders')) {
     Capsule::schema()->create('cartrabbit_orders', function ($table) {
         $table->increments('id');
         $table->string('order_user_id');
+        $table->string('unique_order_id');
         $table->string('invoice_prefix');
-        $table->string('invoice_no');
+        $table->integer('invoice_no');
         $table->string('order_status');
         $table->string('order_mail');
         $table->timestamps();
