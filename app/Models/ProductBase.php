@@ -501,6 +501,7 @@ class ProductBase extends Post implements ProductInterface, StockableInterface, 
         $default_image = Helper\Util::getDefaultConfig()['product_image'];
 
         $this->meta->is_variant = false;
+        $this->meta->has_variant = false;
         $this->getBrand();
         $this->meta->gallery = json_decode($this->meta->_product_image_gallery_raw);
         $this->meta->raw_image = ($this->meta->image == '' || empty($this->meta->image)) ? $default_image : $this->meta->image;

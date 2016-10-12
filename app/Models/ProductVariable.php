@@ -369,8 +369,10 @@ class ProductVariable extends ProductBase
                 $variant->processProduct();
                 $list[$variant->ID] = $variant->meta->pluck('meta_value', 'meta_key');
             }
-            $this->meta->is_variant = true;
+
+            $this->meta->has_variant = true;
         }
+        if ($this->meta->product_type == 'variableProduct') $this->meta->is_variant = true;
         $this->meta->variants = json_encode($list);
     }
 
