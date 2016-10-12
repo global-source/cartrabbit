@@ -14,18 +14,19 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  * For Manage Customer's Orders
  */
 if (!Capsule::Schema()->hasTable('cartrabbit_orders')) {
-    Capsule::schema()->create('cartrabbit_orders', function($table)
-    {
+    Capsule::schema()->create('cartrabbit_orders', function ($table) {
         $table->increments('id');
         $table->string('order_user_id');
+        $table->string('invoice_prefix');
+        $table->string('invoice_no');
+        $table->string('order_status');
         $table->string('order_mail');
         $table->timestamps();
     });
 }
 
 if (!Capsule::Schema()->hasTable('cartrabbit_ordermeta')) {
-    Capsule::schema()->create('cartrabbit_ordermeta', function($table)
-    {
+    Capsule::schema()->create('cartrabbit_ordermeta', function ($table) {
         $table->increments('id');
         $table->integer('order_id');
         $table->string('meta_key');
@@ -63,8 +64,7 @@ if (!Capsule::Schema()->hasTable('cartrabbit_order_itemmeta')) {
  * For Managing Products Special Prices
  */
 if (!Capsule::Schema()->hasTable('cartrabbit_price')) {
-    Capsule::schema()->create('cartrabbit_price', function($table)
-    {
+    Capsule::schema()->create('cartrabbit_price', function ($table) {
         $table->increments('id');
         $table->string('post_id');
         $table->string('date_from');
