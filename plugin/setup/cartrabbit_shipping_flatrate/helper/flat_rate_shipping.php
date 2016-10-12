@@ -82,28 +82,10 @@ class Flat_rate_shipping
     static function save($data)
     {
         if (!isset($data['shipping'])) return false;
-
-//        global $wpdb;
-
-//        $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'crt_sh_fla_conf'");
-
-//        $storeConfigId = $result[0]->ID;
-//        if (!$storeConfigId or empty($storeConfigId) or !isset($storeConfigId)) {
-//            $storeConfigId = self::createConfig();
-//        }
+        
         if ($data['shipping']['enabled'] != 'on') {
             $data['shipping']['enabled'] = 'off';
         }
-
-//        foreach ($data['shipping'] as $key => $value) {
-//
-//            $result = get_post_meta($storeConfigId, $key);
-//            if ($result) {
-//                update_post_meta($storeConfigId, $key, $value);
-//            } else {
-//                add_post_meta($storeConfigId, $key, $value);
-//            }
-//        }
 
         if (get_option('crt_sh_fla_conf')) {
             update_option('crt_sh_fla_conf', json_encode($data));
@@ -143,9 +125,7 @@ class Flat_rate_shipping
     static function loadShippingConfigurations($result)
     {
         if (self::is_me($result['type'])) {
-            $config = [];
-//            $config['items'] = Manage_free_shipping::load();
-//            $config['core'] = Manage_free_shipping::loadConfig();
+            $config = self::load();
             $path = __DIR__ . '/../view/flat_rate_shipping.php';
             $result['html'] = self::processView($path, $config);
         }
@@ -156,7 +136,7 @@ class Flat_rate_shipping
     static function processView($path, $data)
     {
         ob_start();
-        $config = self::load();
+        $config = $data;
         include($path);
         $html = ob_get_contents();
         ob_end_clean();
@@ -165,33 +145,9 @@ class Flat_rate_shipping
 
     static function load()
     {
-//        dd(json_decode(get_option('crt_sh_fla_conf'),true));
-        global $wpdb;
-        //TODO: Eliminate this
-        $result = $wpdb->get_results("SELECT wp_posts.ID, wp_postmeta.meta_key, wp_postmeta.meta_value FROM wp_posts, wp_postmeta WHERE
-                                      wp_posts.post_type = 'crt_sh_fla_conf' AND wp_postmeta.post_id = wp_posts.ID
-                                      AND wp_postmeta.meta_key = 'enabled'
-                                      group by wp_posts.ID");
-        $storeConfig = $result[0];
-
-        $status = 'off';
-        if ($storeConfig->meta_key == 'enabled') {
-            $status = $storeConfig->meta_value;
-        }
-
-        $ids[] = $wpdb->get_results("SELECT ID from wp_posts WHERE post_type='crt_sh_fla_conf'");
-
         $meta = array();
-        $meta['status'] = $status;
-        $i = 0;
+
         $meta['list'] = json_decode(get_option('crt_sh_fla_conf'), true)['shipping'];
-//        dd($meta);
-//        foreach ($ids[0] as $id) {
-//            $meta['list'][$i] = get_post_meta($id->ID);
-//            $meta['list'][$i]['id'] = $id->ID;
-//            $i++;
-//        }
-//        dd($meta);
         return $meta;
     }
 
