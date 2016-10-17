@@ -129,11 +129,13 @@ class Setup extends Post
      */
     public static function installAdditionalPlugins()
     {
-        $oldfolderpath = __DIR__ . '/../../plugin/setup/';
-        $newfolderpath = __DIR__ . '/../../../';
+        $oldfolderpath = WP_PLUGIN_DIR. '/cartrabbit/plugin/setup/';
+        $newfolderpath = WP_PLUGIN_DIR;
         if (Util::full_copy($oldfolderpath, $newfolderpath)) {
-            self::activatePlugins();
+
         }
+        self::activatePlugins();
+        self::preConfigurations();
     }
 
     /**
@@ -157,7 +159,7 @@ class Setup extends Post
      */
     public static function verifyExistence(&$folders)
     {
-        $path = __DIR__ . '/../../../';
+        $path = WP_PLUGIN_DIR;
         foreach ($folders as $index => $folder) {
             if (!file_exists($path . $folder)) {
                 unset($folders[$index]);
