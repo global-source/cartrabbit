@@ -132,9 +132,8 @@ class Setup extends Post
         $oldfolderpath = __DIR__ . '/../../plugin/setup/';
         $newfolderpath = __DIR__ . '/../../../';
         if (Util::full_copy($oldfolderpath, $newfolderpath)) {
-
+            self::activatePlugins();
         }
-        self::activatePlugins();
     }
 
     /**

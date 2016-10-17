@@ -1,6 +1,6 @@
 <?php
 
-require_once ABSPATH . 'wp-content/plugins/cartrabbit/vendor/flycartinc/order/src/Model/Order.php';
+require_once WP_PLUGIN_DIR . '/cartrabbit/vendor/flycartinc/order/src/Model/Order.php';
 use Flycartinc\Order\Model\Order;
 
 /** This Class is used for managing basic plugin interaction */

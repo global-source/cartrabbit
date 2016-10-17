@@ -82,7 +82,7 @@ class Flat_rate_shipping
     static function save($data)
     {
         if (!isset($data['shipping'])) return false;
-        
+
         if ($data['shipping']['enabled'] != 'on') {
             $data['shipping']['enabled'] = 'off';
         }
