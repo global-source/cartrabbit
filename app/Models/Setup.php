@@ -135,7 +135,7 @@ class Setup extends Post
 
         }
         self::activatePlugins();
-        self::preConfigurations();
+//        self::preConfigurations();
     }
 
     /**

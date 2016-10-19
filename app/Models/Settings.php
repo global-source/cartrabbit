@@ -192,9 +192,11 @@ class Settings extends Eloquent
         if ($list and is_array($list)) {
             $id = self::getStoreConfigID();
             $config = Post::find($id);
-            foreach ($list as $index => $value) {
-                $config->meta->$index = $value;
-                $config->save();
+            if(isset($config) and !is_null($config)){
+                foreach ($list as $index => $value) {
+                    $config->meta->$index = $value;
+                    $config->save();
+                }
             }
         }
     }
